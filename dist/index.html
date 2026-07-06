@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAGANA · Newport Bermuda 2026 · Race Analysis</title>
+<meta name="description" content="A crew's-eye reconstruction of RAGANA's 2026 Newport Bermuda Race — 88 boat tracks, the Gulf Stream, the Monday park, and where the race was won and lost. 46/86 St. David's Lighthouse Overall.">
+<link rel="canonical" href="https://hgq.fyi/ragana-newport-bermuda-2026/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RAGANA · Newport Bermuda 2026 · Race Analysis">
+<meta property="og:description" content="A crew's-eye reconstruction of the 2026 Newport Bermuda Race from the YB tracker and the nav log — 46/86 St. David's Lighthouse Overall.">
+<meta property="og:url" content="https://hgq.fyi/ragana-newport-bermuda-2026/">
+<meta property="og:image" content="https://hgq.fyi/ragana-newport-bermuda-2026/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RAGANA · Newport Bermuda 2026 · Race Analysis">
+<meta name="twitter:description" content="A crew's-eye reconstruction of the 2026 Newport Bermuda Race from the YB tracker and the nav log.">
+<meta name="twitter:image" content="https://hgq.fyi/ragana-newport-bermuda-2026/og.png">
+<link rel="icon" href="favicon.svg?v=64cfc6cc6a" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css?v=64cfc6cc6a">
+<!-- DATA:FETCH — start the core payload download before the deferred scripts arrive -->
+<script>window.__CORE_FETCH=fetch('data/core.json?v=64cfc6cc6a').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});</script>
+<!-- /DATA:FETCH -->
+<script src="helpers.js?v=64cfc6cc6a" defer></script>
+<script src="app.js?v=64cfc6cc6a" defer></script>
+<script src="vendor/plotly-basic-2.35.2.min.js" id="plotlyjs" defer></script>
+</head>
+<body>
+<div class="wrap">
+
+<header class="titleblock">
+  <div class="tb-eyebrow">Chart of the Race · 54th Newport Bermuda Race · 19–23 June 2026 · 636 NM</div>
+  <h1><span class="mag">RAGANA</span> · Newport Bermuda 2026</h1>
+  <div class="tb-sub">Cape Fear 38 · USA 52238 · a crew's-eye reconstruction of the race from the YB tracker, the nav log, and the on-course broadcast — compared against class, fleet, and the St. David's podium</div>
+  <div class="tb-result">
+    <span>SDL Overall <b>46 / 86</b></span><span>SDL 3 <b>8 / 10</b></span>
+    <span>Elapsed <b>4d 01:34:52</b></span><span>Corrected <b>2d 10:00:43</b> @ F-TCF 0.5945</span>
+    <span>vs 2022 <b>71 / 99</b> → ~19 pctl gain</span>
+  </div>
+  <div class="tzn">All times EDT (UTC−4). Finish 15:54:52 verified against the tracker on the line at 19:55 UTC.</div>
+</header>
+
+<noscript>
+  <div class="appstate err">This dashboard is interactive and needs JavaScript to draw its charts.
+  The underlying data is plain JSON in <a href="data/core.json">data/core.json</a> if you'd rather read it raw.</div>
+</noscript>
+
+<main>
+
+<div class="appstate" id="appstate" role="status">Loading race data…</div>
+
+<section class="controls" id="controls" aria-label="Boat and overlay controls" hidden>
+  <div class="ctl-head">
+    <span class="ctl-title">Compare boats &amp; overlays</span>
+    <button class="ctl-collapse" id="ctlCollapse" aria-expanded="true">Hide controls ▲</button>
+  </div>
+  <div id="ctlBody">
+    <div class="ctl-row"><div class="ctl-label big">Groups</div><div class="chips big" id="grpbtns"></div></div>
+    <div class="ctl-row"><div class="ctl-label">Boats</div><div class="chips" id="chips"></div></div>
+    <div id="morePanel" style="display:none;margin:2px 0 10px;padding-top:10px;border-top:1px dashed var(--rule)"></div>
+    <div class="ctl-row"><div class="ctl-label">Overlays</div><div class="chips" id="overlays"></div></div>
+    <div class="ctl-row">
+      <div class="ctl-label">Time axis</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div class="axis-toggle" id="axisToggle">
+          <button data-ax="t">By clock time</button>
+          <button data-ax="d">By distance to finish</button>
+        </div>
+        <span class="ctl-hint">Sets the x-axis on the rhumb-offset and speed charts. <b>Distance</b> lines every boat up on the same water; <b>clock</b> shows what was happening when.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="kpis" id="kpis" aria-label="Key results"></section>
+
+<section class="card">
+  <h2>The course</h2>
+  <div class="note">Every selected boat's track, the rhumb line, and the Gulf Stream band as RAGANA measured it (74°F entry 17:21 Sat → 80°F core → 75°F exit 05:01 Sun, from the nav log). It's a plain lat/lon plot stretched to fill the width — positions are exact but the aspect isn't to scale. Grey ghosts are the tracked fleet. Hover — or tap — anything.</div>
+  <div id="map" class="plot"></div>
+  <div class="tapnote" id="tap_map"></div>
+</section>
+
+<section class="card">
+  <div class="hd"><h2>The race</h2><span class="tools" style="color:var(--ink2)">x-axis: clock time</span></div>
+  <div class="note">The whole race at a glance — distance still to sail, one line per boat, divided into the same phases used throughout. Steeper is faster; the Monday flattening is the light-air wall. The detailed story is in the next chart.</div>
+  <div id="dtf" class="plot"></div>
+  <div class="tapnote" id="tap_dtf"></div>
+</section>
+
+<section class="card">
+  <div class="hd">
+    <h2>Where the race was won and lost — vs <span id="refname" style="color:var(--magenta)"></span></h2>
+    <span class="tools">
+      <button class="modebtn" id="mode_h">Corrected (handicap)</button>
+      <button class="modebtn" id="mode_e">Elapsed (boat-for-boat)</button>
+      &nbsp;·&nbsp;
+      <button class="modebtn" id="view_p">Pace (min/100nm)</button>
+      <button class="modebtn" id="view_t">Total (min)</button>
+      &nbsp;·&nbsp; <label for="refsel">Reference</label> <select id="refsel"></select>
+    </span>
+  </div>
+  <div class="note" id="racenote"></div>
+  <div id="race" class="plot"></div>
+  <div class="tapnote" id="tap_race"></div>
+</section>
+
+<section class="card">
+  <h2>The finish — how tight the mid-pack really was</h2>
+  <div class="note">Every scored St. David's Lighthouse boat by corrected time. Each dot is a boat; RAGANA is the magenta diamond. Thirteen boats finished within half an hour of her on corrected time — the densest stretch of the whole fleet. The dashed markers show what one and two hours of corrected time were worth: <b>one hour ≈ 16 places, two hours ≈ 29</b>. In a race this compressed, every one of the small losses in the story above carried real scoreboard weight.</div>
+  <div id="finstrip" class="plot"></div>
+  <div class="tapnote" id="tap_finstrip"></div>
+</section>
+
+<div class="two">
+<section class="card">
+  <div class="hd"><h2>Distance from the rhumb line</h2><span class="tools" id="xte_axnote"></span></div>
+  <div class="note">Plus is east of the direct line, minus is west. RAGANA held the most easterly track of the quick-select set (23 nm east at most, never more than 8 west). East wasn't wrong on its own — the St. David's podium won from the east — but among boats hitting the light air the same evening, the ones nearer the rhumb got through it faster.</div>
+  <div id="xte" class="plot"></div>
+  <div class="tapnote" id="tap_xte"></div>
+</section>
+<section class="card">
+  <div class="hd"><h2>Speed over ground</h2><span class="tools" id="sog_axnote"></span></div>
+  <div class="note">30-minute smoothed GPS speed. Switch the axis to <b>distance</b> to line every boat up on the same stretch of ocean — the fair way to compare the park. The speedo failure early Monday is invisible here because this speed is GPS-derived, which is exactly why steering to it worked when the paddlewheel quit.</div>
+  <div id="sog" class="plot"></div>
+  <div class="tapnote" id="tap_sog"></div>
+</section>
+</div>
+
+<section class="card">
+  <h2>The park, measured fairly — each boat's own run through DTF 180 → 80</h2>
+  <div class="note">Comparing "the park" by wall-clock window is misleading: faster boats clear the light air before slower boats reach it, so you end up comparing different water. This table instead measures the empirically slow zone — the 180-to-80-nm-to-go band, with a dead core around 140–160 where the fleet-median speed bottomed at 3.3 kts — as each boat actually traversed it, on its own clock. The finding: everyone parked (16–38% of each run under 4 kts), the whole set's traversal times fall within 5.5 hours of each other, and RAGANA's 27.9 hours was second-slowest — an honest gap of two to four hours from the most easterly lane, with an instrument failure and a sail repair both landing inside the dead core.</div>
+  <div id="parktable"></div>
+</section>
+
+<section class="card">
+  <h2>Race log — every marked moment</h2>
+  <div class="note">Everything driving the markers and shading above, in order, with the boat's distance-to-finish at each point. Includes the analysis notes (the "insight" rows). Filter by category in the Overlays row.</div>
+  <div id="eventtable" style="max-height:520px;overflow-y:auto"></div>
+</section>
+
+<section class="card">
+  <h2>Nav log vs. tracker — a reconciliation</h2>
+  <div class="note">Each hand-written fix from the nav log matched to the tracker position at that moment, with the log's own columns restored. Ten usable fixes, nine within 2 nm. Two were exactly an hour off — the nav watch and some instruments were set to UTC−5 instead of the race's UTC−4 — and one couldn't be reconciled and was dropped. A small, honest audit of how well the paper record held up.</div>
+  <div id="recon"></div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <h3>How to read this</h3>
+  <ul>
+    <li><b>The race chart</b> plots, at each 10-nm distance-to-finish milestone, one boat's time minus a reference boat's — negative means ahead. <b>Corrected</b> applies each boat's handicap (the actual competition); <b>elapsed</b> is raw boat-for-boat position on the water. Endpoints at the finish are exact from official results; the points between are tracker estimates.</li>
+    <li><b>The park table</b> measures each boat's own traversal of the slow zone, so it compares like with like regardless of when a boat got there.</li>
+    <li>Start-sequence differences (classes started 13:40–14:30) are removed from the race chart. Two boats are named Phoenix — USA25329 (J/120, 45th) is in the quick-select; USA93063 (First 40.7, 24th) is under "+ More."</li>
+  </ul>
+  <h3>Sources &amp; method</h3>
+  <ul>
+    <li>YB tracker export (252,046 positions, 144 boats, ~5-min interval); the boat's nav log; the Commanders' Weather routing brief; and "The Gulf Stream Show" daily broadcast plus the pre-race Navigators' Forum. Speed is derived from position over a centered 30-min window; distance-to-finish and rhumb offset by great-circle math against a finish line triangulated from six boats' official finish times. Race timing verified EDT. Gulf Stream band is approximate, drawn from RAGANA's own sea-temperature log — not an oceanographic product.</li>
+  </ul>
+  <h3>On the wishlist for a future round</h3>
+  <ul>
+    <li>NOAA Gulf Stream overlay · GFS wind underlay · animated time scrubber · synced hover across charts.</li>
+  </ul>
+  <div style="margin-top:10px;font-family:var(--mono);font-size:11px">Built from the 2026 race record · times EDT (UTC−4) · build 2026-07-06</div>
+</footer>
+
+</div>
+</body>
+</html>
