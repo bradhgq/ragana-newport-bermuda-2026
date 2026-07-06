@@ -17,13 +17,13 @@
 <meta name="twitter:title" content="RAGANA · Newport Bermuda 2026 · Race Analysis">
 <meta name="twitter:description" content="A crew's-eye reconstruction of the 2026 Newport Bermuda Race from the YB tracker and the nav log.">
 <meta name="twitter:image" content="https://hgq.fyi/ragana-newport-bermuda-2026/og.png">
-<link rel="icon" href="favicon.svg?v=dc7a5b79a9" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css?v=dc7a5b79a9">
+<link rel="icon" href="favicon.svg?v=5778b34323" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css?v=5778b34323">
 <!-- DATA:FETCH — start the core payload download before the deferred scripts arrive -->
-<script>window.__CORE_FETCH=fetch('data/core.json?v=dc7a5b79a9').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});</script>
+<script>window.__CORE_FETCH=fetch('data/core.json?v=5778b34323').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});</script>
 <!-- /DATA:FETCH -->
-<script src="helpers.js?v=dc7a5b79a9" defer></script>
-<script src="app.js?v=dc7a5b79a9" defer></script>
+<script src="helpers.js?v=5778b34323" defer></script>
+<script src="app.js?v=5778b34323" defer></script>
 <script src="vendor/plotly-basic-2.35.2.min.js" id="plotlyjs" defer></script>
 </head>
 <body>
@@ -48,7 +48,7 @@
 
 <main>
 
-<div class="appstate" id="appstate" role="status">Loading race data…</div>
+<div class="appstate" id="appstate" role="status">Loading the race record — 88 boat tracks, four days of racing…</div>
 
 <section class="controls" id="controls" aria-label="Boat and overlay controls" hidden>
   <div class="ctl-head">
@@ -72,6 +72,12 @@
     </div>
   </div>
 </section>
+
+<!-- phone-width only: the controls live in a bottom sheet behind this bar -->
+<div id="scrim" hidden></div>
+<button type="button" id="sheetBar" aria-controls="controls" aria-expanded="false" hidden>
+  <span class="dot" aria-hidden="true"></span><span id="sheetBarLabel">Boats &amp; overlays</span>
+</button>
 
 <section class="kpis" id="kpis" aria-label="Key results"></section>
 

@@ -81,6 +81,18 @@ function BASE(){ return {paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'#FDFEFD',
 const GAX = {gridcolor:'#E3ECEF', zerolinecolor:'#B9CBD4', tickfont:AXFONT, linecolor:'#B9CBD4'};
 const PLOTCFG = {responsive:true, displaylogo:false, displayModeBar:false};
 
+/* every chart renders through here. On touch-width screens a finger-drag must
+   scroll the PAGE, not zoom the plot — freeze the axes and kill dragmode;
+   tap-to-inspect and tap-hover still work. Desktop keeps drag-zoom + hover. */
+function react(id, traces, layout){
+  if(narrow()){
+    layout.dragmode = false;
+    for(const k of Object.keys(layout))
+      if(/^[xy]axis\d*$/.test(k)) layout[k] = {...layout[k], fixedrange:true};
+  }
+  Plotly.react(id, traces, layout, PLOTCFG);
+}
+
 /* shared x-axis config for the toggle-driven charts */
 function sharedXaxis(extra){
   const base = S.axis==='t'
@@ -164,6 +176,11 @@ function attachTap(id){
   if(tapped.has(id)) return; tapped.add(id);
   const gd = document.getElementById(id);
   if(!gd || !gd.on) return;
+  // on touch widths, advertise the tap affordance until the first tap replaces it
+  if(narrow()){
+    const el = document.getElementById('tap_'+id);
+    if(el && !el.classList.contains('show')){ el.textContent='Tap any point for details.'; el.classList.add('show'); }
+  }
   gd.on('plotly_click', ev=>{
     const p = ev.points && ev.points[0]; if(!p) return;
     let txt = p.hovertext || (typeof p.text==='string' ? p.text : '');
@@ -230,7 +247,7 @@ function buildControls(){
       ()=>toggleBoat(nm), nm==='RAGANA');
     el.title=`${b.meta.typ} · F-TCF ${b.meta.tcf??'—'} · corrected ${b.meta.corr??'—'}`;
     chips.appendChild(el); }
-  const moreBtn=makeChip(`+ More (${ORDER.length-quick.length})`, '#17293A', S.showMore,
+  const moreBtn=makeChip(`+ More boats (${ORDER.length-quick.length})`, '#17293A', S.showMore,
     ()=>{ S.showMore=!S.showMore; buildControls(); });
   moreBtn.setAttribute('aria-expanded', S.showMore?'true':'false');
   moreBtn.setAttribute('aria-controls','morePanel');
@@ -258,7 +275,7 @@ function buildControls(){
   add('Nav log', '#C0392B', ()=>S.log, x=>{S.log=x; render('map');});
   add('Ghosts', '#7A93A3', ()=>S.fleet, x=>{S.fleet=x; render('map'); if(x) loadFleet();});
   add('Gulf Stream', '#3E97C9', ()=>S.gs, x=>{S.gs=x; render('bands');});
-  add('Rhumb', '#C2187E', ()=>S.rhumb, x=>{S.rhumb=x; render('map');});
+  add('Rhumb line', '#C2187E', ()=>S.rhumb, x=>{S.rhumb=x; render('map');});
   add("Brad's watches", '#B8944A', ()=>S.watches, x=>{S.watches=x; render('bands');});
 
   const sel=document.getElementById('refsel'); sel.innerHTML='';
@@ -278,11 +295,39 @@ function buildControls(){
   const axlabel = S.axis==='t' ? 'clock time' : 'distance to finish';
   ['xte_axnote','sog_axnote'].forEach(id=>{ const el=document.getElementById(id); if(el)el.textContent='x-axis: '+axlabel; });
   const cc=document.getElementById('ctlCollapse'), body=document.getElementById('ctlBody');
-  body.style.display = S.panelOpen ? '' : 'none';
-  cc.textContent = S.panelOpen ? 'Hide controls ▲' : 'Show controls ▼';
-  cc.setAttribute('aria-expanded', S.panelOpen?'true':'false');
-  cc.setAttribute('aria-controls','ctlBody');
-  cc.onclick=()=>{ S.panelOpen=!S.panelOpen; buildControls(); };
+  if(narrow()){
+    // inside the bottom sheet the body is always shown; the header button closes the sheet
+    body.style.display='';
+    cc.textContent='Done';
+    cc.setAttribute('aria-expanded','true');
+    cc.removeAttribute('aria-controls');
+    cc.onclick=closeSheet;
+  } else {
+    body.style.display = S.panelOpen ? '' : 'none';
+    cc.textContent = S.panelOpen ? 'Hide controls ▲' : 'Show controls ▼';
+    cc.setAttribute('aria-expanded', S.panelOpen?'true':'false');
+    cc.setAttribute('aria-controls','ctlBody');
+    cc.onclick=()=>{ S.panelOpen=!S.panelOpen; buildControls(); };
+  }
+  const lbl=document.getElementById('sheetBarLabel');
+  if(lbl) lbl.textContent=`Boats & overlays · ${S.boats.size} shown`;
+}
+
+/* ═══ phone bottom sheet ═══ */
+function openSheet(){
+  document.getElementById('controls').classList.add('open');
+  document.getElementById('scrim').hidden=false;
+  document.getElementById('sheetBar').setAttribute('aria-expanded','true');
+  document.body.style.overflow='hidden';
+  document.getElementById('ctlCollapse').focus({preventScroll:true});
+}
+function closeSheet(){
+  document.getElementById('controls').classList.remove('open');
+  document.getElementById('scrim').hidden=true;
+  const bar=document.getElementById('sheetBar');
+  bar.setAttribute('aria-expanded','false');
+  document.body.style.overflow='';
+  if(narrow()) bar.focus({preventScroll:true});
 }
 function bindMode(id,val,key){ const el=document.getElementById(id);
   el.className='modebtn'+(S[key]===val?' on':'');
@@ -377,11 +422,11 @@ function buildMap(){
     return {x,y,ax,ay,xref:'x',yref:'y',text:txt,showarrow:true,arrowhead:0,arrowwidth:.7,
       arrowcolor:'rgba(81,103,122,0.55)',standoff:3,
       font:{size:8.5,color:'#4C6274',family:'SF Mono, Menlo, monospace'},align:'left'}; });
-  Plotly.react('map',tr,{...BASE(), annotations:mapAnn,
+  react('map',tr,{...BASE(), annotations:mapAnn,
     xaxis:{...GAX,title:nw?undefined:{text:'Longitude',font:AXFONT},range:[-72,-63.6]},
     yaxis:{...GAX,title:nw?undefined:{text:'Latitude',font:AXFONT},range:[31.9,42]},
     legend: nw ? {orientation:'h',y:-0.08,font:{size:10}} : {orientation:'v',x:1.001,y:1,font:{size:10.5}},
-    margin: nw ? {l:36,r:10,t:8,b:30} : {l:56,r:150,t:8,b:40}}, PLOTCFG);
+    margin: nw ? {l:36,r:10,t:8,b:30} : {l:56,r:150,t:8,b:40}});
 }
 
 /* ═══ the race chart (own DTF axis unless the shared toggle is on time) ═══ */
@@ -398,9 +443,9 @@ function buildRace(){
   if(!hasTrack(S.ref)){
     // reference's track still downloading — blank the chart rather than leave
     // the previous reference's traces under the new header
-    Plotly.react('race', [], {...BASE(), xaxis:{...GAX,visible:false}, yaxis:{...GAX,visible:false},
+    react('race', [], {...BASE(), xaxis:{...GAX,visible:false}, yaxis:{...GAX,visible:false},
       annotations:[{text:'loading '+S.ref+'’s track…',xref:'paper',yref:'paper',x:.5,y:.5,showarrow:false,
-        font:{size:12,color:'#4C6274',family:'SF Mono, Menlo, monospace'}}]}, PLOTCFG);
+        font:{size:12,color:'#4C6274',family:'SF Mono, Menlo, monospace'}}]});
     return;
   }
   const ref=D.boats[S.ref], refStart=startOf(ref), refTCF=ref.meta.tcf||1;
@@ -438,10 +483,10 @@ function buildRace(){
   const yTitle = narrow()
     ? (pace?'min/100nm':'min')+' vs ref (+ = behind)'
     : (pace?'Min per 100 nm':'Minutes')+' behind (+) / ahead (−) of '+S.ref+(S.raceMode==='h'?' — corrected':' — elapsed');
-  Plotly.react('race',tr,{...BASE(),shapes,annotations:ann,margin:{...BASE().margin,t:26},
+  react('race',tr,{...BASE(),shapes,annotations:ann,margin:{...BASE().margin,t:26},
     xaxis:sharedXaxis(narrow()?{title:undefined}:undefined),
     yaxis:{...GAX,title:{text:yTitle,font:AXFONT}},
-    yaxis2:{overlaying:'y',side:'right',range:[0,20],visible:false,fixedrange:true}}, PLOTCFG);
+    yaxis2:{overlaying:'y',side:'right',range:[0,20],visible:false,fixedrange:true}});
 }
 
 /* ═══ toggle-driven charts: DTF, rhumb offset, speed ═══ */
@@ -461,9 +506,9 @@ function buildDTF(){
     if(i>0) shapes.push({type:'line',xref:'x',yref:'paper',x0:edtStr(t0),x1:edtStr(t0),y0:0,y1:1,line:{color:'#B9CBD4',width:1}});
     if(!narrow()) ann.push({x:edtStr((t0+t1)/2),y:1.05,xref:'x',yref:'paper',text:l,showarrow:false,
       font:{size:8.5,color:'#4C6274',family:'SF Mono, Menlo, monospace'}}); });
-  Plotly.react('dtf',tr,{...BASE(),shapes,annotations:ann,margin:{...BASE().margin,t:22,b:36},
+  react('dtf',tr,{...BASE(),shapes,annotations:ann,margin:{...BASE().margin,t:22,b:36},
     xaxis:{...GAX,tickformat:'%a %H:%M',type:'date'},
-    yaxis:{...GAX,title:{text:'nm to finish',font:AXFONT},range:[680,-15]}}, PLOTCFG);
+    yaxis:{...GAX,title:{text:'nm to finish',font:AXFONT},range:[680,-15]}});
 }
 function buildXTE(){
   const tr=seriesTraces('xte', nm=>nm==='RAGANA'?2.6:1.3).map(t=>({...t,showlegend:false}));
@@ -471,8 +516,8 @@ function buildXTE(){
   const wl=watchLegend(); if(wl)tr.push(wl);
   const shapes=[...gsShape(),...watchShapes(),...dec.shapes,
     {type:'line',xref:'paper',yref:'y',x0:0,x1:1,y0:0,y1:0,line:{color:'#C2187E',width:1,dash:'dash'}}];
-  Plotly.react('xte',tr,{...BASE(),shapes,xaxis:sharedXaxis(),
-    yaxis:{...GAX,title:{text:'nm east (+) / west (−) of rhumb',font:AXFONT}}}, PLOTCFG);
+  react('xte',tr,{...BASE(),shapes,xaxis:sharedXaxis(),
+    yaxis:{...GAX,title:{text:'nm east (+) / west (−) of rhumb',font:AXFONT}}});
 }
 function buildSOG(){
   const tr=seriesTraces('sog', nm=>nm==='RAGANA'?2.4:1.1).map(t=>({...t,showlegend:false,opacity:t.name==='RAGANA'?1:.7}));
@@ -482,22 +527,23 @@ function buildSOG(){
   if(S.axis==='d') shapes=shapes.concat([
     {type:'rect',xref:'x',yref:'paper',x0:180,x1:80,y0:0,y1:1,fillcolor:'rgba(23,41,58,0.05)',line:{width:0}},
     {type:'rect',xref:'x',yref:'paper',x0:160,x1:140,y0:0,y1:1,fillcolor:'rgba(192,57,43,0.07)',line:{width:0}}]);
-  Plotly.react('sog',tr,{...BASE(),shapes,
+  react('sog',tr,{...BASE(),shapes,
     xaxis:sharedXaxis(S.axis==='d'?{title:{text:narrow()?'nm to finish ⟵ (grey = park, red = dead core)':'Distance to finish (nm) ⟵ (grey = park zone, red = dead core)',font:AXFONT}}:{}),
-    yaxis:{...GAX,title:{text:'Speed over ground (kts)',font:AXFONT},range:[0,14]}}, PLOTCFG);
+    yaxis:{...GAX,title:{text:'Speed over ground (kts)',font:AXFONT},range:[0,14]}});
 }
 
 /* ═══ tables ═══ */
 function buildParkTable(){
   const pf=D.parkFair;
   const names=Object.keys(pf).filter(nm=>S.boats.has(nm));
-  if(!names.length){ document.getElementById('parktable').innerHTML='<div class="note">Select boats above to compare their light-air crossings.</div>'; return; }
+  if(!names.length){ document.getElementById('parktable').innerHTML='<div class="note">No boats selected. Pick boats under “Boats &amp; overlays” to compare their light-air crossings.</div>'; return; }
   const rows=names.map(nm=>({nm,...pf[nm],sdl:D.boats[nm].meta.sdl})).sort((a,b)=>a.hrs-b.hrs).map(r=>
     `<tr class="${r.nm==='RAGANA'?'hero':''}"><td>${r.nm}</td><td>${r.sdl?'#'+r.sdl:'—'}</td><td>${fmt(r.enter)}</td>
      <td style="text-align:right">${r.hrs}</td><td style="text-align:right">${r.mean}</td><td style="text-align:right">${r.u4}%</td>
      <td style="text-align:right">${r.u2}%</td><td style="text-align:right">${r.xte>0?'+':''}${r.xte}</td></tr>`).join('');
   document.getElementById('parktable').innerHTML=
     `<div class="tblwrap"><table><thead><tr><th scope="col">Boat</th><th scope="col">SDL</th><th scope="col">Reached zone</th><th scope="col">Hours to cross</th><th scope="col">Avg kts</th><th scope="col">% under 4</th><th scope="col">% under 2</th><th scope="col">Avg nm E+</th></tr></thead><tbody>${rows}</tbody></table></div>
+     <div class="note swipehint">Swipe the table sideways for the rest of the columns.</div>
      <div class="note">The boats you've selected, fastest crossing first. For context on RAGANA's run, Carina makes the cleanest match: she reached the zone 20 min before RAGANA, ~10 nm nearer the rhumb, and got through 3.7 hours quicker.</div>`;
 }
 function buildEventTable(){
@@ -508,7 +554,7 @@ function buildEventTable(){
       <td style="white-space:normal;min-width:320px">${e.txt}</td></tr>`; }).join('');
   document.getElementById('eventtable').innerHTML = evs.length
     ? `<table><thead><tr><th scope="col">Time</th><th scope="col">Type</th><th scope="col">To go</th><th scope="col">Moment</th><th scope="col">Detail</th></tr></thead><tbody>${rows}</tbody></table>`
-    : `<div class="note">No categories selected — turn one on in the Overlays row.</div>`;
+    : `<div class="note">Every event category is off. Turn one on under “Boats &amp; overlays” to fill this log back in.</div>`;
 }
 function buildRecon(){
   const badge=v=> v==='error'?'<span class="badge err">dropped</span>':v==='warn'?'<span class="badge warn">+1h corrected</span>':'<span class="badge ok">match</span>';
@@ -517,7 +563,8 @@ function buildRecon(){
      <td style="text-align:right">${r.d}</td><td>${r.speed}</td><td>${r.course}</td><td>${r.wind}</td>
      <td>${r.temp!=null?r.temp+'°F':'—'}</td><td>${badge(r.verdict)}</td><td style="white-space:normal;min-width:280px">${r.note||''}</td></tr>`).join('');
   document.getElementById('recon').innerHTML=
-    `<table><thead><tr><th scope="col">Log time</th><th scope="col">True EDT</th><th scope="col">Log position</th><th scope="col">Tracker position</th><th scope="col">Δ nm</th><th scope="col">Speed</th><th scope="col">Course</th><th scope="col">Wind</th><th scope="col">Water</th><th scope="col">Verdict</th><th scope="col">Note</th></tr></thead><tbody>${rows}</tbody></table>`;
+    `<table><thead><tr><th scope="col">Log time</th><th scope="col">True EDT</th><th scope="col">Log position</th><th scope="col">Tracker position</th><th scope="col">Δ nm</th><th scope="col">Speed</th><th scope="col">Course</th><th scope="col">Wind</th><th scope="col">Water</th><th scope="col">Verdict</th><th scope="col">Note</th></tr></thead><tbody>${rows}</tbody></table>`
+    +`<div class="note swipehint">Swipe the table sideways for the rest of the columns.</div>`;
 }
 
 /* ═══ finish spread: every scored SDL boat by corrected time ═══ */
@@ -552,17 +599,17 @@ function buildFinStrip(){
     {x:hrs(rag),y:0,xref:'x',yref:'y',ax:0,ay:-46,text:'RAGANA · #46',showarrow:true,
       arrowhead:0,arrowwidth:.7,arrowcolor:'rgba(194,24,126,0.55)',standoff:9,
       font:{size:10,color:'#C2187E',family:'SF Mono, Menlo, monospace'}}];
-  Plotly.react('finstrip',tr,{...BASE(),shapes,annotations:ann,margin:{...BASE().margin,t:14,b:44},showlegend:false,
+  react('finstrip',tr,{...BASE(),shapes,annotations:ann,margin:{...BASE().margin,t:14,b:44},showlegend:false,
     xaxis:{...GAX,title:{text:narrow()?'Corrected time (h) — left is better':'Corrected time (hours) — St. David’s Lighthouse fleet, left is better',font:AXFONT}},
-    yaxis:{...GAX,visible:false,range:[-0.8,0.8]}}, PLOTCFG);
+    yaxis:{...GAX,visible:false,range:[-0.8,0.8]}});
 }
 
 /* ═══ boot ═══ */
 function showError(e){
   const el=document.getElementById('appstate');
   el.className='appstate err';
-  el.innerHTML='Couldn’t load the race data ('+(e && e.message ? e.message : e)+').<br>' +
-    'If you opened this file directly (file://), serve it instead: <kbd>python3 -m http.server</kbd> in the dist folder.<br>' +
+  el.innerHTML='The race data didn’t load ('+(e && e.message ? e.message : e)+').<br>' +
+    'Check your connection and retry. Opened as a local file? Serve the folder instead: <kbd>python3 -m http.server</kbd>.<br>' +
     '<button type="button" class="retry" onclick="location.reload()">Retry</button>';
 }
 (async function init(){
@@ -580,7 +627,11 @@ function showError(e){
 
   document.getElementById('appstate').remove();
   document.getElementById('controls').hidden=false;
-  S.panelOpen = !narrow();
+  const sheetBar=document.getElementById('sheetBar');
+  sheetBar.hidden=false;                      // shown/hidden by breakpoint CSS
+  sheetBar.onclick=()=>{ document.getElementById('controls').classList.contains('open') ? closeSheet() : openSheet(); };
+  document.getElementById('scrim').onclick=closeSheet;
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && narrow()) closeSheet(); });
   buildKPIs(); buildRecon();
   render('all');                       // controls + tables now; charts gated on Plotly
   plotlyReady.then(()=>{
@@ -602,15 +653,15 @@ function showError(e){
     requestAnimationFrame(()=>{ ctl.classList.toggle('scrolled', window.scrollY>40); ticking=false; });
   },{passive:true});
 
-  // re-lay charts when crossing the mobile breakpoint (legend/margin changes)
+  // re-lay charts when crossing the mobile breakpoint (legend/margin/dragmode changes)
   let wasNarrow=narrow(), rt=0;
   window.addEventListener('resize',()=>{
     clearTimeout(rt);
-    rt=setTimeout(()=>{ if(narrow()!==wasNarrow){ wasNarrow=narrow(); render('all'); } },200);
+    rt=setTimeout(()=>{ if(narrow()!==wasNarrow){ wasNarrow=narrow(); closeSheet(); render('all'); } },200);
   });
 })();
 function showChartError(){
   document.querySelectorAll('.plot').forEach(el=>{
-    el.innerHTML='<div class="note" style="padding:20px">Charts couldn’t load (the Plotly library failed to download). The tables below still work.</div>';
+    el.innerHTML='<div class="note" style="padding:20px">The charts didn’t load (the plotting library failed to download). The tables below still work — reload to try the charts again.</div>';
   });
 }

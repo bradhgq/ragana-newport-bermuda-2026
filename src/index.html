@@ -48,7 +48,7 @@
 
 <main>
 
-<div class="appstate" id="appstate" role="status">Loading race data…</div>
+<div class="appstate" id="appstate" role="status">Loading the race record — 88 boat tracks, four days of racing…</div>
 
 <section class="controls" id="controls" aria-label="Boat and overlay controls" hidden>
   <div class="ctl-head">
@@ -72,6 +72,12 @@
     </div>
   </div>
 </section>
+
+<!-- phone-width only: the controls live in a bottom sheet behind this bar -->
+<div id="scrim" hidden></div>
+<button type="button" id="sheetBar" aria-controls="controls" aria-expanded="false" hidden>
+  <span class="dot" aria-hidden="true"></span><span id="sheetBarLabel">Boats &amp; overlays</span>
+</button>
 
 <section class="kpis" id="kpis" aria-label="Key results"></section>
 
