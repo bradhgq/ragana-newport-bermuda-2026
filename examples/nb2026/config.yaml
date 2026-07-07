@@ -1,0 +1,119 @@
+# NB2026 / RAGANA — the frozen worked example (tier 3).
+# Schema of record: skill/race-viz/references/schemas.md. Golden values here are
+# fixtures (prime rule 3): changing one requires a recorded user instruction.
+
+race:
+  name: Newport Bermuda Race
+  edition: 2026
+  slug: nb2026
+  organizer_url: https://bermudarace.com
+
+tracker: { vendor: yb, path: raw/tracks.csv }
+
+official_results:
+  path: official_results.csv
+  columns:
+    rank: rank
+    name: name
+    sail: sail
+    rating: rating
+    elapsed: elapsed
+    corrected: corrected
+    type: type
+    finish_local: finish_local
+    division: division
+    class_rank: class_rank      # official within-class order (drives meta.clsPos)
+    status: status              # FIN | DNF — DNF rows carry retire_reason
+    retire_reason: retire_reason
+
+course:
+  type: point_to_point
+  start: [41.4868, -71.3415]    # Newport start line
+  finish: [32.3618, -64.6303]   # St. David's — triangulated from six boats' official finishes
+  official_length_nm: 635.1
+  finish_radius_nm: 0.7         # arrival cut for boats without an official finish time
+
+time:
+  official_tz: America/New_York
+  utc_offset: -4
+  tz_label: EDT
+  race_start_utc: '2026-06-19 17:40:00+00:00'   # data trim: 40 min before the first warning
+  tz_probe:                     # stage-0 verified: official finish vs the track on the line
+    boat: RAGANA
+    official_finish_local: '2026-06-23 15:54:52'
+    track_epoch_utc: 1782244492
+
+scoring:
+  system: tot                   # corrected = elapsed x F-TCF
+  params: { rating_column: rating }
+  probe_boats: [RAGANA, Christopher Dragon]
+
+start_method: finish_minus_elapsed
+divisions_in_scope: [SDL 3]
+client_boat: RAGANA
+reference_boats: [Christopher Dragon]
+tier: 3
+
+name_overrides:
+  by_id:                        # two boats named Phoenix in the tracker — split by boat_id
+    98: Phoenix F40
+    99: Phoenix J120
+  by_name:
+    Madcap (Madcap/Smee Again Syndicate): Madcap
+  display:                      # official-results name -> shipped display name
+    Ragana: RAGANA
+    Phoenix F40: Phoenix USA93063     # I4: duplicate names disambiguated by sail number
+    Phoenix J120: Phoenix USA25329
+
+groups:                         # chip-group semantics; who's in each is race judgment (CP-0/2)
+  hero_key: ragana
+  by_rank:
+    class: [13, 14, 15, 23, 26, 28, 30, 53, 60]     # SDL 3, minus the hero
+    nbr: [41, 42, 43, 44, 45, 47, 48, 49, 50]       # corrected-time neighbors
+    podium: [1, 2, 3]
+    club: [66, 69]                                  # CPYC clubmates (confirmed by Brad)
+  default_key: sdl_other
+  dnf_key: sdl_dnf
+
+extra_boats:                    # tracked but outside the scored division
+  - { track_name: BLACK JACK 100, display: Black Jack 100, type: 100ft Maxi · line honors, group: maxi }
+  - { track_name: OC 86, display: OC 86, type: Offshore multihull · outside SDL, group: maxi }
+
+grid: { minutes: 15, end_utc: '2026-06-25 12:00:00+00:00', interpolate_limit: 4 }
+sog: { half_window_s: 900, min_span_s: 600 }        # centered 30-min SOG window
+fleet: { resample: 1h, min_points: 5 }              # hourly ghost layer
+milestones: { start_nm: 600, step_nm: 20 }
+finish_pad_min: 3
+
+events: { path: events.yaml }
+event_categories: [crew, systems, sail, tactics, insight, milestone]   # draw order, low -> high
+
+reconcile: { path: navlog.yaml, matched_key: matched_edt }
+
+zone_detection:
+  band_nm: 10
+  collapse_frac: 0.5
+  min_traversal_hours: 6
+  # Shipped park bounds are an authored CP-2 analysis judgment (RETROSPECTIVE §5.3),
+  # not a detection output: the fleet-median table (run_log.json) shows band 180-190
+  # (5.93 kts) is slower than band 80-90 (6.15 kts), so no threshold rule can land
+  # exactly on 180→80. Detection candidates are logged alongside for audit.
+  zone: { upper_nm: 180, lower_nm: 80 }
+
+finish_spread: { window_min: 30, min_boats: 10 }
+noise_floor_min: 30
+
+privacy: { default: private }   # events.yaml rows are individually opted-in via visibility: public
+
+output:
+  dir: out/
+  generated: '2026-07-05'       # pinned: the frozen example reproduces byte-for-byte; omit for new races
+
+goldens:                        # frozen at CP-2 — never re-derive (prime rule 3)
+  tz_probe: { epoch: 1782094500, rendered: '2026-06-21 22:15' }
+  endpoints: { ref: Christopher Dragon, corrected_min: 94.0, elapsed_min: 155.3 }
+  module_canaries:
+    park: { boat: Gemini II, u4: 31 }
+  names_present: [Phoenix USA25329, Phoenix USA93063, Hissy Fit II]
+  names_absent: ['Hissy  Fit II']
+  finstrip_count: 82

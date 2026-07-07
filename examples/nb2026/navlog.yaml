@@ -1,0 +1,170 @@
+# NB2026 paper nav-log fixes (Steve's log), transcribed + reconciled in the worked
+# example. t_local is the TRUE local time (clock-base corrections already applied —
+# see the row notes about the UTC-5 instrument error). Verdicts/notes are authored.
+# One unresolvable 09:00 row was deleted during the original analysis.
+fixes:
+- label: Fri 15:50
+  t_local: 2026-06-19 15:50
+  lat:
+    deg: 41
+    min: 19
+    hem: N
+  lon:
+    deg: 71
+    min: 16
+    hem: W
+  speed: '8.2'
+  course: 154°M
+  wind: 14–20 kts / 240°
+  temp: null
+  verdict: match
+  note: Log dated "Sat" — race started Fri 14:20, this is Friday afternoon.
+- label: Fri 21:16
+  t_local: 2026-06-19 21:16
+  lat:
+    deg: 40
+    min: 39.6
+    hem: N
+  lon:
+    deg: 70
+    min: 43.7
+    hem: W
+  speed: ~9.0–8.5
+  course: 155°M
+  wind: 14–17 kts / 257°M
+  temp: 64
+  verdict: match
+  note: Same date mislabel as above — Friday evening, not Saturday.
+- label: Sat 01:55
+  t_local: 2026-06-20 01:55
+  lat:
+    deg: 40
+    min: 5
+    hem: N
+  lon:
+    deg: 70
+    min: 19
+    hem: W
+  speed: 8.5–9
+  course: 290°M
+  wind: 14–18 kts
+  temp: 70
+  verdict: match
+  note: ''
+- label: Sat 05:20
+  t_local: 2026-06-20 05:20
+  lat:
+    deg: 39
+    min: 39
+    hem: N
+  lon:
+    deg: 70
+    min: 1
+    hem: W
+  speed: 9–11
+  course: 290°M
+  wind: 20s, gusting 27
+  temp: 63
+  verdict: match
+  note: ''
+- label: Sat 11:57
+  t_local: 2026-06-20 12:57
+  lat:
+    deg: 38
+    min: 45
+    hem: N
+  lon:
+    deg: 69
+    min: 13
+    hem: W
+  speed: 8–10
+  course: —
+  wind: 22 kts
+  temp: 72
+  verdict: warn
+  note: CONFIRMED — Steve's watch (and some boat instruments) were running UTC−5 (EST) instead of UTC−4
+    (EDT), i.e. exactly 1 hr slow. True EDT = logged time + 1 hr = 12:57, matching the tracker within
+    0.6 nm (vs. 9.6 nm off at the literal 11:57). Bermuda Race official timing is UTC−4 throughout — the
+    instrument was simply on the wrong zone.
+- label: Sat 16:21
+  t_local: 2026-06-20 17:21
+  lat:
+    deg: 38
+    min: 10
+    hem: N
+  lon:
+    deg: 68
+    min: 44
+    hem: W
+  speed: 8 (2 reefs+J3)
+  course: —
+  wind: entering Gulf Stream
+  temp: 74
+  verdict: warn
+  note: CONFIRMED — same UTC−5-instead-of-UTC−4 instrument error as the row above. True EDT = 17:21, matching
+    the tracker within 0.7 nm (vs. 9.7 nm off at the literal 16:21). Gulf Stream entry was actually ~17:21,
+    about an hour later than the log’s face value.
+- label: Sat 21:00
+  t_local: 2026-06-20 21:00
+  lat:
+    deg: 37
+    min: 42
+    hem: N
+  lon:
+    deg: 68
+    min: 16
+    hem: W
+  speed: ~8.5
+  course: 155°M
+  wind: 16–20 kts / 310°M
+  temp: 80
+  verdict: match
+  note: ''
+- label: Sat 22:42
+  t_local: 2026-06-20 22:42
+  lat:
+    deg: 37
+    min: 27
+    hem: N
+  lon:
+    deg: 68
+    min: 5
+    hem: W
+  speed: '9.7'
+  course: 154°M
+  wind: — (word unclear, reads "Kevin")
+  temp: 80
+  verdict: match
+  note: Wind/notes field has an illegible word transcribed as "Kevin" — unclear meaning, quoted as written.
+- label: Sun 05:01
+  t_local: 2026-06-21 05:01
+  lat:
+    deg: 36
+    min: 51
+    hem: N
+  lon:
+    deg: 67
+    min: 20
+    hem: W
+  speed: '7'
+  course: 262°M
+  wind: 13 kts
+  temp: 75
+  verdict: match
+  note: South of the Stream.
+- label: Sun 08:47
+  t_local: 2026-06-21 08:47
+  lat:
+    deg: 36
+    min: 32
+    hem: N
+  lon:
+    deg: 67
+    min: 1
+    hem: W
+  speed: '6.15'
+  course: —
+  wind: —
+  temp: null
+  verdict: match
+  note: ''

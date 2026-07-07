@@ -1,0 +1,12 @@
+# Narrative as data (never pipeline code). Times are naive local strings in the
+# race's official timezone. visibility: public requires a per-item CP-5 opt-in
+# when the row derives from private logs (prime rule 4).
+events:
+  - t: 'YYYY-MM-DD HH:MM'
+    cat: milestone              # one of event_categories in config.yaml
+    label: ''
+    txt: ''
+    source: journal             # journal | navlog | transcript | analysis
+    visibility: private         # private | public
+
+watches: []                     # optional crew watch spans: [['YYYY-MM-DD HH:MM', 'YYYY-MM-DD HH:MM'], ...]

@@ -1,0 +1,110 @@
+# Race config template — copy races/_template/ to races/<race>/ and fill in.
+# Schema of record: skill/race-viz/references/schemas.md (+ repo additions, all
+# shown here). Facts about the race live here; judgment lives in the skill;
+# narrative lives in events.yaml; code lives in the repo.
+
+race:
+  name: ""
+  edition: 2026
+  slug: ""                      # output filename stem, e.g. nb2026
+  organizer_url: ""
+
+tracker:
+  vendor: auto                  # yb | kattack | tractrac | predictwind | auto (detect, error on ambiguity)
+  path: raw/tracks.csv
+
+official_results:
+  path: raw/results.csv
+  columns:                      # map canonical field -> your CSV's header
+    rank: rank
+    name: name
+    sail: sail
+    rating: rating
+    elapsed: elapsed            # 'Nd HH:MM:SS' or 'HH:MM:SS'
+    corrected: corrected
+    type: type
+    finish_local: finish_local  # 'YYYY-MM-DD HH:MM:SS' in the race's official tz
+    division: division
+    class_rank: class_rank      # optional: official within-class order
+    status: status              # FIN | DNF (DNF rows carry retire_reason)
+    retire_reason: retire_reason
+
+entries: { path: raw/scratch.csv }   # optional scratch sheet
+
+course:
+  type: point_to_point          # point_to_point | marks (marks = routed DTF, Phase 4)
+  start: [0.0, 0.0]             # [lat, lon]
+  finish: [0.0, 0.0]
+  official_length_nm: 0.0       # from official documents
+  finish_radius_nm: 0.7         # arrival cut for boats without an official finish
+  marks: []                     # ordered [lat, lon] waypoints; required when type: marks
+
+time:
+  official_tz: America/New_York
+  utc_offset: -4                # fixed offset for the race window (I1: naive local rendering)
+  tz_label: EDT
+  race_start_utc: ''            # ISO, tz-aware — data trim start (a little before the first warning)
+  tz_probe:                     # REQUIRED — stage-0 verified, never assumed
+    boat: ""
+    official_finish_local: 'YYYY-MM-DD HH:MM:SS'
+    track_epoch_utc: 0
+
+scoring:
+  system: tot                   # tot | tod | custom
+  params: { rating_column: rating }
+  probe_boats: ["", ""]         # >=2 must reproduce official corrected within 1 s BEFORE fleet math
+
+start_method: finish_minus_elapsed   # finish_minus_elapsed | pursuit | staggered | custom
+divisions_in_scope: []
+client_boat: null               # null for Tier 1
+reference_boats: []
+tier: 1
+
+name_overrides:
+  by_id: {}                     # tracker boat_id -> name (duplicate-name split)
+  by_name: {}                   # tracker name -> name (syndicate/sponsor cleanup)
+  display: {}                   # results name -> shipped display name (I4: dupes by sail number)
+
+groups:                         # chip-group semantics — who's in each is a CP-0/CP-2 judgment
+  hero_key: hero
+  by_rank: {}                   # e.g. { class: [3,7,9], podium: [1,2,3] }
+  default_key: fleet_other
+  dnf_key: fleet_dnf
+
+extra_boats: []                 # tracked but unscored, e.g.
+                                # - { track_name: X, display: X, type: '...', group: maxi }
+
+grid: { minutes: 15, end_utc: '', interpolate_limit: 4 }
+sog: { half_window_s: 900, min_span_s: 600 }
+fleet: { resample: 1h, min_points: 5 }
+milestones: { start_nm: 600, step_nm: 20 }
+finish_pad_min: 3
+
+events: { path: events.yaml }
+event_categories: [crew, systems, sail, tactics, insight, milestone]   # draw order, low -> high
+
+# reconcile: { path: navlog.yaml, matched_key: matched_local }   # only with a paper nav log (Tier 2+)
+
+zone_detection:
+  band_nm: 10
+  collapse_frac: 0.5
+  min_traversal_hours: 6
+  # zone: { upper_nm: 0, lower_nm: 0 }   # optional authored CP-2 bounds; detection
+  #                                        candidates are always logged for audit
+
+finish_spread: { window_min: 30, min_boats: 10 }
+noise_floor_min: 30             # margins under this are scoring noise (doctrine 6)
+
+privacy: { default: private }
+
+output:
+  dir: out/
+  # generated: 'YYYY-MM-DD'     # pin only to reproduce a frozen build byte-for-byte
+
+goldens:                        # freeze at CP-2 (prime rule 3); the four I10 categories
+  tz_probe: { epoch: 0, rendered: 'YYYY-MM-DD HH:MM' }
+  endpoints: { ref: "", corrected_min: 0.0, elapsed_min: 0.0 }
+  module_canaries: {}
+  names_present: []
+  names_absent: []
+  finstrip_count: 0

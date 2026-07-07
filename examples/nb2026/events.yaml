@@ -1,0 +1,356 @@
+# NB2026 narrative layer — authored content, extracted verbatim from the legacy
+# export_json.py events/watches literals. Times are naive local strings in the
+# race's official timezone (EDT, UTC-4). `watches` are the skipper's watch spans
+# (crew-specific overlay). All rows shipped publicly in the worked example.
+events:
+- t: 2026-06-19 09:00
+  cat: crew
+  label: Crew reduced 7 → 5
+  txt: Francois and Iwona scratch (sickness/injury). Decision was actually confirmed earlier than this
+    — pinned to Friday race-morning here so it doesn’t sit off the left edge of the timeline.
+  source: journal
+  visibility: public
+- t: 2026-06-19 12:58
+  cat: milestone
+  label: Off the dock
+  txt: 'Departed for the start line. Final prep: dropped J1, raised and furled J3.'
+  source: journal
+  visibility: public
+- t: 2026-06-19 14:10
+  cat: milestone
+  label: Warning signal
+  txt: Sequence 8 warning.
+  source: journal
+  visibility: public
+- t: 2026-06-19 14:20
+  cat: milestone
+  label: START
+  txt: Close-hauled beat in 20+ kts. Crew not yet in foulies — everyone soaked before the first watch
+    change. Lesson logged early.
+  source: journal
+  visibility: public
+- t: 2026-06-19 15:00
+  cat: crew
+  label: Foulies, one by one
+  txt: Heavily heeled, crew went below individually to suit up. Brad's stomach turned from the extended
+    time in the cabin.
+  source: journal
+  visibility: public
+- t: 2026-06-19 16:00
+  cat: crew
+  label: Seasickness sets in
+  txt: Three of the crew feel the sea state Friday evening and are sailing through it — on deck, on watch,
+    getting the job done, just not at their sharpest. Nobody had pre-medicated. A reminder that in fresh
+    going the edge you lose to seasickness is comfort and precision, and that pre-race meds are cheap
+    insurance.
+  source: journal
+  visibility: public
+- t: 2026-06-19 20:00
+  cat: crew
+  label: Evening watch settles in
+  txt: Hot burritos from the galley; ~20 kts, holding J3. First trick on the wheel for the newest offshore
+    hand.
+  source: journal
+  visibility: public
+- t: 2026-06-20 01:45
+  cat: sail
+  label: 'All-hands: reef + Reacher'
+  txt: '15-minute debate (Reacher vs Code 0 vs A3 vs reef) settles on reef + Reacher. Darius up the mast
+    to help reef; Darius and Brad on the foredeck for the Reacher. Hoist goes poorly — confusion over
+    which side the halyard is on, what sheet runs over what. Coordination by yelling and relay. No maneuver
+    card existed — the crew never fully assembled pre-race to build one. Lesson logged at the time: reef
+    earlier, don''t rush midnight all-hands changes.'
+  source: journal
+  visibility: public
+- t: 2026-06-20 02:45
+  cat: sail
+  label: New watch — J3 furled
+  txt: Brad + Steve on; Darius stays up the whole shift. Briefly double-headed J3 + Reacher; main kept
+    overpowering so J3 comes off. Still overpowered but manageable.
+  source: journal
+  visibility: public
+- t: 2026-06-20 06:00
+  cat: crew
+  label: Watch extended an hour
+  txt: Sebastian and Matt still unwell; Brad + Steve cover an extra hour before being relieved.
+  source: journal
+  visibility: public
+- t: 2026-06-20 10:30
+  cat: sail
+  label: 2nd reef (late, reactive)
+  txt: Main had been eased so far the first spreader chafed a visible mark into it before the reef went
+    in. Brad up most of the day managing broaches — vang and main releases.
+  source: journal
+  visibility: public
+- t: 2026-06-20 13:30
+  cat: sail
+  label: Reacher sheet lost overboard
+  txt: No stopper knot on the sheet end — it ran. Forced a douse instead of a furl. 2nd reef + J3 finally
+    finds a good balance.
+  source: journal
+  visibility: public
+- t: 2026-06-20 17:21
+  cat: milestone
+  label: GULF STREAM entry
+  txt: 38°10′N 68°44′W, 74°F, 2 reefs + J3, ~8 kts. Logged as 16:21 but Steve's watch was running UTC−5
+    instead of UTC−4 — true time confirmed as 17:21 EDT (0.7 nm match on the tracker).
+  source: journal
+  visibility: public
+- t: 2026-06-20 16:45
+  cat: crew
+  label: Brad drives 10-ft waves
+  txt: Two hours on the wheel in the biggest sea state of the race.
+  source: journal
+  visibility: public
+- t: 2026-06-20 18:30
+  cat: sail
+  label: Shook 2nd reef
+  txt: Brad on the wheel, Darius on the mast, Steve in the pit.
+  source: journal
+  visibility: public
+- t: 2026-06-20 19:00
+  cat: crew
+  label: Freeze-dried dinner
+  txt: Chicken pesto pasta — too much water, tasted like chicken noodle soup. "Was ok."
+  source: journal
+  visibility: public
+- t: 2026-06-20 21:00
+  cat: milestone
+  label: Stream core, 80°F
+  txt: 9.7 kts logged at 22:42 — favorable current, wind behind, best speeds of the race.
+  source: journal
+  visibility: public
+- t: 2026-06-20 23:00
+  cat: crew
+  label: Back on, driving 1.5 hrs
+  txt: Similar conditions to the evening watch.
+  source: journal
+  visibility: public
+- t: 2026-06-21 01:00
+  cat: systems
+  label: BATTERY BLACKOUT
+  txt: House bank dead; full instrument outage ~10 min. Brad steering by the stars. Engine charge; daily
+    charging thereafter, but no formal schedule.
+  source: journal
+  visibility: public
+- t: 2026-06-21 05:00
+  cat: sail
+  label: A3 up
+  txt: Brad on the foredeck, coached by Steve on the pit; Sebastian driving, Matt assisting bow. Reminders
+    needed on the spin-halyard untangle and the tackline set for the inside jibe.
+  source: journal
+  visibility: public
+- t: 2026-06-21 05:01
+  cat: milestone
+  label: South of the Stream
+  txt: 75°F at 36°51′N — crossing complete in ~8–12 hrs, on plan. Anticlimactic, i.e. nailed.
+  source: journal
+  visibility: public
+- t: 2026-06-21 09:00
+  cat: sail
+  label: A3 down — big left shift
+  txt: Wind swings 300→210. The race turns into an upwind beat from here to Bermuda.
+  source: journal
+  visibility: public
+- t: 2026-06-21 12:00
+  cat: crew
+  label: Recovery window
+  txt: A calm midday stretch — rest, drying gear, cleanup. Rest banked here mattered later (see the light-air
+    doctrine).
+  source: journal
+  visibility: public
+- t: 2026-06-21 18:00
+  cat: systems
+  label: 'Satcomm: GRIBs yes, phone finicky'
+  txt: The Iridium GO! pulled GRIB weather files for the navigators most of the time — but getting it
+    working was painful and pulled Steve off other jobs more than once. On Brad’s phone, only one messaging
+    app would connect. Worth drilling the whole satcomm workflow, and every app, before the start.
+  source: journal
+  visibility: public
+- t: 2026-06-21 19:30
+  cat: tactics
+  label: Wind dying
+  txt: The forecast “wall of little wind” south of 36°N arrives. Under 5 kts by late watch; Brad drives
+    ~2 hrs. Still east of rhumb; EU model calls for a midnight tack.
+  source: journal
+  visibility: public
+- t: 2026-06-22 01:40
+  cat: tactics
+  label: Tack to port — back to rhumb
+  txt: Shift 200–240 → 140–170. Optimism aboard — mid-fleet among boats considered faster.
+  source: journal
+  visibility: public
+- t: 2026-06-22 01:45
+  cat: sail
+  label: Leech tear noticed
+  txt: Upper leech of the mainsail found tearing. Steve suspects flogging plus reef-induced chafe.
+  source: journal
+  visibility: public
+- t: 2026-06-22 02:45
+  cat: systems
+  label: SPEEDO FAILS
+  txt: 'Boatspeed reads zero or garbage — every derived true-wind number goes with it. 03:00: Brad strips
+    the displays to AWA + SOG only. "Now we''re dinghy sailing."'
+  source: journal
+  visibility: public
+- t: 2026-06-22 04:30
+  cat: sail
+  label: Stay with J3 over J1
+  txt: Considered the J1 for the light air; stuck with J3 — same size, rougher shape reasoned to hold
+    better in the leftover chop.
+  source: journal
+  visibility: public
+- t: 2026-06-22 08:00
+  cat: sail
+  label: Mainsail leech patch
+  txt: ~1 hr repair, Steve driving under jib alone at 2.5 kts SOG. Steve has not slept to keep the boat
+    moving.
+  source: journal
+  visibility: public
+- t: 2026-06-22 09:00
+  cat: sail
+  label: J3 → J1
+  txt: Clean change, Brad on the foredeck. Light-air inventory call for the beat.
+  source: journal
+  visibility: public
+- t: 2026-06-22 10:00
+  cat: crew
+  label: Breakfast + galley rhythm
+  txt: Hot breakfast; dishes done with a seawater bucket — the routine smoothing out by day four.
+  source: journal
+  visibility: public
+- t: 2026-06-22 11:15
+  cat: crew
+  label: Dolphins + birds
+  txt: So many of them, with birds working the same water.
+  source: journal
+  visibility: public
+- t: 2026-06-22 11:45
+  cat: systems
+  label: BSP returns
+  txt: Display fallback profiles built, including a no-BSP backup, plus helm hot-keys.
+  source: journal
+  visibility: public
+- t: 2026-06-22 12:00
+  cat: crew
+  label: Humpback dead ahead
+  txt: Near-miss — could have hit it. Wind building.
+  source: journal
+  visibility: public
+- t: 2026-06-22 14:00
+  cat: tactics
+  label: Three-way helm split
+  txt: 130 nm to go, Bermuda just below layline. VMG (Sebastian) vs boat speed (Darius) vs layline (Steve)
+    — helm rotates, each sails their own idea. Fleet visibly sailing higher.
+  source: journal
+  visibility: public
+- t: 2026-06-22 16:45
+  cat: tactics
+  label: Steve takes the layline
+  txt: Steve back on the helm after rest, commits to the layline. Faster-looking boats cross to windward.
+  source: journal
+  visibility: public
+- t: 2026-06-22 20:30
+  cat: tactics
+  label: Parked, 3 kts — tack to port
+  txt: 'Sebastian tacks; Steve disagrees, wants to hold near rhumb. 20:40: an unexpected SE''ly (150°T)
+    straight from Bermuda arrives — the tack pays a little, against the forecast.'
+  source: journal
+  visibility: public
+- t: 2026-06-22 23:00
+  cat: crew
+  label: Fog, rebuild, an hour on the wheel
+  txt: Wind rebuilds 6→11+ kts; confused chop, thick fog, no visibility beyond nearby boats, very humid.
+    "Like driving a race car" — stable enough to hold with one hand at times.
+  source: journal
+  visibility: public
+- t: 2026-06-23 05:45
+  cat: tactics
+  label: Shift to 210 — layline made
+  txt: '"Right on the money for a finish on the layline."'
+  source: journal
+  visibility: public
+- t: 2026-06-23 11:00
+  cat: tactics
+  label: Finish prep begins
+  txt: Very shifty conditions; Steve navigating multiple tacks into the approach.
+  source: journal
+  visibility: public
+- t: 2026-06-23 13:00
+  cat: tactics
+  label: The wind cloud
+  txt: Missed going under a wind cloud in the final hours — cost a few miles, ~28th → 39th provisional.
+  source: journal
+  visibility: public
+- t: 2026-06-23 15:54
+  cat: milestone
+  label: FINISH
+  txt: 15:54:52 EDT. Elapsed 4d 01:34:52. 46th/86 SDL Overall, 8th/10 SDL 3 — up from 71st/99 in 2022.
+  source: journal
+  visibility: public
+- t: 2026-06-20 03:30
+  cat: insight
+  label: INSIGHT · The cost of chaos
+  txt: 'Tracker analysis: RAGANA bled roughly 90–130 minutes to her rating twin Christopher Dragon across
+    Friday night and Saturday — the window containing the un-carded 01:45 all-hands change, reactive reefs,
+    and a lost sheet. Against the eventual class winner Gesture, most of the final deficit accrued here,
+    not in the light air.'
+  source: analysis
+  visibility: public
+- t: 2026-06-21 14:00
+  cat: insight
+  label: INSIGHT · The Sunday beat paid
+  txt: From roughly 265 nm to 180 nm to go, RAGANA’s east lane gained ~20 minutes per 10 nm on Christopher
+    Dragon’s west lane — continuously, for 80 nm — flipping a 94-minute deficit into a 75-minute lead
+    by 22:13 Sunday. Upwind in 8–11 kts of flat water is this boat’s design sweet spot.
+  source: analysis
+  visibility: public
+- t: 2026-06-22 06:00
+  cat: insight
+  label: INSIGHT · Everyone parked
+  txt: 'Fair-metric finding: measured over the same stretch of ocean (180→80 nm to go), every boat in
+    the comparison set parked — 16–38% of each traversal under 4 kts. The spread between best and worst
+    traversal was only 5.5 hours. RAGANA’s 27.9 h was second-slowest: an honest penalty of ~2–4 hours
+    vs peers, from the most-east lane, with a speedo failure and a sail repair falling inside the dead
+    core.'
+  source: analysis
+  visibility: public
+- t: 2026-06-22 18:00
+  cat: insight
+  label: INSIGHT · Position × timing
+  txt: 'Within the cohort entering the light-air zone the same evening, boats nearer the rhumb line traversed
+    it 1.5–4 hours faster (Carina: same entry hour, ~10 nm further west, 3.7 h quicker). Yet the overall
+    podium — Nicole, Selkie, Towhee — won from the east: as lower-rated boats they arrived 3–5 hours later,
+    when the Monday-evening rebuild was closer. Lane choice and arrival timing both mattered.'
+  source: analysis
+  visibility: public
+- t: 2026-06-23 09:00
+  cat: insight
+  label: INSIGHT · The near-catch
+  txt: RAGANA closed Hissy Fit II (J/120) from 159 minutes behind at 400 nm to go to just 9 minutes at
+    20 nm to go — and lost to her by 2m15s corrected. The back half of this race was sailed well.
+  source: analysis
+  visibility: public
+watches:
+- - 2026-06-19 20:00
+  - 2026-06-19 23:00
+- - 2026-06-20 02:45
+  - 2026-06-20 07:00
+- - 2026-06-20 13:30
+  - 2026-06-20 19:00
+- - 2026-06-20 23:00
+  - 2026-06-21 02:00
+- - 2026-06-21 05:00
+  - 2026-06-21 08:00
+- - 2026-06-21 19:30
+  - 2026-06-21 23:00
+- - 2026-06-22 01:40
+  - 2026-06-22 05:00
+- - 2026-06-22 08:00
+  - 2026-06-22 12:30
+- - 2026-06-22 23:00
+  - 2026-06-23 02:15
+- - 2026-06-23 05:00
+  - 2026-06-23 08:00
+- - 2026-06-23 11:00
+  - 2026-06-23 15:55
