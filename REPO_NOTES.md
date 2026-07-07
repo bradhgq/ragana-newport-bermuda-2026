@@ -313,3 +313,14 @@ records what I *did* about it.
     defects**: the Zélée phantom group-button entry (#11) plus these three
     copy claims (#36). Redeploying is an owner decision, out of scope for this
     build.
+
+## Round 2 (2026-07-08) — Sebastian's upgrades
+- #30 Features: VMC channel+toggle, class input + F-TCF band filters, dist-vs-speed
+  module; crew-record corrections (electrolyte, Kevin memorial); full SDL class
+  splits acquired + reconciled. Harness 11→18 checks. See RETROSPECTIVE_ROUND2.md
+  and decisions/R2-sebastian-upgrades.yaml (I14–I18).
+- #31 frozen/ re-frozen (404 ledgered diffs); GATE A now guards reproducibility,
+  not the round-1 port. Round-1 oracle: git history at 2b6a085.
+- #32 OPEN: migrate #finstrip height to section.height (I15); one-command build
+  chain wrapper (stale-standalone trap); promote distspeed + schema slots to
+  skill docs (RETROSPECTIVE_ROUND2 §6 amendment list).
