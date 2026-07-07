@@ -83,3 +83,14 @@ without guessing. (What I *did* about each is in `REPO_NOTES.md`.)
     the worked example's results are an extracted artifact (`official_results
     .csv` at race root), not a raw download; template keeps `raw/results.csv`.
     Harmless, but the spec reads as if results are always raw inputs.
+
+## From the GATE A adjudication round
+
+14. **Referenced attachments missing.** The adjudication says REPO_SPEC v1.1
+    ("accompanies this message") and the 9/9 harness ("accompanies this
+    message too") were provided; neither was — only the acquisition
+    retrospective + two download scripts arrived. Cannot diff v0→v1.1 or
+    retire the harness file to examples/nb2026/legacy/ until delivered.
+15. **Adjudication's "finstrip = 81" conflicts with the frozen payload** (82
+    boats carry official corrected times). Kept 82 per the oracle; "81" is
+    consistent with counting only non-hero dots.

@@ -3,9 +3,17 @@
 reports EVERY diff with its path.
 
     python3 pipeline/compare_data.py <candidate.json> <reference.json> \
-        [--tol 1e-6] [--max-print 100] [--report out.txt]
+        [--tol 1e-6] [--max-print 100] [--report out.txt] [--ties rounding_ties.json]
 
-Exit 0 iff no diffs.
+Exit 0 iff no NON-EXEMPT diffs.
+
+Tie exemption (GATE A adjudication): with --ties (emitted by build_data.py), a
+diff is exempt iff |Δ| equals exactly one serialization quantum AND the path
+was recorded as a .5 rounding tie when the candidate was built (i.e. the
+recomputed unrounded value sat within epsilon of the tie). Exempt diffs are
+counted separately, never silently dropped. No loosened global tolerance, no
+hardcoded allowlist — other machines tie at other points, and a real
+regression (wrong value, or a shift at a non-tie site) still fails loudly.
 """
 import argparse
 import json
@@ -54,28 +62,47 @@ def main():
     ap.add_argument('--tol', type=float, default=1e-6)
     ap.add_argument('--max-print', type=int, default=100)
     ap.add_argument('--report', help='write the full diff list to this file')
+    ap.add_argument('--ties', help="candidate build's rounding_ties.json — enables the "
+                                   'half-boundary tie exemption')
     args = ap.parse_args()
 
     a = json.load(open(args.candidate))
     b = json.load(open(args.reference))
+    ties = json.load(open(args.ties)) if args.ties else {}
     diffs = []
     walk(a, b, '', diffs, args.tol)
+
+    def is_exempt(path, msg):
+        q = ties.get(path)
+        if q is None or '!=' not in msg:
+            return False
+        try:
+            x, y = (float(s.strip().split(' ')[0]) for s in msg.split('!='))
+        except ValueError:
+            return False
+        return abs(abs(x - y) - q) <= q * 1e-6
+
+    exempt = [(p, m) for p, m in diffs if is_exempt(p, m)]
+    real = [(p, m) for p, m in diffs if not is_exempt(p, m)]
 
     if not diffs:
         print(f'IDENTICAL (semantic, tol={args.tol}): {args.candidate} == {args.reference}')
         return
-    by_top = Counter(p.split('.')[0].split('[')[0] for p, _ in diffs)
-    print(f'{len(diffs)} diff(s) [tol={args.tol}] — by top-level key: {dict(by_top)}')
-    for p, msg in diffs[:args.max_print]:
+    by_top = Counter(p.split('.')[0].split('[')[0] for p, _ in real)
+    print(f'{len(diffs)} diff(s) [tol={args.tol}]: {len(exempt)} exempt half-boundary '
+          f'tie(s), {len(real)} real — real by top-level key: {dict(by_top)}')
+    for p, msg in real[:args.max_print]:
         print(f'  {p}: {msg}')
-    if len(diffs) > args.max_print:
-        print(f'  … {len(diffs) - args.max_print} more (use --report for the full list)')
+    if len(real) > args.max_print:
+        print(f'  … {len(real) - args.max_print} more (use --report for the full list)')
     if args.report:
         with open(args.report, 'w') as f:
-            for p, msg in diffs:
+            for p, msg in real:
                 f.write(f'{p}: {msg}\n')
+            for p, msg in exempt:
+                f.write(f'[exempt tie] {p}: {msg}\n')
         print(f'full report: {args.report}')
-    sys.exit(1)
+    sys.exit(1 if real else 0)
 
 
 if __name__ == '__main__':

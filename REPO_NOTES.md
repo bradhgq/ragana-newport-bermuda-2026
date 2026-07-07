@@ -91,3 +91,27 @@ records what I *did* about it.
 14. **Milestone corrected values route through `scoring.corrected()`** rather
     than a literal `× tcf` — same numbers for `tot` (probe-verified), but the
     milestone series now respects the configured scoring system.
+
+## GATE A adjudication (2026-07-07, coordinating chat session)
+
+15. **Verdict PASS; tie-exemption encoded** — `pipeline/rounding.py` TieTracker
+    records every .5-tie rounding site at build time (`out/rounding_ties.json`,
+    3090 sites on NB2026); `compare_data.py --ties` exempts a diff iff |Δ| ==
+    exactly one quantum AND the path is a recorded tie. 39/39 GATE A diffs
+    exempt, 0 real, exit 0. Negative test: a one-quantum shift at a non-tie
+    site and a ±1 golden change both fail loudly. No global tolerance change,
+    no allowlist.
+16. **GATE B builds from the pipeline's emitted payload** (not the frozen
+    copy) — adjudication #2; platform/env recorded in run_log.json.
+17. **finstrip count: 82, not 81.** The adjudication's harness-porting list
+    says "finstrip = 81"; the frozen payload has 82 boats with official
+    corrected times (the shipped strip renders 81 dots + the hero diamond —
+    likely the source of "81"). Goldens assert 82 scored boats, verified
+    against the oracle; flagged for GATE B.
+18. **REPO_SPEC v1.1 and the 9/9 harness file were not delivered** with the
+    adjudication message (only the three acquisition files arrived). Proceeded
+    per the adjudication's own fallback: implementation stands, deltas logged;
+    the six harness assertions are ported from the adjudication text itself.
+    See DOC_GAPS #14.
+19. **Name-hygiene assertions extended to every selection surface** (defaults,
+    group buttons, module boat lists) — Phase 3 scope, per adjudication #4.

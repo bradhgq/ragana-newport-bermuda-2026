@@ -27,6 +27,7 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from adapters import canonical                              # noqa: E402
 from pipeline import geo, reconcile, scoring, zones        # noqa: E402
+from pipeline.rounding import TieTracker                   # noqa: E402
 
 
 def pick_adapter(cfg, tracker_path):
@@ -189,6 +190,7 @@ def main():
         sub['sog'] = sog
         return sub
 
+    tie = TieTracker()   # records .5-tie rounding sites for compare_data's exemption rule
     grid = pd.date_range(race_start, pd.Timestamp(grid_cfg['end_utc']),
                          freq=f'{grid_cfg["minutes"]}min')
     boats_out, feat_series, skipped = {}, {}, []
@@ -202,12 +204,16 @@ def main():
         g = g.reindex(g.index.union(grid)).interpolate('time', limit=grid_cfg['interpolate_limit']).reindex(grid)
         g = g[g.index <= s['ts'].max()]
         g = g.dropna(subset=['lat'])
-        boats_out[meta['disp']] = dict(
+        disp = meta['disp']
+        boats_out[disp] = dict(
             meta=meta,
             t=[int(x.timestamp()) for x in g.index],
-            lat=[round(float(v), 4) for v in g['lat']], lon=[round(float(v), 4) for v in g['lon']],
-            dtf=[round(float(v), 1) for v in g['dtf']], xte=[round(float(v), 1) for v in g['xte']],
-            sog=[None if np.isnan(v) else round(float(v), 1) for v in g['sog']])
+            lat=[tie.r(v, 4, f'boats.{disp}.lat[{i}]') for i, v in enumerate(g['lat'])],
+            lon=[tie.r(v, 4, f'boats.{disp}.lon[{i}]') for i, v in enumerate(g['lon'])],
+            dtf=[tie.r(v, 1, f'boats.{disp}.dtf[{i}]') for i, v in enumerate(g['dtf'])],
+            xte=[tie.r(v, 1, f'boats.{disp}.xte[{i}]') for i, v in enumerate(g['xte'])],
+            sog=[None if np.isnan(v) else tie.r(v, 1, f'boats.{disp}.sog[{i}]')
+                 for i, v in enumerate(g['sog'])])
 
     # ── milestone corrected-time series (scoring-function corrected, I2 feeds off official) ──
     mil_cfg = cfg['milestones']
@@ -220,10 +226,11 @@ def main():
         st = fin_utc - pd.Timedelta(seconds=scoring.parse_duration(meta['el']))
         s = feat_series[name]
         row = []
-        for m in milestones:
+        for mi, m in enumerate(milestones):
             hit = s[s['dtf'] <= m]
-            row.append(round(scoring.corrected((hit['ts'].iloc[0] - st).total_seconds(),
-                                               {'rating': meta['tcf']}, course_len, cfg))
+            row.append(tie.rint(scoring.corrected((hit['ts'].iloc[0] - st).total_seconds(),
+                                                  {'rating': meta['tcf']}, course_len, cfg),
+                                f'mil.series.{meta["disp"]}[{mi}]')
                        if len(hit) else None)
         mil[meta['disp']] = row
 
@@ -242,10 +249,11 @@ def main():
         sub = sub.set_index('t_utc').resample(fleet_cfg['resample']).first().dropna(subset=['lat'])
         if len(sub) < fleet_cfg['min_points']:
             continue
+        fi = len(fleet)
         fleet.append(dict(name=nm,
                           t=[int(x.timestamp()) for x in sub.index],
-                          lat=[round(float(v), 3) for v in sub['lat']],
-                          lon=[round(float(v), 3) for v in sub['lon']]))
+                          lat=[tie.r(v, 3, f'fleet[{fi}].lat[{i}]') for i, v in enumerate(sub['lat'])],
+                          lon=[tie.r(v, 3, f'fleet[{fi}].lon[{i}]') for i, v in enumerate(sub['lon'])]))
 
     # ── narrative layer: events + watches (authored data, post privacy cut) ──
     ev_doc = yaml.safe_load((race_dir / cfg['events']['path']).read_text())
@@ -268,7 +276,7 @@ def main():
     if active:
         display_of = {k: entries[k]['disp'] for k in feat_series}
         park = zones.traversal_metrics(feat_series, display_of,
-                                       active['upper_nm'], active['lower_nm'])
+                                       active['upper_nm'], active['lower_nm'], tie=tie)
 
     # ── nav-log reconciliation (optional; requires a paper log) ──
     recon_rows = []
@@ -277,7 +285,7 @@ def main():
         fixes = yaml.safe_load((race_dir / rc['path']).read_text())['fixes']
         hero_series = feat_series[lookup[canonical.norm_key(hero)]]
         recon_rows = reconcile.reconcile(fixes, hero_series, utc_offset,
-                                         rc.get('matched_key', 'matched_local'))
+                                         rc.get('matched_key', 'matched_local'), tie=tie)
 
     # ── client-boat stats ──
     rs = feat_series[lookup[canonical.norm_key(hero)]]
@@ -285,12 +293,14 @@ def main():
     dist_sailed = float(hop.sum())
     sogv = rs['sog'].dropna()
     stats = dict(
-        dist_sailed=round(dist_sailed, 1), rhumb=course_len,
-        extra=round(dist_sailed - course_len, 1),
-        avg_sog=round(float(sogv.mean()), 2), max_sog=round(float(sogv.max()), 1),
-        pct_under3=round(float((sogv < 3).mean() * 100), 1),
-        pct_under5=round(float((sogv < 5).mean() * 100), 1),
-        max_xte_e=round(float(rs['xte'].max()), 1), max_xte_w=round(float(rs['xte'].min()), 1))
+        dist_sailed=tie.r(dist_sailed, 1, 'stats.dist_sailed'), rhumb=course_len,
+        extra=tie.r(dist_sailed - course_len, 1, 'stats.extra'),
+        avg_sog=tie.r(sogv.mean(), 2, 'stats.avg_sog'),
+        max_sog=tie.r(sogv.max(), 1, 'stats.max_sog'),
+        pct_under3=tie.r((sogv < 3).mean() * 100, 1, 'stats.pct_under3'),
+        pct_under5=tie.r((sogv < 5).mean() * 100, 1, 'stats.pct_under5'),
+        max_xte_e=tie.r(rs['xte'].max(), 1, 'stats.max_xte_e'),
+        max_xte_w=tie.r(rs['xte'].min(), 1, 'stats.max_xte_w'))
 
     # ── assemble + write ──
     generated = str(cfg.get('output', {}).get('generated') or time.strftime('%Y-%m-%d'))
@@ -309,6 +319,7 @@ def main():
     goldens['zone'] = active
     goldens['zone_source'] = 'authored' if authored else 'detected'
     (out_dir / 'goldens.json').write_text(json.dumps(goldens, indent=2))
+    (out_dir / 'rounding_ties.json').write_text(json.dumps(tie.ties, separators=(',', ':')))
 
     def sha(p):
         return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -327,7 +338,8 @@ def main():
     (out_dir / 'run_log.json').write_text(json.dumps(run_log, indent=2, default=str))
 
     print(f'boats: {len(boats_out)} | fleet tracks: {len(fleet)} | events: {len(events)} '
-          f'| park rows: {len(park)} | recon rows: {len(recon_rows)}')
+          f'| park rows: {len(park)} | recon rows: {len(recon_rows)} '
+          f'| rounding ties: {len(tie.ties)}')
     print(f'name misses: {name_misses} | skipped (no track): {skipped}')
     print(f'zone: {active} ({"authored" if authored else "detected"}) | detection candidates: '
           f'{[(z["upper_nm"], z["lower_nm"]) for z in detected]} '

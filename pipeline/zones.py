@@ -80,14 +80,17 @@ def detect_zones(series_map, zcfg):
     return zones, diagnostics
 
 
-def traversal_metrics(series_map, display_of, upper_nm, lower_nm):
+def traversal_metrics(series_map, display_of, upper_nm, lower_nm, tie=None):
     """Per-boat metrics over each boat's own crossing of the zone.
 
     series_map is ordered (output key order follows it); display_of maps
     series key -> display name. Emits the dashboard_data 'parkFair' contract:
     enter (epoch s), hrs, mean (kts), u4/u2 (% of samples under 4/2 kts),
-    xte (mean nm signed).
+    xte (mean nm signed). `tie` (pipeline.rounding.TieTracker) records
+    .5-rounding-tie sites for compare_data's exemption rule.
     """
+    from pipeline.rounding import NullTracker
+    tie = tie or NullTracker()
     out = {}
     for key, s in series_map.items():
         t0, t1 = _hit(s, upper_nm), _hit(s, lower_nm)
@@ -96,11 +99,12 @@ def traversal_metrics(series_map, display_of, upper_nm, lower_nm):
         seg = s[(s['ts'] >= t0) & (s['ts'] <= t1)].dropna(subset=['sog'])
         if not len(seg):
             continue
-        out[display_of[key]] = dict(
+        d = display_of[key]
+        out[d] = dict(
             enter=int(t0.timestamp()),
-            hrs=round((t1 - t0).total_seconds() / 3600, 1),
-            mean=round(float(seg['sog'].mean()), 1),
-            u4=round(100 * float((seg['sog'] < 4).mean())),
-            u2=round(100 * float((seg['sog'] < 2).mean())),
-            xte=round(float(seg['xte'].mean()), 1))
+            hrs=tie.r((t1 - t0).total_seconds() / 3600, 1, f'parkFair.{d}.hrs'),
+            mean=tie.r(seg['sog'].mean(), 1, f'parkFair.{d}.mean'),
+            u4=tie.rint(100 * float((seg['sog'] < 4).mean()), f'parkFair.{d}.u4'),
+            u2=tie.rint(100 * float((seg['sog'] < 2).mean()), f'parkFair.{d}.u2'),
+            xte=tie.r(seg['xte'].mean(), 1, f'parkFair.{d}.xte'))
     return out
