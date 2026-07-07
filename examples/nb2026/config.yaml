@@ -49,7 +49,11 @@ scoring:
   probe_boats: [RAGANA, Christopher Dragon]
 
 start_method: finish_minus_elapsed
-divisions_in_scope: [SDL 3]
+# Full SDL class splits (all 8 classes) gleaned from the official results at
+# racing.bermudarace.com/raceresults/dd7f301e-9590-4427-a572-7548d685684c
+# (2026-07-08), reconciled row-by-row against this CSV's elapsed / corrected /
+# rating before the division and class_rank columns were filled in.
+divisions_in_scope: [SDL 1, SDL 2, SDL 3, SDL 4, SDL 5, SDL 6, SDL 7, SDL 8]
 client_boat: RAGANA
 reference_boats: [Christopher Dragon]
 tier: 3
@@ -117,3 +121,9 @@ goldens:                        # frozen at CP-2 — never re-derive (prime rule
   names_present: [Phoenix USA25329, Phoenix USA93063, Hissy Fit II]
   names_absent: ['Hissy  Fit II']
   finstrip_count: 82
+  # round 2 (recorded instruction: Sebastian's-upgrades prompt, 2026-07-08)
+  vmc: { hero_mean_kt: 6.51, tol: 0.05, y_range: [-3, 14] }
+  class_filter: { input: 3, label: SDL 3, boats: 10, default_overlap: 5, invalid_input: 99 }
+  tcf_bands: { width_counts: { '0.01': 23, '0.02': 45 }, class3_band001: 6 }
+  distspeed: { dots: 82, hero: [687.6, 7.05], rhumb_x: 635.1, iso_check_days: 4.0 }
+  corrections: { events_contain: electrolyte, recon_contains: Coast Guard, absent: illegible }

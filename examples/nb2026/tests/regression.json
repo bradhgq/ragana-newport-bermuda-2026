@@ -1,5 +1,5 @@
 {
-  "_comment": "NB2026 frozen goldens (prime rule 3) — the four I10 categories. Changing any value requires a recorded user instruction. finstrip_count is 82 scored boats (adjudication said 81 = non-hero dots; oracle-verified 82, see REPO_NOTES #17).",
+  "_comment": "NB2026 frozen goldens (prime rule 3) — the four I10 categories plus the round-2 fixtures (recorded instruction: Sebastian's-upgrades prompt, 2026-07-08). Changing any value requires a recorded user instruction. finstrip_count is 82 scored boats (adjudication said 81 = non-hero dots; oracle-verified 82, see REPO_NOTES #17). vmc.hero_mean_kt is the time-mean over the OFFICIAL race window ≈ rhumb ÷ elapsed (∫VMC dt recovers the course).",
   "tz_probe": { "epoch": 1782094500, "rendered": "2026-06-21 22:15" },
   "endpoints": { "ref": "Christopher Dragon", "corrected_min": 94.0, "elapsed_min": 155.3, "pace_min_per_100": 14.81 },
   "module_canaries": { "park": { "boat": "Gemini II", "u4": 31 } },
@@ -7,5 +7,10 @@
   "names_absent": ["Hissy  Fit II"],
   "finstrip_count": 82,
   "duration_roundtrip": { "str": "4d 01:34:52", "seconds": 351292 },
-  "start_window": { "boat": "RAGANA", "date": "2026-06-19", "hm_min": "13:40", "hm_max": "14:30" }
+  "start_window": { "boat": "RAGANA", "date": "2026-06-19", "hm_min": "13:40", "hm_max": "14:30" },
+  "vmc": { "hero_mean_kt": 6.51, "tol": 0.05, "y_range": [-3, 14] },
+  "class_filter": { "input": 3, "label": "SDL 3", "boats": 10, "default_overlap": 5, "invalid_input": 99 },
+  "tcf_bands": { "width_counts": { "0.01": 23, "0.02": 45 }, "class3_band001": 6 },
+  "distspeed": { "dots": 82, "hero": [687.6, 7.05], "rhumb_x": 635.1, "iso_check_days": 4.0 },
+  "corrections": { "events_contain": "electrolyte", "recon_contains": "Coast Guard", "absent": "illegible" }
 }

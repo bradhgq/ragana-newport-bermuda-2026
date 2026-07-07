@@ -1,0 +1,33 @@
+# Round 2 — Sebastian's upgrades + crew-record corrections (recorded instruction:
+# the "Claude Code Round 2" prompt, Brad, 2026-07-08). Adjudicates the frozen-
+# oracle re-freeze: after this round GATE A's role is cross-machine
+# reproducibility, not port parity (the round-1 oracle lives in git history
+# at the pre-R2 commit).
+features:
+  - id: class-input
+    what: "'+ SDL [n]' class-number input in the Groups row; toggle semantics; quiet no-such-class state"
+    data: "division + class_rank for all 86 boats gleaned from racing.bermudarace.com/raceresults/dd7f301e-9590-4427-a572-7548d685684c (8 class pages, fetched 2026-07-08), reconciled row-by-row against official_results.csv elapsed/corrected/rating before the columns were filled; page order cross-checked against corrected-time order (0 mismatches)"
+  - id: tcf-band
+    what: "F-TCF band chips ±0.01 (23 boats) / ±0.02 (45) around the hero's 0.5945, plus custom min/max; intersects with class selection; matches highlighted in the More panel"
+  - id: vmc-toggle
+    what: "SOG | VMC (toward finish) y-metric on the speed chart; pipeline vmc channel = centered difference of gridded DTF (~30-min window); negatives shipped as real; labelled VMC never VMG (no wind data); Sunday boatspeed-not-routing verdict in the caption"
+  - id: distspeed-module
+    what: "distance-sailed vs average-speed scatter (module), iso-elapsed rays v=d/t, rhumb line at 635.1; meta.sailedNm from raw pings (RAGANA 687.6), meta.avgKt = sailed / official elapsed (RAGANA 7.05)"
+  - id: sailed-axis
+    what: "DEFERRED — sailed-distance x-axis mode; sailed≈DTF for this race (ratio ~1.01 beat / ~1.08 whole-race); VMC toggle + scatter answer the underlying question at a fraction of the cost"
+corrections:
+  - { before: "Three of the crew feel the sea state…",
+      after: "Two of five seasick; third episode corrected for the record 😂 to an artificial-sweetener electrolyte reaction (Sebastian); galley plan to vet mixes",
+      source: "crew record correction via Brad (binding)", propagated_to: [events.yaml] }
+  - { before: "illegible word transcribed as 'Kevin' — unclear meaning",
+      after: "Steve's mid-ocean tribute to Kevin, a U.S. Coast Guard veteran and friend who had recently passed away — memorial note, kept with respect",
+      source: "crew record correction via Brad (binding)", propagated_to: [navlog.yaml] }
+hypothesis_test:
+  claim: "Sunday gains came from sailing shorter (parallel vs returning to rhumb)"
+  verdict: "NOT SUPPORTED — sailed/DTF-progress 1.00–1.01 across the cohort; RAGANA 83.2 nm @ 7.57 kt vs Dragon 68.2 nm @ 6.20 kt over Sun 11:00→22:13; gain was boatspeed"
+  shipped_in: "VMC-mode caption (copy.js sections.sog.noteVmc)"
+frozen_refreeze:
+  diff_vs_round1_oracle: "404 real diffs, all intentional: recon[7] wind+note (Kevin), events[5] label+txt (seasickness), boats.* cls/clsPos fills + sailedNm/avgKt/vmc additions; 39 exempt rounding ties; zero unexplained"
+  goldens_added: [vmc, class_filter, tcf_bands, distspeed, corrections]
+confirmed_by: Brad (round-2 prompt; class-splits source confirmed interactively)
+date: 2026-07-08

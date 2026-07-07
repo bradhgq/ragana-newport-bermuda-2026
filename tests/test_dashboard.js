@@ -237,7 +237,107 @@ const approx = (a, b, tol, msg) => assert.ok(Math.abs(a - b) < tol, `${msg}: ${a
       `dtf x-values must be naive local strings, got ${x0}`);
   });
 
-  const EXPECTED = 11;   // fixed: a silently-skipped block must fail loudly
+  /* ── round 2: VMC channel (I14 — VMC integrates back to the course) ── */
+  const V = FIX.vmc;
+  check('vmc', `channel integrity: hero official-window mean ≈ ${V.hero_mean_kt} kt, negatives real`, () => {
+    const hb = D.boats[hero];
+    assert.ok(Array.isArray(hb.vmc), 'hero has no vmc array');
+    assert.equal(hb.vmc.length, hb.sog.length, 'vmc length != sog length');
+    const start = H.startOf(hb, off);
+    const finEp = start + H.parseDur(hb.meta.el);
+    const inwin = hb.t.map((t, i) => [t, hb.vmc[i]]).filter(([t, v]) => v != null && t >= start && t <= finEp);
+    const mean = inwin.reduce((s, [, v]) => s + v, 0) / inwin.length;
+    approx(mean, V.hero_mean_kt, V.tol, '∫VMC dt must recover the rhumb ÷ elapsed');
+    const anyNeg = Object.values(D.boats).some(b => (b.vmc || []).some(v => v != null && v < 0));
+    assert.ok(anyNeg, 'no negative VMC anywhere — tacks/park drift got clamped?');
+  });
+  check('vmc', 'speed chart renders both metrics; labelled VMC never VMG; park shading stays', () => {
+    assert.equal(S.axis, 'd', 'precondition: distance axis');
+    S.speedMetric = 'vmc'; render('speed');
+    const yt = plots.sog.layout.yaxis.title.text;
+    assert.ok(yt.includes('VMC'), `y-axis title must say VMC: ${yt}`);
+    assert.ok(!yt.includes('VMG'), 'must not claim VMG (no wind data)');
+    const yr = plots.sog.layout.yaxis.range;   // element-wise: vm arrays fail cross-realm deepEqual
+    assert.ok(yr[0] === V.y_range[0] && yr[1] === V.y_range[1],
+      `VMC y-range must admit negatives: [${yr}] != [${V.y_range}]`);
+    const note = getEl('sog_note').innerHTML;
+    assert.ok(note.includes('not wind-VMG'), 'VMC caption must carry the no-wind-data caveat');
+    assert.ok(note.includes('boatspeed'), 'VMC caption must carry the Sunday verdict');
+    const park = CFG.charts.parkShading;
+    assert.ok(plots.sog.layout.shapes.some(s => s.type === 'rect' && s.x0 === park.zone[0] && s.x1 === park.zone[1]),
+      'park-zone shading missing in DTF-aligned VMC view');
+    S.speedMetric = 'sog'; render('speed');
+    assert.ok(plots.sog.layout.yaxis.title.text.includes('Speed over ground'), 'SOG mode did not restore');
+  });
+
+  /* ── round 2: class + rating-band filters ── */
+  const CF = FIX.class_filter, TB = FIX.tcf_bands;
+  const toggleClassFilter = evalIn('toggleClassFilter');
+  const setBand = evalIn('setBand');
+  const filterTargets = evalIn('filterTargets');
+  const clsMembers = Object.keys(D.boats).filter(nm => D.boats[nm].meta.cls === CF.label);
+  check('filters', `class input: ${CF.input} selects exactly ${CF.boats} boats; toggle removes only filter-added`, () => {
+    assert.equal(clsMembers.length, CF.boats, `${CF.label} membership drifted`);
+    const before = new Set(S.boats);
+    const overlap = clsMembers.filter(nm => before.has(nm));
+    assert.equal(overlap.length, CF.default_overlap, 'default-selection overlap drifted');
+    toggleClassFilter(CF.input);
+    for (const nm of clsMembers) assert.ok(S.boats.has(nm), `${nm} not selected by class filter`);
+    toggleClassFilter(CF.input);   // toggle off
+    for (const nm of overlap) assert.ok(S.boats.has(nm), `${nm} was default-selected and must survive`);
+    for (const nm of clsMembers) if (!before.has(nm)) assert.ok(!S.boats.has(nm), `${nm} should have been removed`);
+  });
+  check('filters', `invalid class ${CF.invalid_input}: quiet inline state, no crash, selection untouched`, () => {
+    const before = new Set(S.boats);
+    toggleClassFilter(CF.invalid_input);
+    assert.ok(evalIn('S.clsErr'), 'clsErr not set for unknown class');
+    assert.deepEqual([...S.boats].sort(), [...before].sort(), 'selection changed on invalid input');
+    toggleClassFilter(CF.input); toggleClassFilter(CF.input);   // valid action clears the error
+    assert.ok(!evalIn('S.clsErr'), 'clsErr should clear on the next valid action');
+  });
+  check('filters', `band ±0.01 selects ${TB.width_counts['0.01']} rating peers; class composes as intersection (${TB.class3_band001})`, () => {
+    const t0 = D.boats[hero].meta.tcf;
+    setBand(t0 - 0.01, t0 + 0.01, '0.01');
+    assert.equal(filterTargets().length, TB.width_counts['0.01'], '±0.01 match count drifted');
+    for (const nm of filterTargets()) assert.ok(S.boats.has(nm), `${nm} in band but not selected`);
+    toggleClassFilter(CF.input);             // compose: class ∩ ±0.01 band
+    assert.equal(filterTargets().length, TB.class3_band001, 'class ∩ band intersection drifted');
+    for (const nm of filterTargets())
+      assert.ok(D.boats[nm].meta.cls === CF.label, `${nm} outside the class slipped through the intersection`);
+    toggleClassFilter(CF.input);             // class off; band ±0.01 still active
+    setBand(t0 - 0.02, t0 + 0.02, '0.02');   // replace with the wider band
+    assert.equal(filterTargets().length, TB.width_counts['0.02'], '±0.02 match count drifted');
+    setBand(t0 - 0.02, t0 + 0.02, '0.02');   // cleanup: same key toggles off
+    assert.equal(filterTargets(), null, 'filters did not clear');
+  });
+
+  /* ── round 2: distance-vs-speed scatter (module canary) ── */
+  const DS = FIX.distspeed;
+  check('distspeed', `one dot per scored boat (${DS.dots}); hero at (${DS.hero}); rays exact; rhumb line`, () => {
+    const [dots, diamond] = plots.distspeed.traces;
+    assert.equal(dots.x.length + diamond.x.length, DS.dots, 'dots+diamond != scored boats');
+    approx(diamond.x[0], DS.hero[0], 0.05, 'hero sailed distance');
+    approx(diamond.y[0], DS.hero[1], 0.01, 'hero average speed');
+    const ray = plots.distspeed.layout.shapes.find(s =>
+      s.line && s.line.dash === 'dot' && Math.abs(s.y1 - s.x1 / (DS.iso_check_days * 24)) < 1e-9);
+    assert.ok(ray, `no iso-elapsed ray consistent with v=d/t at ${DS.iso_check_days} d`);
+    assert.ok(Math.abs(ray.y0 - ray.x0 / (DS.iso_check_days * 24)) < 1e-9, 'ray does not pass through the origin line');
+    assert.ok(plots.distspeed.layout.shapes.some(s => s.x0 === DS.rhumb_x && s.x1 === DS.rhumb_x),
+      `no rhumb reference line at ${DS.rhumb_x}`);
+  });
+
+  /* ── round 2: record corrections ── */
+  const CO = FIX.corrections;
+  check('corrections', `crew record: '${CO.events_contain}' present, Kevin note memorialized, '${CO.absent}' gone`, () => {
+    assert.ok(D.events.some(e => e.txt.includes(CO.events_contain)), 'corrected seasickness event missing');
+    const kev = D.recon.find(r => (r.note || '').includes(CO.recon_contains));
+    assert.ok(kev, 'Kevin memorial note missing from the reconciliation');
+    assert.equal(kev.verdict, 'match', 'Kevin row must read as a normal match, not an anomaly');
+    const all = JSON.stringify(D.events) + JSON.stringify(D.recon);
+    assert.ok(!all.includes(CO.absent), `'${CO.absent}' still present in the record`);
+  });
+
+  const EXPECTED = 18;   // fixed: a silently-skipped block must fail loudly
   console.log(`\n${passed} passed, ${failed} failed (of ${EXPECTED})`);
   if (failed || passed + failed !== EXPECTED) process.exit(1);
 })().catch(e => { console.error(e); process.exit(1); });
