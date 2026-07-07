@@ -121,6 +121,7 @@ def main():
                 return key
         return groups['default_key']
 
+    finish_statuses = set(cfg['official_results'].get('finish_statuses') or ['FIN'])
     entries = {}          # track name -> meta dict
     name_misses = []
     for row in res_rows:
@@ -129,7 +130,7 @@ def main():
             name_misses.append(row['name'])
             continue
         disp = disp_over.get(row['name']) or canonical.display_name(row['name'])
-        if row['status'] == 'FIN':
+        if row['status'] in finish_statuses:
             entries[track_name] = dict(
                 disp=disp, typ=row['type'], tcf=row['rating'],
                 cls=row['division'], clsPos=row['class_rank'], sdl=row['rank'],

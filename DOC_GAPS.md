@@ -94,3 +94,11 @@ without guessing. (What I *did* about each is in `REPO_NOTES.md`.)
 15. **Adjudication's "finstrip = 81" conflicts with the frozen payload** (82
     boats carry official corrected times). Kept 82 per the oracle; "81" is
     consistent with counting only non-hero dots.
+16. **decyb license unknown/absent** (acquisition retrospective calls it "the
+    open-source decyb project" — it is public but carries NO license, which is
+    not the same thing). Must be resolved before public/client-facing use of
+    the ported decoder. Details in acquisition/README.md.
+17. **Acquisition retrospective's YS results schema omits `retire_reason`** —
+    the YS results CSV has no such column (finish_status only); the template
+    maps it anyway for organizer-sourced files. Retirement narratives remain
+    hand-authored data.

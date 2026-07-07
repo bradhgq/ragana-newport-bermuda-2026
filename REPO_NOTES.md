@@ -156,3 +156,24 @@ records what I *did* about it.
     across the four I10 categories; the count itself is asserted so a skipped
     block fails loudly. Verified green under both TZ=America/New_York and
     TZ=UTC; the tampered-golden path refuses the build.
+
+## Phase 5 — acquisition tooling
+
+28. **decyb has NO declared license** (verified 2026-07-07 via the GitHub API
+    and README — no LICENSE file, no terms, author attribution only). The YB
+    binary decoder is a port of decyb's; all-rights-reserved by default. Flag
+    lives in acquisition/README.md; before anything public/client-facing,
+    obtain terms from the author or cleanroom-reimplement from the byte-layout
+    notes. Also DOC_GAPS #16.
+29. **fetch_race.py verified live against ildr2025** (YS 50065): satTrackingUrl
+    parsed (with its trailing '#'), 3-of-35 coverage warning fired, 5190 ping
+    rows byte-consistent with the prior session's download, name-join proposed
+    Max/Concise 8 by name and honestly left Boudicca UNMATCHED-YB for review.
+    YS vs YB start times disagreed (placeholders vs actual) — recorded in the
+    manifest with a cross-check note, vindicating the start_method doc.
+30. **Pipeline addition: `official_results.finish_statuses`** (default [FIN])
+    so YS's AOK/DNF vocabulary maps without editing pipeline code. NB2026
+    behavior unchanged (re-verified: GATE A 39 exempt/0 real, harness 11/11).
+31. **Offline decoder fixture**: real 41 KB ildr2025 AllPositions3 blob
+    (sha256-pinned) + 5 unittest assertions in CI; discovered and documented
+    that the binary stores moments newest-first.

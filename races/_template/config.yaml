@@ -15,19 +15,26 @@ tracker:
 
 official_results:
   path: raw/results.csv
+  # Defaults below map the YachtScoring results CSV that acquisition/fetch_race.py
+  # downloads. YB-only races (e.g. Newport Bermuda) source results from the
+  # organizer's site instead — remap to that file's headers (the worked example's
+  # examples/nb2026/official_results.csv shows the hand-built shape).
   columns:                      # map canonical field -> your CSV's header
-    rank: rank
-    name: name
-    sail: sail
+    rank: place_overall
+    name: boat_name
+    sail: sail_number
     rating: rating
-    elapsed: elapsed            # 'Nd HH:MM:SS' or 'HH:MM:SS'
-    corrected: corrected
-    type: type
-    finish_local: finish_local  # 'YYYY-MM-DD HH:MM:SS' in the race's official tz
+    elapsed: elapsed_hms        # 'Nd HH:MM:SS', 'HH:MM:SS', or YS's 'H:MM:SS' (hours may exceed 24)
+    corrected: corrected_hms
+    type: design
+    finish_local: finish_local  # 'YYYY-MM-DD HH:MM:SS' in the race's official tz.
+                                # YS ships finish_time_utc (UTC ISO) — derive this
+                                # column with the race's utc_offset before the run.
     division: division
-    class_rank: class_rank      # optional: official within-class order
-    status: status              # FIN | DNF (DNF rows carry retire_reason)
+    class_rank: place_class     # official within-class order
+    status: finish_status       # YS: AOK/DNF/… — see finish_statuses below
     retire_reason: retire_reason
+  finish_statuses: [FIN, AOK]   # status values treated as finishers; anything else is a retirement
 
 entries: { path: raw/scratch.csv }   # optional scratch sheet
 
@@ -54,6 +61,10 @@ scoring:
   params: { rating_column: rating }
   probe_boats: ["", ""]         # >=2 must reproduce official corrected within 1 s BEFORE fleet math
 
+# Staggered per-division starts show up in YB RaceSetup.teams[].start and YS
+# races[].startTime (both land in fetch_race.py's manifest — and they can
+# disagree; ILDR's YS times were placeholders). Record which source you used
+# and cross-check it against finish − elapsed before trusting either.
 start_method: finish_minus_elapsed   # finish_minus_elapsed | pursuit | staggered | custom
 divisions_in_scope: []
 client_boat: null               # null for Tier 1
