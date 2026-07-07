@@ -39,12 +39,15 @@ official_results:
 entries: { path: raw/scratch.csv }   # optional scratch sheet
 
 course:
-  type: point_to_point          # point_to_point | marks (marks = routed DTF, Phase 4)
+  type: point_to_point          # point_to_point | marks (marks = routed DTF along the polyline)
   start: [0.0, 0.0]             # [lat, lon]
   finish: [0.0, 0.0]
-  official_length_nm: 0.0       # from official documents
+  official_length_nm: 0.0       # from official documents; for marks courses build_data
+                                # logs the delta vs the polyline length as a sanity check
   finish_radius_nm: 0.7         # arrival cut for boats without an official finish
-  marks: []                     # ordered [lat, lon] waypoints; required when type: marks
+  marks: []                     # ordered [lat, lon] turning marks; required when type: marks
+  mark_radius_nm: 1.0           # a boat within this of the next mark has rounded it
+                                # (conventions documented in pipeline/route.py)
 
 time:
   official_tz: America/New_York

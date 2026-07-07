@@ -26,7 +26,7 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from adapters import canonical                              # noqa: E402
-from pipeline import geo, reconcile, scoring, zones        # noqa: E402
+from pipeline import geo, reconcile, route, scoring, zones  # noqa: E402
 from pipeline.rounding import TieTracker                   # noqa: E402
 
 
@@ -158,7 +158,17 @@ def main():
     probe_report = scoring.run_probe(probe_input, course_len, cfg)
 
     # ── per-boat series ──
+    # course.type dispatch: point_to_point measures great-circle DTF/XTE against
+    # the rhumb; marks measures BOTH along the waypoint polyline (route.py —
+    # conventions documented there). Arrival trims and the fleet ghost layer
+    # keep using plain distance-to-finish either way.
     xte_fn = geo.xte_signed(start_pt, finish_pt)
+    course_model = None
+    if course.get('type', 'point_to_point') == 'marks':
+        if not course.get('marks'):
+            raise SystemExit('course.type: marks requires a non-empty course.marks waypoint list')
+        course_model = route.Course([start_pt] + [tuple(m) for m in course['marks']] + [finish_pt],
+                                    course.get('mark_radius_nm', 1.0))
 
     def series_for(name, fin_local):
         sub = df[df['name'] == name].copy().rename(columns={'t_utc': 'ts'})
@@ -175,8 +185,12 @@ def main():
         sub = sub.drop_duplicates('ts').reset_index(drop=True)
         if not len(sub):
             return sub
-        sub['dtf'] = geo.hav(sub['lat'], sub['lon'], *finish_pt)
-        sub['xte'] = xte_fn(sub['lat'].values, sub['lon'].values)
+        if course_model:
+            d, x, _ = course_model.dtf_xte(sub['lat'].values, sub['lon'].values)
+            sub['dtf'], sub['xte'] = d, x
+        else:
+            sub['dtf'] = geo.hav(sub['lat'], sub['lon'], *finish_pt)
+            sub['xte'] = xte_fn(sub['lat'].values, sub['lon'].values)
         # resolution-independent epoch seconds (pandas >= 3.0 may store [s] not [ns])
         ts_s = ((sub['ts'] - pd.Timestamp(0, tz='UTC')) // pd.Timedelta(seconds=1)).values
         half, span = sog_cfg['half_window_s'], sog_cfg['min_span_s']
@@ -331,6 +345,11 @@ def main():
                 cfg['official_results']['path']: sha(race_dir / cfg['official_results']['path']),
                 cfg['events']['path']: sha(race_dir / cfg['events']['path'])},
         adapter=adapter.ADAPTER, canonical=vreport,
+        course=dict(type=course.get('type', 'point_to_point'),
+                    official_length_nm=course_len,
+                    polyline_length_nm=(round(course_model.length_nm, 2) if course_model else None),
+                    length_delta_nm=(round(course_model.length_nm - course_len, 2)
+                                     if course_model else None)),
         ping_gap_anomalies=[g for g in gap_report if g['anomalous']],
         name_misses=name_misses, skipped_no_track=skipped,
         probe=probe_report,

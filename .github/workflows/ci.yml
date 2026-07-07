@@ -18,6 +18,9 @@ jobs:
       - name: Acquisition decoder regression (offline fixture — network paths stay out of CI)
         run: python3 -m unittest discover -s acquisition/tests
 
+      - name: Routed distance-remaining (marks courses — synthetic geometry suite)
+        run: python3 -m unittest tests.test_route
+
       - name: Build data payload from the raw tracker export
         run: python3 pipeline/build_data.py races/nb2026/config.yaml
 

@@ -254,3 +254,28 @@ records what I *did* about it.
     private; before anything public or client-facing, obtain terms from the
     author or cleanroom-reimplement from acquisition/README.md's byte-layout
     notes (which document the format, not decyb's code).
+
+## Phase 4 — routed distance-remaining (course.type: marks)
+
+34. **New geometry, conventions documented in pipeline/route.py** (and
+    exercised by tests/test_route.py — the prompt's four tests plus the
+    out-and-back collapse regression): (1) stateful monotone leg assignment —
+    the active leg never regresses, which is what keeps out-and-back courses
+    (ALIR/Block Island shapes) from collapsing onto the reciprocal return leg;
+    (2) an APPROACH BLEND inside mark_radius_nm (dtf = distance-to-mark +
+    remaining-after-mark); (3) advance on abeam-crossing (along >= leg length)
+    or on receding-from-closest-approach with positive next-leg along-track,
+    keyed to the minimum distance seen so sparse pings still advance; (4)
+    along-track clamped to the leg — lateral excursion shows in XTE, never in
+    DTF; (5) XTE re-references the active leg at each rounding (a visible,
+    correct step). Config: course.marks (ordered turning marks) +
+    course.mark_radius_nm (default 1.0); build_data logs polyline-vs-official
+    length delta in the run log.
+
+35. **Found by test, kept as a war story**: the first implementation advanced
+    legs on radius-ENTRY; near a corner the next leg's projection wobbles
+    around its origin, so an on-line boat's DTF *rose* while closing the mark
+    (+0.0008 nm/ping on a 90° dogleg, +0.37 nm/ping on a hairpin — the exact
+    course shape of the next two races). The approach blend + past-closest
+    advance is the fix; the monotonicity test now pins it. Point-to-point
+    races are untouched (GATE A re-verified 0 real diffs after integration).

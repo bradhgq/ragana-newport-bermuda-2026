@@ -24,6 +24,31 @@ def bearing(lat1, lon1, lat2, lon2):
     return np.arctan2(y, x)
 
 
+def destination(lat, lon, bearing_rad, dist_nm):
+    """Great-circle destination point from (lat, lon) on a bearing for dist_nm."""
+    d = dist_nm / R_NM
+    p1, l1 = np.radians(lat), np.radians(lon)
+    p2 = np.arcsin(np.sin(p1) * np.cos(d) + np.cos(p1) * np.sin(d) * np.cos(bearing_rad))
+    l2 = l1 + np.arctan2(np.sin(bearing_rad) * np.sin(d) * np.cos(p1),
+                         np.cos(d) - np.sin(p1) * np.sin(p2))
+    return np.degrees(p2), np.degrees(l2)
+
+
+def gc_interpolate(p1, p2, n):
+    """n points (inclusive of both ends) along the great circle p1->p2 (slerp)."""
+    la1, lo1, la2, lo2 = map(np.radians, [p1[0], p1[1], p2[0], p2[1]])
+    v1 = np.array([np.cos(la1) * np.cos(lo1), np.cos(la1) * np.sin(lo1), np.sin(la1)])
+    v2 = np.array([np.cos(la2) * np.cos(lo2), np.cos(la2) * np.sin(lo2), np.sin(la2)])
+    omega = np.arccos(np.clip(v1 @ v2, -1, 1))
+    ts = np.linspace(0, 1, n)
+    pts = []
+    for t in ts:
+        v = (np.sin((1 - t) * omega) * v1 + np.sin(t * omega) * v2) / np.sin(omega)
+        pts.append((float(np.degrees(np.arcsin(v[2]))),
+                    float(np.degrees(np.arctan2(v[1], v[0])))))
+    return pts
+
+
 def xte_signed(start, finish):
     """Cross-track-distance function for the course line start→finish.
 
