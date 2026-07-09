@@ -1,0 +1,45 @@
+# CP-4 — Screenshot Log & Dashboard Sign-off — BIR 2026 RAGANA
+# CONFIRMED by Brad, 2026-07-08 ("let's ship it and perfect it in CC").
+rounds: 8
+render_method: "headless Playwright + inlined vendored Plotly (CDN blocked in container)"
+approved_for_handoff: true
+signoff: "Dashboard approved as-is; remaining work is productionization in Claude Code (mobile, hosting, payload split, codify assertions into shell harness)."
+
+# ── Every human-caught defect from the 8 rounds, as regression assertions ──
+# These MUST become named tests in test_dashboard.js during the CC handoff.
+assertions:
+  # goldens (frozen at CP-2, one corrected at CP-4 r1)
+  - { id: G1_endpoint_corrected, check: "race chart Ragana endpoint (corrected+total) === 276.07 min (+4:36:04)", origin: CP-2 }
+  - { id: G2_endpoint_elapsed,   check: "race chart Ragana endpoint (elapsed+total) === 288.55 min (+4:48:33)", origin: CP-2 }
+  - { id: G3_upwind_canary,      check: "upwind bar Ragana−CD === 4.7 nm (from meta.up1bi, raw track)", origin: CP-2 }
+  - { id: G4_tz_probe,           check: "edtStr(1779602689) === '2026-05-24 02:04' under TZ=America/New_York", origin: "CP-4 r1 (golden epoch corrected 1779696289→1779602689)" }
+  - { id: G5_finstrip_orc,       check: "ORC finstrip band === 33 finishers (never mixed with PHRF)", origin: "CP-2 r2 (56→33)" }
+  # round-2 (Brad laptop review)
+  - { id: A1_despike,            check: "no implied speed >25 kt in cleaned tracks; 16 phantom pings removed at Fri 20:00 EDT", origin: "r2 #9" }
+  - { id: A2_phrf_guard,         check: "corrected mode hides cross-division boats with visible note (PHRF ratings never used as ToT factors)", origin: "r2 #7" }
+  - { id: A3_events_present,     check: "payload events === rendered log rows (config-driven privacy.build=private)", origin: "r2 #6" }
+  - { id: A4_fleet_ghosts,       check: "fleet ghost tracks === 57 (out-and-back arrival guard; start/finish lines ~1nm apart)", origin: "r2 unflagged" }
+  - { id: A5_daffodil_excluded,  check: "Daffodil absent from payload (DNC, stationary at mooring)", origin: CP-0 }
+  # round-3 (narrative stress-test)
+  - { id: A6_narrative_honest,   check: "upwind module shows finish place per bar; copy states 4.7nm≈53min≈19% of gap, Zélée +8.9→6th counterexample", origin: "r3 challenge" }
+  # round-4/5/6/7/8 (layout + correctness)
+  - { id: A7_finstrip_beeswarm,  check: "finstrip dots bidirectional beeswarm (y-spread non-monotonic), not diagonal", origin: "r4" }
+  - { id: A8_map_continuous,     check: "boat tracks solid lines with periodic mid-line direction arrows (scaled to selection size)", origin: "r5" }
+  - { id: A9_note_width,         check: ".note paragraphs render at full column width (~1048px, not 80ch/601px)", origin: "r5" }
+  - { id: A10_chip_superset,     check: "chip row includes Class6 + Young American/Max/Loki/Banter/Touch of Grey/Full Tilt (15 buttons)", origin: "r5" }
+  - { id: A11_lane_fills,        check: "upwind-lane chart on distance-sailed x-axis (0→~105nm), fills frame, Block Island rounding marked", origin: "r4-6" }
+  - { id: A12_act_bands,         check: "DTF + race + SOG charts all carry identical 3 act bands (OUT / SOUND→BLOCK ISLAND / ROUNDING & HOME)", origin: "r6" }
+  - { id: A13_rounding_label,    check: "rounding annotation on EAST side of island (starboard geometrically clear); SI-correct starboard confirmed 57/58 vs SE-Light", origin: "r6 challenge" }
+  - { id: A14_map_aspect,        check: "map y-range clipped to lat p1–p99 (no scaleanchor); content fills ~98% of frame height", origin: "r7-8" }
+  - { id: A15_uniform_heights,   check: "race + upwind-lane + SOG charts all 360px", origin: "r8" }
+  - { id: A16_log_columns,       check: "race log: nm col 44px, notes col ~666px sans-serif", origin: "r8" }
+
+known_deferred_to_cc:
+  - "1BI charted coordinate: annotation coord [41.262,-71.587] is track-consensus, not the charted buoy. Pin from NOAA chart / Light List before any exact rounding-time prose. (The +4.7 distance measure is robust regardless.)"
+  - "Payload is 1.6MB with Plotly inlined; split data layer + vendor for production loading."
+  - "Mobile breakpoints not yet done (built/reviewed at ~1200px desktop only)."
+  - "Assertions above verified via one-off Playwright scripts, NOT the shell test_dashboard.js harness (which is wired for the shell architecture; this build is the monolith path). Codifying them is CC job #1."
+  - "Pace-view y-scale amplifies near the finish (inherent to min/100nm normalization) — consider a note or clamp."
+
+confirmed_by: "Brad"
+date: "2026-07-08"

@@ -1,0 +1,44 @@
+diff --git a/pipeline/build_data.py b/pipeline/build_data.py
+index d981bf1..6add4ee 100644
+--- a/pipeline/build_data.py
++++ b/pipeline/build_data.py
+@@ -179,7 +179,11 @@ def main():
+         else:
+             sub = sub[sub['ts'] >= race_start]
+             d = geo.hav(sub['lat'], sub['lon'], *finish_pt)
+-            arr = sub[d < finish_radius]
++            # out-and-back guard: start/finish lines can be adjacent, so only
++            # search for arrival AFTER the boat has first been >20 nm out
++            # (BIR2026: pre-start milling within finish_radius truncated tracks)
++            prog = (d.values > 20).argmax() if (d.values > 20).any() else len(sub)
++            arr = sub.iloc[prog:][d.values[prog:] < finish_radius]
+             if len(arr):
+                 sub = sub[sub['ts'] <= arr['ts'].iloc[0]]
+         sub = sub.drop_duplicates('ts').reset_index(drop=True)
+@@ -258,7 +262,9 @@ def main():
+         if not len(sub):
+             continue
+         d = geo.hav(sub['lat'], sub['lon'], *finish_pt)
+-        arr = sub[d.values < finish_radius]
++        # same out-and-back guard as the per-boat series (see above)
++        prog = (d.values > 20).argmax() if (d.values > 20).any() else len(sub)
++        arr = sub.iloc[prog:][d.values[prog:] < finish_radius]
+         if len(arr):
+             sub = sub[sub['t_utc'] <= arr['t_utc'].iloc[0]]
+         sub = sub.set_index('t_utc').resample(fleet_cfg['resample']).first().dropna(subset=['lat'])
+@@ -271,10 +277,14 @@ def main():
+                           lon=[tie.r(v, 3, f'fleet[{fi}].lon[{i}]') for i, v in enumerate(sub['lon'])]))
+ 
+     # ── narrative layer: events + watches (authored data, post privacy cut) ──
++    # privacy.build: 'private' includes private rows (the Tier-2 client artifact);
++    # default 'public' keeps the original public-only cut for any public build.
+     ev_doc = yaml.safe_load((race_dir / cfg['events']['path']).read_text())
+     cat_z = {c: i for i, c in enumerate(cfg['event_categories'])}
++    build_vis = cfg.get('privacy', {}).get('build', 'public')
+     events = [dict(t=ep(e['t']), cat=e['cat'], label=e['label'], txt=e['txt'])
+-              for e in ev_doc['events'] if e.get('visibility', 'private') == 'public']
++              for e in ev_doc['events']
++              if build_vis == 'private' or e.get('visibility', 'private') == 'public']
+     events.sort(key=lambda e: (e['t'], cat_z.get(e['cat'], 0)))
+     watches = [[ep(a), ep(b)] for a, b in ev_doc.get('watches') or []]
+ 

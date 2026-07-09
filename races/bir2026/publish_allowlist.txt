@@ -1,0 +1,13 @@
+# CP-5 publication allowlist — BIR 2026
+# ---------------------------------------------------------------------------
+# Drives `python3 build.py --public`. Decides which events a PUBLIC build ships.
+#
+# Brad's CP-5 decision: host like nb2026 — the full narrative, public. The mode
+# below publishes every event EXCEPT any label listed in a private, gitignored
+# private/never_public.txt (prime rule 4: firsthand-confirmed third-party
+# incidents not in the public record). Those labels are not stored in this
+# public tree, and the committed events.yaml already excludes them.
+ALL_EXCEPT_NEVER_PUBLIC
+#
+# To instead opt in a specific subset, delete the line above and list exact
+# event labels, one per line.

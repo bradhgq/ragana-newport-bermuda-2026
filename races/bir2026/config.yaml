@@ -1,0 +1,151 @@
+race:
+  name: Storm Trysail Club Block Island Race
+  edition: 2026
+  slug: bir2026
+  organizer_url: https://www.yachtscoring.com/emenu/50619
+tracker:
+  vendor: yb
+  path: raw/tracks_clean.csv
+official_results:
+  path: raw/results.csv
+  columns:
+    rank: place_overall
+    name: boat_name
+    sail: sail_number
+    rating: rating
+    elapsed: elapsed_hms
+    corrected: corrected_hms
+    type: design
+    finish_local: finish_local
+    division: division
+    class_rank: place_class
+    status: finish_status
+  finish_statuses:
+  - AOK
+entries:
+  path: raw/scratch.csv
+course:
+  type: marks
+  start:
+  - 41.0005
+  - -73.5238
+  finish:
+  - 41.0153
+  - -73.536
+  official_length_nm: 186.0
+  finish_radius_nm: 0.7
+  marks:
+  - - 41.221
+    - -72.057
+  - - 41.262
+    - -71.587
+  - - 41.144
+    - -71.533
+  - - 41.221
+    - -72.057
+  mark_radius_nm: 1.0
+time:
+  official_tz: America/New_York
+  utc_offset: -4
+  tz_label: EDT
+  race_start_utc: '2026-05-22T15:00:00Z'
+  tz_probe:
+    boat: Ragana
+    official_finish_local: '2026-05-24 02:04:49'
+    track_epoch_utc: 1779602689
+scoring:
+  system: tot
+  params:
+    rating_column: rating
+  probe_boats:
+  - Christopher Dragon XII
+  - Ragana
+start_method: staggered
+divisions_in_scope:
+- ORC / Block Island Course
+client_boat: Ragana
+reference_boats:
+- Christopher Dragon XII
+- In Theory
+- Groupe 5
+- Young American
+tier: 2
+name_overrides:
+  by_name:
+    Zelee: Zèlèe
+  display:
+    Zèlèe: Zélée
+    BANTER: Banter
+    DUET: Duet
+    SLEEPER: Sleeper
+    FULL TILT: Full Tilt
+    Midnight Rider - PMP Strategy: Midnight Rider
+groups:
+  hero_key: hero
+  by_rank: {}
+  default_key: fleet_other
+  dnf_key: fleet_dnf
+extra_boats: []
+grid:
+  minutes: 15
+  end_utc: '2026-05-24T09:00:00Z'
+  interpolate_limit: 4
+sog:
+  half_window_s: 900
+  min_span_s: 600
+fleet:
+  resample: 1h
+  min_points: 5
+milestones:
+  start_nm: 180
+  step_nm: 10
+finish_pad_min: 3
+events:
+  path: events.yaml
+event_categories:
+- crew
+- systems
+- sail
+- tactics
+- insight
+- milestone
+zone_detection:
+  band_nm: 10
+  collapse_frac: 0.5
+  min_traversal_hours: 6
+finish_spread:
+  window_min: 30
+  min_boats: 10
+noise_floor_min: 30
+privacy:
+  default: private
+  build: private
+output:
+  dir: out/
+goldens:
+  tz_probe:
+    epoch: 1779602689
+    rendered: 2026-05-24 02:04
+  endpoints:
+    ref: Christopher Dragon XII
+    corrected_min: 276.1
+    elapsed_min: 288.6
+  module_canaries:
+    upwind_excess:
+      boat: Ragana
+      vs: Christopher Dragon XII
+      nm: 4.7
+  names_present:
+  - Ragana
+  - Christopher Dragon XII
+  - In Theory
+  - Groupe 5
+  - Young American
+  - Zèlèe
+  names_absent:
+  - Windfall
+  - MXM
+  - Towhee
+  finstrip_count: 33
+template:
+  path: dashboard_template.html

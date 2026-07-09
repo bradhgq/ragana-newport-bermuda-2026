@@ -1,0 +1,13 @@
+{
+  "name": "ragana-block-island-2026",
+  "private": true,
+  "description": "Ragana · Block Island Race 2026 race-analysis dashboard",
+  "scripts": {
+    "test": "TZ=America/New_York node --test test/regression.test.cjs",
+    "build": "python3 build.py",
+    "serve": "cd dist && python3 -m http.server 8009"
+  },
+  "devDependencies": {
+    "jsdom": "^26.0.0"
+  }
+}

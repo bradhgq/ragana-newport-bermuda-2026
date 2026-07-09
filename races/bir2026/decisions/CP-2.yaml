@@ -1,0 +1,27 @@
+# CP-2 — Findings & Modules Record — BIR 2026 RAGANA
+# CONFIRMED by Brad, 2026-07-07 ("yes go w rec" on the two open decisions).
+modules_selected:
+  - upwind-excess          # sailed-distance-to-1BI vs same-start podium; canary = RAGANA +4.7 nm vs CD
+  - exit-choice-xte        # Race/Gut/Sluiceway spread as XTE band (modeling-vertex-relative; label as such)
+  - finish-spread-strip    # 25/58 finished >=2300 Sat; RAGANA 4th-from-last across the line
+modules_vetoed:
+  - park-zone-table        # no light-air park this race (median SOG 5.65 kt, zero collapse detected) — correct veto
+reference_set_confirmed: true          # core four (CD XII, In Theory, Groupe 5, Young American); Zélée = story/continuity boat, not benchmark
+corrections:
+  - "stats.extra (vs 186 straight rhumb) misleading for a mark course -> reframe to vs-CD (+7.5 total / +4.7 upwind). APPLIED at CP-2."
+  - "broach timestamp 23:30 -> 23:55-00:10 May24 local (raw-track SOG collapse 8.5->0.7 kt, 66deg swing); events.yaml patched at CP-2/CP-3."
+  - "rounding TIMESTAMPS must use route.py stateful leg logic, not naive closest-approach; the +4.7 DISTANCE measure is robust and frozen."
+  - "1BI coord [41.262,-71.587] is track-consensus, not the charted buoy — DEFERRED to Stage-5 Claude Code (ship +4.7 now; pin charted posn before any exact rounding-time prose)."
+decisions_on_open_questions:
+  1BI_coordinate: "ship +4.7 now (robust); pin charted 1BI at productionization"
+  finstrip_count: "56 finishers + Ragana diamond (house style, matches NB2026)"
+  reference_set: "core four stand; Zélée story-boat only"
+  cd_overall_framing: "CD overall win = sub-noise-floor (~3 min vs Loki); Class-6 win over In Theory (53 min) = solid"
+reference_set_note: "User grants judgment to add refs later if Stage-3 needs them; Class 6 ORC boats are the candidate pool."
+goldens_frozen: true
+pipeline_invocation: ".venv2/bin/python pipeline/build_data.py races/bir2026/config.yaml"
+confirmed_by: "Brad"
+date: "2026-07-07"
+golden_corrections:
+  - { field: tz_probe.epoch, before: 1779696289, after: 1779602689, reason: "hand-transcription slip at stage 0 (off by 86400s / one day); payload+charts always correct; rendered value 2026-05-24 02:04 unchanged", authorized_by: "Brad 2026-07-07" }
+  - { field: finstrip_count, before: 56, after: 33, reason: "round-2 user directive: corrected times never pooled across divisions — golden = ORC/Block Island Course finishers only; PHRF rendered as a separate band (23)", authorized_by: "Brad 2026-07-07 round-2 review" }

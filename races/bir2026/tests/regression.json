@@ -1,0 +1,11 @@
+{
+  "_comment": "Per-race frozen goldens — freeze at CP-2 (prime rule 3); values must agree with config.yaml goldens (shell/build.py cross-checks). The four I10 categories are fixed; every human-caught defect adds an assertion.",
+  "tz_probe": { "epoch": 0, "rendered": "YYYY-MM-DD HH:MM" },
+  "endpoints": { "ref": "", "corrected_min": 0.0, "elapsed_min": 0.0, "pace_min_per_100": 0.0 },
+  "module_canaries": {},
+  "names_present": [],
+  "names_absent": [],
+  "finstrip_count": 0,
+  "duration_roundtrip": { "str": "", "seconds": 0 },
+  "start_window": { "boat": "", "date": "YYYY-MM-DD", "hm_min": "00:00", "hm_max": "23:59" }
+}

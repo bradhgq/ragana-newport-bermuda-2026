@@ -1,0 +1,130 @@
+events:
+- t: 2026-05-22 11:00
+  cat: systems
+  label: Pre-start engine problems eat the practice window
+  txt: Engine problems before the start that the crew had to fix; cost the practice window and Brad's
+    bow assignment (he sailed as spinnaker trimmer instead). Time reconstructed — "before the starts,"
+    exact time unknown. Nature of the fault unrecorded.
+  source: transcript
+  visibility: private
+- t: 2026-05-22 12:35
+  cat: milestone
+  label: Start — Class 6 ORC
+  txt: Derived exact from official results (finish minus elapsed = 12:35:00; whole fleet resolves to a
+    clean ten-minute class ladder, 12:05 DH classes through 13:25 Class 12/13). No firsthand account of
+    the start itself survives. Young American (reference boat, PHRF-DH) started 12:05 — thirty minutes
+    earlier; handle the offset in any comparison.
+  source: analysis
+  visibility: private
+- t: 2026-05-22 20:35
+  cat: tactics
+  label: South-of-rhumb positioning (the race's tactical bet)
+  txt: 'Positioned south of the rhumb line hoping for a south shift (Francois''s slide: "a deliberate
+    sacrifice"). Sailed 4.7 nm further than Christopher Dragon to reach the same layline; off-rhumb 5.12
+    + 1.34 = 6.5 nm vs CD''s 1.70 (F''s measurements, verify against track). Time reconstructed — anchored
+    to F''s "+8hrs" checkpoint (start + 8h); actual decision moment unrecorded. Decision-maker not on
+    record; Brad was in no navigation conversations this race. Sebastian separately noted extra miles
+    "on the way to Mountack and to Connecticut shore" (sic) — unquantified, undated, distinct from this
+    excursion.'
+  source: analysis
+  visibility: private
+- t: 2026-05-23 11:35
+  cat: milestone
+  label: 1BI rounding (reconstructed)
+  txt: 'Time reconstructed: start + Francois''s "23 hours to 1BI" upwind figure — verify against track.
+    Per F: arrived ~3 hours (~15 nm) after Christopher Dragon, ~1 hour after Young American. His split
+    of the deficit at this mark: 2 hours boatspeed, 1 hour tactics.'
+  source: analysis
+  visibility: private
+- t: 2026-05-23 12:00
+  cat: sail
+  label: The race's only spinnaker set
+  txt: Effectively the only set of the race, and it happened outside Brad's watch. Time reconstructed
+    — presumed at/after the 1BI bear-away; actual time unrecorded. The kite was the A3 (confirmed up at
+    the broach that night). One set + one douse total in 37.5 hours is itself a claim the track's maneuver
+    signature can check.
+  source: transcript
+  visibility: private
+- t: 2026-05-23 22:00
+  cat: milestone
+  label: Night build — fleet report (third-hand)
+  txt: 'A friend on a slower boat elsewhere in the fleet, relayed via the Max group chat: gusts to 35
+    kn after 2200, "a sea state on the Long Island Sound he has not experienced before," still overpowered
+    under J4 and a second reef. Third-hand; not Ragana-measured wind. Onset differs from Ragana''s own
+    clock (next event) — two boats, two positions.'
+  source: transcript
+  visibility: private
+- t: 2026-05-23 23:00
+  cat: milestone
+  label: Night build — Ragana's clock
+  txt: 'Brad, contemporaneous: "Ragana had a rough time after the wind picked up at ~2300." A3 still flying.
+    Approximate time, firsthand.'
+  source: transcript
+  visibility: private
+- t: 2026-05-23 23:15
+  cat: tactics
+  label: Douse discussed — and hesitated on
+  txt: 'The crew discussed dousing minutes before the broach and hesitated on the decision; the wind built
+    further. (Brad, July 7 interview — firsthand.) Time reconstructed: "minutes before" the broach, which
+    is itself bounded 2300–0205. This hesitation is the firsthand origin of the depower-early / change-by-trigger
+    doctrine later codified in the crew primer and validated at Bermuda.'
+  source: transcript
+  visibility: private
+- t: 2026-05-23 23:55
+  cat: crew
+  label: Broach (A3 up)
+  txt: 'Sequence finalized July 7: build → douse discussed → hesitation → further build → broach. A3 was
+    up. Time reconstructed — window bounded by the ~2300 build and the 02:05 finish; wind seen aboard
+    and helm at the moment not on record. The track''s heading/SOG signature should pin this.'
+  source: transcript
+  visibility: private
+- t: 2026-05-24 00:00
+  cat: sail
+  label: Emergency douse — all hands, kite saved
+  txt: 'Emergency douse immediately following the broach: all hands on deck, pre-assigned seats, Sebastian
+    on the bow, Brad gathered the sail. A3 recovered with minor damage. Who voiced the post-douse seamanship
+    praise is not on record (any public wording states the act only). Time reconstructed, coupled to the
+    broach event.'
+  source: transcript
+  visibility: private
+# NOTE: two private third-party milestone events (post-finish incidents affecting
+# other boats) are withheld from this public source under prime rule 4. They exist
+# only in the private client build. This is the sole difference from the full record.
+- t: 2026-05-24 02:04
+  cat: milestone
+  label: Finish — 9th of 9 Class 6 finishers
+  txt: 'Official: 02:04:49 local. Elapsed 37:29:49; corrected 35:20:27 (ToT 0.9425). Last finisher in
+    Class 6 ORC; 31st of 33 ORC-division finishers on the Block Island Course; +4:48:33 elapsed / +4:36:04
+    corrected behind class-and-division winner Christopher Dragon XII (same 12:35 start). Fourth-from-last
+    of the course''s 58 finishers across the line; 25 of 58 finished at or after 2300.'
+  source: analysis
+  visibility: private
+- t: 2026-05-24 02:45
+  cat: milestone
+  label: Delivery Stamford → Westport into the building breeze
+  txt: Departed soon after the finish because the wind was forecast to keep building; depart time reconstructed
+    (~02:30–03:00). 10 nm took hours of slow beating against wind and current; dock lines on between 0700
+    and 0800. All six aboard including Brad — who was asleep the entire leg ("they let me sleep"). Not
+    race data; ends the tracked story.
+  source: transcript
+  visibility: private
+- t: 2026-05-22 21:00
+  cat: insight
+  label: The post-race verdict on this stretch — the slides and the Honey rule
+  txt: 'Pinned where it applies: this south-of-rhumb stretch is what Francois''s post-race slides quantified
+    (circulated Mon May 25) — ''Because we are slower, extra distance hurts us more; we should per default
+    stay close to rhumbline'' — and what Sebastian''s 13:06 reply turned into standing doctrine: ''only
+    invest in going off rhumb line if you are sure you can recoup the investment plus bonus'' (his Stan
+    Honey paraphrase). Both are post-race analysis, re-timed to the water they describe.'
+  source: transcript
+  visibility: private
+- t: 2026-05-22 13:00
+  cat: systems
+  label: Sailing without a working speedo (named post-race)
+  txt: 'The whole race was sailed without a functioning speedo (implied by Sebastian''s Mon 13:16 message
+    naming the fix: ''We will have better trim, speed and tactical decisions once we install a new Speedo
+    and calibrate instruments''). Post-race insight, pinned at the start because it applied to every mile.
+    Origin of the Bermuda instrument-calibration program.'
+  source: transcript
+  visibility: private
+watches: []

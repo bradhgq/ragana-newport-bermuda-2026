@@ -1,0 +1,72 @@
+# CP-5 — Publication ledger — BIR 2026 RAGANA
+# The productionization checkpoint: assertions codified, payload split, mobile +
+# a11y, hosting wired. Records what shipped, where, and under what privacy terms.
+stage: 5
+date: "2026-07-07"
+confirmed_by: "Brad"
+
+productionization:
+  assertions_codified: true          # JOB 1 — CP-4's G1–G5 + A1–A16 as a runnable suite
+  test_suite: "races/bir2026/test/regression.test.cjs (+ harness.cjs)"
+  test_count: 23                     # 5 goldens + 16 CP-4 assertions + 2 new findings
+  test_runner: "TZ=America/New_York node --test test/regression.test.cjs"
+  green_before_and_after: true       # prime rule 5 — non-UTC TZ, green both times
+  shell_migration: "declined — see RETROSPECTIVE §shell. The monolith's chart engine
+    diverged from the nb2026 shell (different module set); productionized in place
+    on the same proven build/split/mobile/a11y pattern instead of merging engines."
+  payload_split:
+    core_kb: 117                     # 15 default/quick/chip boats + all 58 metas + events/stats — eager
+    fleet_kb: 54                     # 57 ghost tracks — lazy, after first paint
+    more_kb: 244                     # 42 other boats' tracks — lazy, on demand
+    vendor_kb: 1046                  # plotly-basic, separate + cacheable (not inlined)
+    lossless: true                   # core ∪ more ∪ fleet reconstructs the FROZEN oracle byte-semantically
+    first_chart_interactive: "<2s (core 117KB ≈ 30KB gzip + cached vendor)"
+  mobile: "bottom-sheet controls, scroll-safe charts (fixedrange on touch), ~44px targets; verified 375px"
+  accessibility:
+    - "all controls are real <button>/<select> with aria-pressed / focus-visible"
+    - "non-colour division cue: PHRF ghosts dashed on the map; ORC circles vs PHRF squares on the finstrip"
+    - "tap-to-inspect gives a text-reachable equivalent of chart hover"
+  new_findings:                      # prime rule 5 — caught this session, now assertions
+    - "NF1: FROZEN oracle injects Windfall meta-only (PHRF finisher). goldens.json/config.yaml
+       still list Windfall under names_absent — that golden is STALE vs the oracle; without
+       Windfall the PHRF finstrip band is 22, not the golden 23. Test asserts the oracle."
+    - "NF2: display-name override (Zèlèe→Zélée) is applied in the payload; goldens.json
+       names_present still shows the raw 'Zèlèe'. Test asserts the applied display name."
+
+publication:
+  decision: "Host exactly like the nb2026 board — public, full narrative — confirmed by Brad 2026-07-07."
+  deploy_choice: "Push dist + deploy (feature-branch PRs for review; final rebuild on silverbox)."
+  public_url: "https://hgq.fyi/ragana-block-island-2026/"
+  build:
+    mode: "python3 build.py --public"
+    version_hash: "e01c913d9e"
+    events_included: 14
+    events_stripped: 2
+  events_never_public: 2             # prime rule 4 — firsthand-confirmed third-party
+                                     # milestone incidents, NOT in the public record.
+                                     # Labels withheld from this public tree; they live
+                                     # only in the private client build + private/never_public.txt.
+  note: >
+    Brad chose 'exactly like nb2026' (full public narrative). That instruction was about
+    publicness/mechanism and did not explicitly reverse the written prime-rule-4 carve-out
+    for two THIRD-PARTY post-finish incidents, so the public build withholds them and ships
+    the other 14 events. To include them, Brad must say so explicitly; there is no allowlist
+    path that adds them. The private CLIENT build (`python3 build.py`, all 16 events) is
+    unchanged and not published.
+
+deploy:
+  monorepo:
+    repo: "github:bradhgq/yacht-race-visualization (race-viz-site flake input)"
+    branch: "claude/bir2026-dashboard"
+    rev: "0d5eaff0e7e6db482a0ced76c7a436337cc8fc19"
+    path: "races/bir2026/dist/"
+  nix_config:
+    repo: "github:bradhgq/nix-config"
+    branch: "claude/bir2026-hosting"
+    file: "hosts/silverbox/ragana-dashboard.nix"
+    change: "nginx alias /ragana-block-island-2026/ → ${race-viz-site}/races/bir2026/dist/"
+  remaining_manual_steps:            # require merge-to-main review + silverbox (x86_64-linux)
+    - "Merge PR claude/bir2026-dashboard → main on yacht-race-visualization."
+    - "Merge PR claude/bir2026-hosting → the deployed nix-config branch."
+    - "On silverbox: nix flake update race-viz-site && sudo nixos-rebuild switch --flake .#silverbox"
+  status: "staged for review — not yet live (final rebuild is Brad's, on silverbox)."

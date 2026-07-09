@@ -1,0 +1,159 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   BIR 2026 dashboard — styles.
+   Part 1 is the CP-4-approved monolith look, verbatim (do not restyle the
+   desktop appearance — it was signed off across 8 screenshot rounds).
+   Part 2 adds the productionization layers that the monolith never had:
+   loading/error states, tap-to-inspect, keyboard focus, the phone bottom
+   sheet, chart heights (moved out of inline style so mobile can override),
+   and the responsive breakpoints.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Part 1 · approved monolith styles ── */
+:root{--magenta:#C2187E;--ink:#17293A;--ink2:#51677A;--rule:#D5E0E4;--mono:'SF Mono',Menlo,Consolas,monospace;--paper:#FDFEFD}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;color:var(--ink);background:#F4F8F7;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 80px}
+header.tb{padding:26px 0 14px;border-bottom:2px solid var(--ink)}
+.tb-eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.02em;color:var(--ink2);text-transform:uppercase}
+h1{font-size:clamp(22px,4vw,32px);margin:6px 0 4px;font-weight:800}
+h1 .mag{color:var(--magenta)}
+.subline{font-family:var(--mono);font-size:12px;color:var(--ink2);display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
+.subline b{color:var(--ink)}
+h2{font-size:clamp(17px,2.6vw,21px);margin:30px 0 4px;font-weight:700}
+.hd{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.tools{font-family:var(--mono);font-size:11px;color:var(--ink2)}
+.note{font-size:14px;color:#33475a;margin:4px 0 12px;max-width:none;line-height:1.55}
+.note b{color:var(--ink)}
+.plot{width:100%}
+section{margin-top:8px}
+.controls{position:sticky;top:0;z-index:20;background:rgba(244,248,247,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule);padding:10px 0;margin-bottom:6px}
+.ctl-row{display:flex;gap:8px;align-items:flex-start;margin:5px 0;flex-wrap:wrap}
+.ctl-label{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--ink2);min-width:64px;padding-top:4px}
+.ctl-label.big{padding-top:5px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11.5px;border:1px solid var(--rule);border-radius:14px;padding:3px 9px;cursor:pointer;user-select:none;background:#fff;transition:.12s}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
+.chip.on{color:#fff!important;border-color:transparent}
+.chip.locked{cursor:default;opacity:.95}
+.grpbtn{font-family:var(--mono);font-size:11px;border:1px solid var(--rule);border-radius:6px;padding:3px 9px;cursor:pointer;background:#fff;color:var(--ink)}
+.grpbtn.allon{background:var(--ink);color:#fff;border-color:var(--ink)}
+.modebtn{font-family:var(--mono);font-size:11px;border:1px solid var(--rule);border-radius:6px;padding:3px 9px;cursor:pointer;background:#fff;color:var(--ink2)}
+.modebtn.on{background:var(--magenta);color:#fff;border-color:var(--magenta)}
+select{font-family:var(--mono);font-size:11.5px;padding:2px 6px;border:1px solid var(--rule);border-radius:6px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.kpi{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:11px 13px}
+.kpi .v{font-size:22px;font-weight:800;font-family:var(--mono)}
+.kpi .l{font-size:11px;color:var(--ink2);text-transform:uppercase;letter-spacing:.02em;margin-top:2px}
+.kpi .s{font-size:11.5px;color:#33475a;margin-top:3px}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px;margin:8px 0 10px}
+.logtable{table-layout:fixed;min-width:720px}
+.logtable td{vertical-align:top}
+.logtable td:nth-child(5){font-family:-apple-system,Arial,sans-serif;font-size:12.5px;color:#33475a}
+#eventtable{overflow-x:auto;max-height:520px;overflow-y:auto}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--rule)}
+th{position:sticky;top:0;background:#EEF4F3;font-weight:600}
+tr.hero td{background:#FBEAF3;font-weight:600}
+.axis-toggle{display:inline-flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.axis-toggle button{border:none;background:#fff;font-family:var(--mono);font-size:11px;padding:3px 10px;cursor:pointer;color:var(--ink2)}
+.axis-toggle button.on{background:var(--ink);color:#fff}
+.ctl-hint{font-size:11px;color:var(--ink2);max-width:none}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink2)}
+footer li{margin:4px 0}
+.mag{color:var(--magenta)}
+
+/* ── Part 2 · productionization layers ── */
+
+/* keyboard focus (all controls are real <button>/<select> now) */
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--magenta);outline-offset:2px;border-radius:4px}
+
+/* loading / error / noscript states */
+.appstate{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:26px 20px;margin:14px 0;text-align:center;font-family:var(--mono);font-size:12.5px;color:var(--ink2)}
+.appstate.err{border-color:#C0392B;color:#A33}
+.appstate .retry{display:inline-block;margin-top:10px;border:1px solid var(--ink);border-radius:999px;padding:6px 16px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:none}
+.appstate .retry:hover{background:var(--ink);color:#fff}
+noscript .appstate{text-align:left}
+kbd{font-family:var(--mono);background:#EDF2F4;border-radius:3px;padding:0 5px;font-size:11px}
+
+/* the .plot placeholder while Plotly / data are still loading */
+.plot{position:relative}
+.plot:empty{background:repeating-linear-gradient(-45deg,#FDFEFD 0 14px,#F1F6F6 14px 28px);border:1px dashed var(--rule);border-radius:6px}
+.plot:empty::after{content:"chart loading…";position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:11px;color:var(--ink2)}
+
+/* tap-to-inspect detail line (fills in on Plotly click; the touch hover) */
+.tapnote{font-family:var(--mono);font-size:11px;color:var(--ink2);border-top:1px dashed var(--rule);margin-top:4px;padding:5px 2px 6px;display:none}
+.tapnote.show{display:block}
+.tapnote b{color:var(--ink)}
+
+/* aria-pressed mirrors .on for the toggle buttons; give a11y users focus state */
+.chip[aria-pressed],.grpbtn[aria-pressed],.modebtn[aria-pressed],.axis-toggle button[aria-pressed]{position:relative}
+
+/* + More panel rows (keyboard-reachable buttons) */
+.more-list{display:flex;flex-wrap:wrap;gap:6px}
+.more-row{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border:1px solid var(--rule);border-radius:14px;padding:3px 9px;cursor:pointer;background:#fff;color:var(--ink2)}
+.more-row.on{color:#fff;border-color:transparent;background:var(--ink)}
+.more-row.loading{opacity:.5;cursor:progress}
+.more-row .dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+
+/* phone bottom-sheet chrome (activated ≤760px) */
+#sheetBar{position:fixed;left:14px;right:14px;bottom:max(12px,env(safe-area-inset-bottom));z-index:45;
+  display:none;align-items:center;justify-content:center;gap:8px;padding:14px 16px;min-height:48px;
+  background:var(--ink);color:#fff;border:none;border-radius:999px;font-family:var(--mono);font-size:12px;
+  letter-spacing:.06em;text-transform:uppercase;box-shadow:0 4px 18px rgba(23,41,58,0.35);cursor:pointer}
+#sheetBar .dot{width:9px;height:9px;background:var(--magenta);border-radius:50%;flex:none}
+#scrim{position:fixed;inset:0;background:rgba(23,41,58,0.4);z-index:50}
+
+/* chart heights (moved out of inline style; approved desktop values).
+   A15: race + upwind-lane (xte) + sog are all 360px. */
+#map{height:min(300px,34vw)}
+#dtf{height:min(320px,72vw)}
+#race{height:360px}
+#upwind{height:min(300px,64vw)}
+#finstrip{height:min(300px,70vw)}
+#xte{height:360px}
+#sog{height:360px}
+
+/* ── responsive ── */
+@media(max-width:760px){
+  .wrap{padding:0 10px 96px}
+  .subline{gap:10px;font-size:11px}
+  header.tb{padding:18px 0 12px}
+  #sheetBar{display:flex}
+  /* the sticky controls panel becomes a bottom sheet */
+  .controls{position:fixed;top:auto;left:0;right:0;bottom:0;z-index:60;margin:0;
+    max-height:80vh;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#fff;
+    border-radius:14px 14px 0 0;border-bottom:none;padding:14px 14px max(18px,env(safe-area-inset-bottom));
+    box-shadow:0 -8px 30px rgba(23,41,58,0.28);backdrop-filter:none;
+    transform:translateY(102%);visibility:hidden;transition:transform .28s ease,visibility 0s .28s}
+  .controls.open{transform:none;visibility:visible;transition:transform .28s ease}
+  .ctl-head{display:flex;align-items:center;justify-content:space-between;position:sticky;top:-14px;
+    background:#fff;margin:-14px -14px 10px;padding:12px 14px;border-bottom:1px solid var(--rule);z-index:1}
+  .ctl-title{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+  .ctl-label{min-width:100%;padding-top:0;margin-bottom:4px}
+  /* thumb-first ~44px targets inside the scrollable sheet */
+  .chip{padding:11px 13px;font-size:12.5px}
+  .chip .dot{width:9px;height:9px}
+  .more-row{padding:11px 13px;font-size:12.5px}
+  .grpbtn{padding:11px 14px;font-size:12.5px}
+  .modebtn{padding:10px 13px;min-height:42px}
+  .axis-toggle button{padding:12px 14px}
+  select{padding:9px 8px;font-size:12.5px}
+  #ctlCollapse{padding:9px 15px;min-height:40px}
+  /* charts get more vertical room on a narrow viewport */
+  #map{height:min(96vw,68vh)}
+  #dtf{height:82vw}
+  #race{height:100vw}
+  #upwind{height:96vw}
+  #finstrip{height:92vw}
+  #xte{height:96vw}
+  #sog{height:82vw}
+  .logtable{min-width:600px}
+  #eventtable{max-height:none}
+}
+.tb-eyebrow{display:block}
+@media(max-width:420px){ .tb-eyebrow{font-size:10.5px} }
+
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}

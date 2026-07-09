@@ -1,0 +1,40 @@
+# CP-0 — Scope Record — Block Island Race 2026 (79th), Storm Trysail Club — CONFIRMED
+fleet_count:
+  entries_scratch: 75            # 61 ACTIVE + 14 INACTIVE (withdrawn pre-race)
+  results_rows: 61               # 58 AOK + 2 RET (Inisharon, Towhee) + 1 DNC (Daffodil)
+  tracked: 58                    # 56 of 58 finishers + Inisharon (RET) + Daffodil (DNC)
+  untracked: ["Windfall (Cl4 PHRF, fin 3rd)", "MXM (Cl3 PHRF-PI, fin 1st)", "Towhee (Cl3 PHRF-PI, RET)"]
+anomalies:
+  - "Rounding direction: prior-session 'port' inference CONTRADICTED — track 57/57 clockwise (starboard), SI §7.1 concurs. → discrepancy register"
+  - "results.finish_time_utc holds LOCAL EDT despite Z suffix (56-boat finish triangulation; UTC reading scatters 25 nm). finish_local derived by stripping the false Z"
+  - "Daffodil: DNC with live tracker — stationary at mooring 40.948N 73.731W, 0.4 nm total path. Exclude from fleet layer"
+  - "Zelee (tracker) = Zèlèe (results/scratch), GBR1030X JPK 1030 — join via by_name override; display 'Zélée' (confirmed)"
+  - "Case mismatches results↔tracker: BANTER/DUET/SLEEPER/FULL TILT vs proper case — norm-key joins fine; display overrides confirmed"
+  - "Sponsor suffix 'Midnight Rider - PMP Strategy' — display trim to 'Midnight Rider' confirmed"
+  - "Official-place gaps: class-6 place 10, Plum-Island place 2 absent; Inisharon RET carries overall 35 with 34 absent. Finisher ladders complete (ORC 1–33, PHRF 1–23); entrant counts are floors"
+  - "Ping cadence: median 60 s, p90 300 s; 47/58 boats flag >6x gaps — dominant mode ~3600 s (YB cadence switching), covered by grid interpolate_limit 4x15 min; max gap 7,376 s"
+  - "481 exact duplicate pings dropped (54,119 -> 53,638)"
+  - "Sail-number noise: SLEEPER 'USAUSA 326' malformed; Daffodil '167' vs Save the Sound 'USA167' near-collision — name-keyed joins unaffected"
+  - "SI PDF + SI Amendment #1 not yet in hand; §7.1 corroborated by two independent quotes. Red Nun '1' vs '2' at finish approach differs between sources — resolve from SI PDF, immaterial to course model"
+  - "Edition numbering: tracker id says 79th; a May-2026 McMichael repost says 78th — cosmetic"
+reference_boats:
+  benchmarks:
+    - { name: "Christopher Dragon XII", why: "class + ORC-division winner; rating twin (0.9404 vs 0.9425); same 12:35 start; central benchmark" }
+    - { name: "In Theory",              why: "Class 6 runner-up; F's-slides benchmark; 'extra distance bought speed' counterfactual boat" }
+    - { name: "Groupe 5",               why: "Class 6 third — same-start podium boat so the benchmark set isn't CD-only" }
+    - { name: "Young American",         why: "F's-slides benchmark; won Class 2 PHRF-DH; 12:05 start — 30-min offset on EVERY comparison; positional/elapsed only" }
+  story_boats: ["Zélée", "Full Tilt", "Loki", "Max", "Banter", "Touch of Grey"]
+  note: "User: open to adding references later if research surfaces interesting ones; Ragana's-division boats are good candidates"
+tz:
+  official: "America/New_York (EDT, utc_offset -4)"
+  probe: { boat: "Ragana", official_finish_local: "2026-05-24 02:04:49", track_epoch_utc: 1779696289, offset: "-4h; 56-boat finish cluster sigma ~0.14 nm confirms" }
+course_model: "marks: start [41.0005,-73.5238] -> Race corner -> 1BI (N of island) -> SE-Light clearance -> Race corner -> finish [41.0153,-73.5360]; island to STARBOARD; official 186.0 nm, draft polyline 188.7"
+divisions_in_scope: ["ORC / Block Island Course"]
+tier: 2
+grid_minutes: 15
+scoring: { system: tot, params: { rating_column: rating }, probe_boats: ["Christopher Dragon XII", "Ragana"] }
+display_names: "Ragana as-spelled (not RAGANA house-caps); Zélée; Midnight Rider; proper-case fixes — all confirmed"
+milestones: "180/10 confirmed 'ok for now'"
+non_finishers: "Inisharon track on map with RET status; Daffodil excluded — confirmed"
+confirmed_by: "Brad"
+date: "2026-07-07"

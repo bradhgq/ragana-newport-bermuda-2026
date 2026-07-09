@@ -1,0 +1,17 @@
+# CP-3 — Corrections Record — BIR 2026 RAGANA
+# CONFIRMED by Brad, 2026-07-07 ("lgtm"). Act-3-is-larger-loss reframe approved.
+corrections:
+  - { before: "broach 23:30 / douse 23:35 (reconstructed)", after: "broach 23:55 / douse 00:00 May24 (raw-track SOG collapse 8.5->0.7 kt)", source: "raw-track", propagated_to: [events.yaml] }
+  - { before: "stats.extra 31.8 nm (vs 186 straight rhumb)", after: "+7.5 nm vs CD total / +4.7 upwind (mark-course honest metric)", source: "pipeline", propagated_to: [FINDINGS.md, synthesis] }
+  - { before: "prior emphasis: upwind excess is the main loss", after: "Act 3 home leg is the larger share (+182 min vs +64 min upwind); 4.7nm stays the tactical headline", source: "per-benchmark decomposition", propagated_to: [synthesis] }
+spine:
+  act1: "Out into the Sound (start->~8h): early upwind bleed, +43 min vs CD"
+  act2: "The 4.7-nm upwind investment (8h->1BI): +64 min, the Honey-rule lesson"
+  act3: "The leg home + the broach (1BI->finish 02:04): +182 min, the larger share"
+  reconciliation: "43+64+182 = 289 min = official elapsed +4:48:33; corrected +4:36:04"
+discrepancy_register_confirmed: true
+noise_floor_note: "CD overall win vs Loki ~3 min = sub-floor; CD Class-6 win over In Theory 53 min = solid"
+unresolvable_flagged: ["35-kt gust figure (LIS buoys inactive; exaggerated relay per Brad)", "1BI charted coord (deferred to Stage 5)"]
+spine_approved: true
+confirmed_by: "Brad"
+date: "2026-07-07"

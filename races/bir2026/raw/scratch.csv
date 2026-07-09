@@ -1,0 +1,76 @@
+boat_name,sail_number,design,length,bow_number,circle,division,class_name,rating,owner,owner_city,owner_state,owner_club,tactician,status,checked_in
+Blitzkrieg,USA52901,J/122,40,,,,,,Matthew Schaedler,Toledo,OH,North Cape Yacht Club,,INACTIVE,False
+Celeritas,USA3340,Soverel 33-2,33,,,,,,William Beery,Norwalk,CT,"Norwalk YC, STC",,INACTIVE,False
+Dreadknot,USA 12,Gunboat 62,65,,,,,,Charlie Welsh,Newport Beach,CA,NHYC/LAYC/NYYC,,INACTIVE,False
+Eagle,USA61121,J/121,40,,,,,,Steven Levy,Greenwich,CT,Indian Harbor YC/NYYC,,INACTIVE,False
+Eclipse,USA52386,Sabre 386,38.7,,,,,,Marc Berkowitz,Armonk,NY,,,INACTIVE,False
+Good News,USA7065,J/125,41,,,,,,Macrae Sykes,Old Greenwich,CT,NYYC/RYC/STC,,INACTIVE,False
+Imagine,USA 108,X382,11.5,,,,,,Matt Blake,Pelham,NY,Harlem,,INACTIVE,False
+Kent Racing,USA34,Class 40,40,,,,,,Tim Kent,Oyster Bay,NY,SEAWANHAKA CORINTHIAN YACHT CLUB,,INACTIVE,False
+Masquerade,USA52070 / 2323,Baltic 47,47,,,,,,Andrew Burton,Newport,RI,Ida Lewis/Storm Trysail Club,Casey Nickerson,INACTIVE,False
+Monhegan,USA35777,J/44,44.9,,,,,,Martinus van Breems,Redding,CT,"STC, St Thomas Yacht Club",,INACTIVE,False
+Pterodactyl,USA45045,custom,45,,,,,,Scott Weisman,White Plains,NY,New York Yacht Club/Sunningdale,Phillip Moore,INACTIVE,False
+Rapscallion,USA 77,Figaro 2,33,,,,,,Michael Komar,Jamestown,RI,Conanicut Yacht Club,,INACTIVE,False
+Rumba,USA61132,J/133,43,,,,,,Ove Haxthausen,Stamford,CT,Stamford Yacht Club,,INACTIVE,False
+Wizard,USA31,J/99,32.5,,,,,,Adam Zakka & Jonathan Krumeich,Old Greenwich,CT,RYC/NYYC,,INACTIVE,False
+Abilyn,USA25559,J 120,40,,Block Island Course,ORC,Class 1 ORC-DH,0.9735,Josh Reisberg,Sea Cliff,NY,Sea Cliff YC / Storm Trysail Club,,ACTIVE,False
+Eventyr,USA61668,J/99,32.6,,Block Island Course,ORC,Class 1 ORC-DH,0.8956,Michael Kohler,New York,NY,Larchmont Yacht Club,,ACTIVE,False
+Stratos,USA15833,Sun Fast 3300,33,,Block Island Course,ORC,Class 1 ORC-DH,0.9218,Marcus Wunderlich,Jersey City,NJ,Cedar Point Yacht Club,,ACTIVE,False
+Thin Man,USA24,J/99,32.6,,Block Island Course,ORC,Class 1 ORC-DH,0.9036,Todd Aven & Todd Diffee,Brooklyn,NY,City Island Yacht Club / Storm Trysail Club,,ACTIVE,False
+Velocity2,USA22,J/99,32.6,,Block Island Course,ORC,Class 1 ORC-DH,0.9233,Kevin Marks,Darien,CT,Noroton Yacht Club,John Fallon,ACTIVE,False
+Blue Skies,USA44022,Alden Skye,50,,Block Island Course,ORC,Class 6 ORC,0.9264,William Gunther,Essex,Connecticut,"Essex Yacht Club, NYYC,CCA,STC",,ACTIVE,False
+Christopher Dragon XII,USA2277,Italia 11.98,38,,Block Island Course,ORC,Class 6 ORC,0.9404,Linda & Andrew Weiss,Mamaroneck,NY,Storm Trysail Club / Larchmont Yacht Club,,ACTIVE,False
+Groupe 5,USA 26,Figaro 2,9.81,,Block Island Course,ORC,Class 6 ORC,0.9573,NEKA Sailing,Glen Cove,NY,NEKA,,ACTIVE,False
+In Theory,USA61183,JPK 1080,35.5,,Block Island Course,ORC,Class 6 ORC,0.9337,Peter McWhinnie,Larchmont,New York,"LYC, STC, RORC",,ACTIVE,False
+Inisharon,USA51003,Lyman Morse Seguin 49,50.2,,Block Island Course,ORC,Class 6 ORC,,Jim Murphy,Rye,NY,"American Yacht Club, STC, CCA, NYYC",,ACTIVE,False
+Ragana,USA52238,Cape Fear 38R,37.77,,Block Island Course,ORC,Class 6 ORC,0.9425,Darius Peleda,Westport,CT,CPYC,,ACTIVE,False
+SLEEPER,USAUSA 326,J/105,10.5,,Block Island Course,ORC,Class 6 ORC,0.9084,NEKA SAILING,Glen Cove,NY,NEKA Sailing,,ACTIVE,False
+Save the Sound,USA167,J/99,32,,Block Island Course,ORC,Class 6 ORC,0.9264,Douglas McKeige McKeige,Mamaroneck,NY,American Yacht Club,,ACTIVE,False
+SqueeZeplay,USA52240,IMX 40,39’7”,,Block Island Course,ORC,Class 6 ORC,0.953,Gregg Brinegar,Farmington,CT,New York Yacht Club,,ACTIVE,False
+Zèlèe,GBR1030X,JPK 1030,32,,Block Island Course,ORC,Class 6 ORC,0.897,Lindsey Lind,Bainbridge Island,WA,"RORC, PMYC",Evgeniy Goussev,ACTIVE,False
+Alibi,USA43968,J/120,40,,Block Island Course,ORC,Class 8 ORC,0.9792,John Sartorius,Greenwich,CT,IHYC,,ACTIVE,False
+BANTER,USA61682,Archambault 40RC,39.3,,Block Island Course,ORC,Class 8 ORC,0.9747,Matthew Gimple,Pawcatuck,CT,Cruising Club of America / RORC / SHYC,,ACTIVE,False
+Dire Wolf,USA12204,J/122,40,,Block Island Course,ORC,Class 8 ORC,0.9712,Constantine Baris,Locust Valley,NY,Sagamore Yacht Club / New York Yacht Club / Storm Trysail Club / New York Athletic Club Yacht Club,,ACTIVE,False
+Loki,USA61220,J/122,40,,Block Island Course,ORC,Class 8 ORC,0.963,David Rosow,Fairfield,CT,Pequot Yacht Club / NYYC,,ACTIVE,False
+Palantir 5,USA25244,J/44,44,,Block Island Course,ORC,Class 8 ORC,0.9845,June & Amanda Kendrick,Huntington,NY,Lloyd Harbor Yacht Club / Centerport Yacht Club / Storm Trysail Club / New York Yacht Club,,ACTIVE,False
+Quickdraw,USA104,J/111,36.5,,Block Island Course,ORC,Class 8 ORC,0.9616,Martin Zonnenberg,St. Petersburg,FL,DIYC/SPYC,Nik Hartney,ACTIVE,False
+Skye,USA39534,Farr 395,40,,Block Island Course,ORC,Class 8 ORC,0.9941,Ty Anderson,Riverside,CT,Riverside/STC/NYYC,,ACTIVE,False
+Zig Zag,USA12912,J 122,40,,Block Island Course,ORC,Class 8 ORC,0.9757,Andrew Clark,Greenwich,CT,"NYYC, IHYC, STC",,ACTIVE,False
+ARMA,USA61211,GP42,42,,Block Island Course,ORC,Class 11 ORC,1.0878,Dubois / Eaves / Krow / Roseberry,Larchmont,NY,Larchmont Yacht Club,,ACTIVE,False
+Cool Breeze,USA 60432,Mills 43,43,,Block Island Course,ORC,Class 11 ORC,1.0398,United States Coast Guard Academy,New London,CT,Unuted States Coast Guard Academy Sailing,,ACTIVE,False
+Cougar,USA4900,J/160,53,,Block Island Course,ORC,Class 11 ORC,1.0456,Leonard Sitar,Holmdel,NJ,Storm Trysail Club / American Yacht Club / New York Yacht Club / Cruising Club of America,,ACTIVE,False
+Fortissimo,USA25,IC37,37,,Block Island Course,ORC,Class 11 ORC,1.0338,United States Merchant Marine Academy,Kings Point,NY,KPUSMMA,,ACTIVE,False
+Habiru,USA61124,J/121,40.0,,Block Island Course,ORC,Class 11 ORC,1.0061,Steve Losik,Great Neck,NY,United Yacht Club,,ACTIVE,False
+Katara56,CAY 61887,X-Yacht 56,56,,Block Island Course,ORC,Class 11 ORC,1.0242,Daniel Griffin,Port Washington,NY,PWYC/NYYC,,ACTIVE,False
+Phantom,USA60711,Xp 44,39,,Block Island Course,ORC,Class 11 ORC,1.022,Chris Schoen,Larchmont,NY,Larchmont Yacht Club,,ACTIVE,False
+Rocksteady,USA60492,Xp 44,44,,Block Island Course,ORC,Class 11 ORC,1.0252,Baudoin Lorans,Larchmont,NY,Larchmont Yacht Club,,ACTIVE,False
+Touch of Grey,USA68750,J/121,40,,Block Island Course,ORC,Class 11 ORC,0.9943,Trevor Roach,Stamford,CT,Cedar Point Yacht Club,,ACTIVE,False
+OC-86,USA 28686,RP 86,86,,Block Island Course,ORC,Class 12 ORC,1.4333,Oakcliff Sailing,Oyster Bay,NY,Oakcliff / Storm Trysail Club,,ACTIVE,False
+Temptation/Oakcliff,USA119,JV 66,66,,Block Island Course,ORC,Class 12 ORC,1.3487,Art Santry Oakcliff Sailing,Oyster Bay,NY,NYYC/Storm Trysail Club/Oakcliff,,ACTIVE,False
+Lucky,USA 2872,Juan K 88,88,,Block Island Course-Cows Finish,ORC,Class 13 ORC-CF,1.5674,Bryon Ehrhart,Chicago,IL,New York Yacht Club,,ACTIVE,False
+Midnight Rider - PMP Strategy,511,J/30,29.92,,Block Island Course,PHRF,Class 2 PHRF-DH,138,Denis Lafarge,New York,NY,,,ACTIVE,False
+Sunny Side,USA37,J/109,35,,Block Island Course,PHRF,Class 2 PHRF-DH,66,Cary James,Larchmont,NY,Larchmont Yacht Club,,ACTIVE,False
+Young American,USA146,J 105,34,,Block Island Course,PHRF,Class 2 PHRF-DH,78,Peter Becker & Adrien Blanc,Rye,NY,"NYYC, CCA, American YC, STC, YASA",,ACTIVE,False
+MXM,B36,Bavaria 36,36,,Plum Island Course,PHRF,Class 3 PHRF-PI,123,Roman Brushtein,Hewlett,NY,Hempstead Bay Sailing Club,,ACTIVE,False
+Towhee,USA1781,Cal 40,39.25,,Plum Island Course,PHRF,Class 3 PHRF-PI,,Paul Jennings,Branford,CT,"CCA, OSC, NYYC",,ACTIVE,False
+Cathexis,USA114,X382,38,,Block Island Course,PHRF,Class 4 PHRF,81,Bryan & Kara Schapperle,Wilton,CT,Norwalk Yacht Club / New York Yacht Club,,ACTIVE,False
+Co-Conspirator,USA48,J/33,33,,Block Island Course,PHRF,Class 4 PHRF,78,Matt Roleke & Trace Dittenhofer,Jersey City,NJ,Toms River Yacht Club,,ACTIVE,False
+FULL TILT,USA200,J/109,35.2,,Block Island Course,PHRF,Class 4 PHRF,69,Jonathan Thomson,FAIRFIELD,CT,PEQUOT,,ACTIVE,False
+Tacktile,USA56,Sabre,42,,Block Island Course,PHRF,Class 4 PHRF,102,Jeffrey Wilson,Fairfield,CT,"Pequot Yacht Club, STC, CCA",,ACTIVE,False
+Windfall,USA379,Beneteau 46.1,46,,Block Island Course,PHRF,Class 4 PHRF,93,Shawn Bay,Fairfield,CT,Pequot Yacht Club,,ACTIVE,False
+Charlotte,USA46650,J/120,40,,Block Island Course,PHRF,Class 5 PHRF,51,Richard West,Darien,CT,NYYC / Stamford YC / Storm Trysail  Club,,ACTIVE,False
+DUET,USA51445,J/120,40,,Block Island Course,PHRF,Class 5 PHRF,45,Andrian Lubimov,Scarsdale,NY,Huguenot YC,,ACTIVE,False
+Elan,CGA 10,Nautor Swan 53,53,,Block Island Course,PHRF,Class 5 PHRF,60,US Coast Guard Academy,New London,CT,USCGA Sailing,,ACTIVE,False
+Flying Lady,USA50197,Swan 46 Mk 1,47,,Block Island Course,PHRF,Class 5 PHRF,63,Phillip Dickey,Guilford,CT,Pequot YC,,ACTIVE,False
+Madison,USA83293,J 120,40',,Block Island Course,PHRF,Class 5 PHRF,42,Brian Spears,Fairfield,CT,Pequot YC | STC,,ACTIVE,False
+Speck,USA59916,J/120,40,,Block Island Course,PHRF,Class 5 PHRF,42,William Klein,Rowayton,CT,Norwalk Yacht Club,,ACTIVE,False
+Blitzen,USA46,J130SD,42,,Block Island Course,PHRF,Class 7 PHRF,33,John Storck Jr,Huntington,NY,"Storm Trysail Club, CCA, CYC, LHYC",,ACTIVE,False
+Comet,USA 43600,J44,44,,Block Island Course,PHRF,Class 7 PHRF,27,United States Merchant Marine Academy,Kings Point,NY,KPUSMMA,,ACTIVE,False
+Fireball,USA16,J/111,36.5,,Block Island Course,PHRF,Class 7 PHRF,24,Bill & Jackie Baxter,Stamford,CT,Riverside Yacht Club / STC / NYYC,Jackie Baxter,ACTIVE,False
+Lioness,USA38007,Sydney 38,38,,Block Island Course,PHRF,Class 7 PHRF,24,Lion Sailing Sailmakers,NYC,NY,Lion Racing,,ACTIVE,False
+Scylla,USA60739,Dehler 46,47,,Block Island Course,PHRF,Class 7 PHRF,15,Markus Lahrkamp,Rye,NY,American Yacht Club,,ACTIVE,False
+Summer Grace,USA12235,J/122,40.0,,Block Island Course,PHRF,Class 7 PHRF,27,Kevin Kelley,Riverside,CT,Riverside Yacht Club/NYYC,,ACTIVE,False
+Max,USA75050,Pogo 50,50,,Block Island Course,PHRF,Class 9 PHRF,-18,Moritz Hilf,New York,NY,New York Yacht Club / Storm Trysail Club,,ACTIVE,False
+Oakcliff Farr 40 Blue,USA51990,Farr 40 Turbo,40,,Block Island Course,PHRF,Class 9 PHRF,-6,Oakcliff Sailing,Oyster Bay,NY,Oakcliff Sailing,,ACTIVE,False
+Oakcliff Farr 40 Red,USA46597,Farr 40,40,,Block Island Course,PHRF,Class 9 PHRF,-6,Oakcliff Sailing,Oyster Bay,NY,Oakcliff Sailing,,ACTIVE,False
+Daffodil,167,Corsair F31R,31,,Block Island Course,PHRF,Class 10 MultiHull,,Alex Watson,New York,NY,NEMA,,ACTIVE,False
