@@ -341,3 +341,17 @@ records what I *did* about it.
   the monorepo restructure (`785536d`) had dropped it. REPO_SPEC v1.1's layout
   and the GATE B adjudication both place these files there; byte-verified
   against the originals.
+
+## No-legacy policy + riders (2026-07-10, owner-directed)
+
+- **Policy: nothing `legacy/` stays on active main** — tag + GitHub release
+  zip, then remove; git history retains everything. Executed:
+  `nb2026-legacy-final` (tag + release; `races/nb2026/legacy/` removed — note
+  it was restored to main only yesterday at 12caf77, and remains available in
+  the tag, the release zip, and docs/archives/ragana-dashboard.bundle) and
+  `bir2026-monolith-final` (tag + release now; the monolith files leave main
+  when the shell build replaces them in place).
+- `CLAUDE.md` v0 added (one page, rules in force). `docs/KICKOFF_TEMPLATE.md`
+  committed — closes RETROSPECTIVE_ROUND2 §6's "no KICKOFF_TEMPLATE in the
+  repo" note. Source: the step-1 handoff copy (~/Downloads/files/), since the
+  parity prompt's "attached file" was not re-delivered with the message.
