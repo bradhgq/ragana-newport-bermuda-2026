@@ -136,3 +136,10 @@ without guessing. (What I *did* about each is in `REPO_NOTES.md`.)
     188.7). With ±0.05 kt tolerance the two bases differ by more than the
     tolerance (5.30 vs 5.01 kt at BIR's elapsed). Fixtures must pin the
     dtf-at-gun basis; skill stage-2 amendment queued (skills/ frozen this run).
+
+- **#19 CLOSED** (skill-consolidation round, 2026-07-16): stage-2's VMC
+  integral check now pins the DTF-at-the-gun basis — routed polyline for marks
+  courses, `rhumb ÷ elapsed` only as the point-to-point special case — with the
+  BIR numbers as the cautionary example. The BIR fixture comment
+  (`races/bir2026/tests/regression.json`) had already recorded the basis; the
+  skill now matches it.
