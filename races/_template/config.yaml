@@ -1,6 +1,6 @@
 # Race config template — copy races/_template/ to races/<race>/ and fill in.
-# Schema of record: skill/race-viz/references/schemas.md (+ repo additions, all
-# shown here). Facts about the race live here; judgment lives in the skill;
+# Schema of record: skills/race-viz/references/schemas.md (kept in lockstep with
+# this file). Facts about the race live here; judgment lives in the skill;
 # narrative lives in events.yaml; code lives in the repo.
 
 race:

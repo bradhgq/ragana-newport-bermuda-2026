@@ -155,3 +155,20 @@ without guessing. (What I *did* about each is in `REPO_NOTES.md`.)
   in `races/nb2026/config.yaml time.tz_probe.track_epoch_utc` since Phase 1
   (REPO_NOTES #13); nothing further to fix.
 
+- **#6 CLOSED** (skill-consolidation round, 2026-07-16): schemas.md's
+  `config.yaml` block now carries the full key set, folded back from
+  `races/_template/config.yaml` (the two are declared lockstep), including
+  every key on this item's list. The old block's `divisions:`/`rating_bands:`
+  lines were also mislocated — those are presentation.js keys
+  (`classFilter`/`ratingBands`); schemas.md now documents the
+  config.yaml/presentation.js split and the build-time consistency check.
+
+- **#3 CLOSED** (same round): stage-2 §6 has carried the resolution since the
+  R2 loop — detection PROPOSES (and always logs the band-median table), CP-2
+  DECIDES, config RECORDS (`zone_detection.zone`); schemas.md's config block
+  now says the same at the key itself.
+
+- **#5 CLOSED** (same round): the zone_detection defaults in schemas.md now
+  carry the note that they find zero candidates on the reference race — they
+  are proposal knobs, not truth.
+

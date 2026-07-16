@@ -5,54 +5,94 @@ Boundary rule: **facts about the race → `config.yaml`; judgment about races �
 ## config.yaml — per-race facts
 
 ```yaml
-race: { name: "", edition: 2026, organizer_url: "" }
-tracker: { vendor: yb, path: raw/tracks.csv }        # vendor: auto → adapter detect()
+race: { name: "", edition: 2026, slug: "", organizer_url: "" }   # slug = output filename stem
+tracker: { vendor: auto, path: raw/tracks.csv }      # yb | kattack | tractrac | predictwind | auto
 official_results:
   path: raw/results.csv
-  columns: { rank: , name: , sail: , rating: , elapsed: , corrected: , type: , finish_local: , division: }
+  columns: { rank: , name: , sail: , rating: , elapsed: , corrected: , type: ,
+             finish_local: , division: , class_rank: , status: , retire_reason: }
+                                # class_rank drives meta.clsPos; status/retire_reason carry DNF rows
+  finish_statuses: [FIN, AOK]   # status values counted as finishers; anything else retires
 entries: { path: raw/scratch.csv }                   # optional scratch sheet
 course:
-  type: point_to_point          # point_to_point | marks
+  type: point_to_point          # point_to_point | marks (marks = routed DTF via pipeline/route.py)
   start: [lat, lon]
   finish: [lat, lon]
-  official_length_nm: 635.1     # from official documents when available
-  marks: []                     # ordered; required when type: marks
+  official_length_nm: 635.1     # from official documents; marks builds log the polyline delta
+  finish_radius_nm: 0.7         # arrival cut for boats without an official finish
+  marks: []                     # ordered [lat, lon] turning marks; required when type: marks
+  mark_radius_nm: 1.0           # rounding radius (conventions documented in pipeline/route.py)
 time:
   official_tz: America/New_York
+  utc_offset: -4                # fixed offset for the race window (I1: naive-local rendering)
+  tz_label: EDT
+  race_start_utc: ''            # ISO, tz-aware — data trim (a little before the first warning)
   tz_probe:                     # REQUIRED — stage-0 verified, never assumed
     boat: ""
     official_finish_local: "YYYY-MM-DD HH:MM:SS"
     track_epoch_utc: 0
 scoring:
   system: tot                   # tot | tod | custom
-  params: {}                    # rating column, units, etc.
+  params: { rating_column: rating }
   probe_boats: ["", ""]         # official corrected must reproduce exactly before fleet math
 start_method: finish_minus_elapsed   # finish_minus_elapsed | pursuit | staggered | custom (document it)
 divisions_in_scope: []
 client_boat: null               # null for Tier 1
 reference_boats: []
-name_overrides: {}              # per-race display/disambiguation (duplicate names → by sail number)
 tier: 1                         # 1 | 2 | 3
-grid_minutes: 15
-zone_detection: { band_nm: 10, collapse_frac: 0.5, min_traversal_hours: 6 }
+name_overrides:                 # structured, not a flat map (I4)
+  by_id: {}                     # tracker boat_id -> name (duplicate-name split)
+  by_name: {}                   # tracker name -> name (syndicate/sponsor cleanup)
+  display: {}                   # results name -> shipped display name (dupes by sail number)
+groups:                         # chip-group semantics; membership is CP-0/CP-2 judgment
+  hero_key: hero
+  by_rank: {}                   # e.g. { class: [3,7,9], podium: [1,2,3] }
+  default_key: fleet_other
+  dnf_key: fleet_dnf
+extra_boats: []                 # tracked but unscored: { track_name, display, type, group }
+grid: { minutes: 15, end_utc: '', interpolate_limit: 4 }
+sog: { half_window_s: 900, min_span_s: 600 }         # centered 30-min SOG window
+fleet: { resample: 1h, min_points: 5 }               # hourly ghost layer
+milestones: { start_nm: 600, step_nm: 20 }
+finish_pad_min: 3
+events: { path: events.yaml }
+event_categories: [crew, systems, sail, tactics, insight, milestone]   # draw order, low -> high
+# reconcile: { path: navlog.yaml, matched_key: matched_local }   # Tier 2+, paper nav log only
+zone_detection:                 # defaults find ZERO candidates on the worked example (NB2026's
+  band_nm: 10                   # only sub-threshold run traverses ~3 h vs min 6) — they are
+  collapse_frac: 0.5            # proposal knobs, not truth. Detection PROPOSES and logs its
+  min_traversal_hours: 6        # band-median table; CP-2 DECIDES; config RECORDS the decision:
+  # zone: { upper_nm: 180, lower_nm: 80 }   # authored CP-2 bounds (NB2026's shipped park)
 finish_spread: { window_min: 30, min_boats: 10 }
 noise_floor_min: 30             # per-race; scoring-system dependent
-modules: []                     # filled from CP-2
 privacy: { default: private }
-paths: { out_dir: out/ }
-goldens:                        # frozen at CP-2; changing one requires a recorded user instruction
+output:
+  dir: out/
+  # generated: 'YYYY-MM-DD'     # pin only to reproduce a frozen build byte-for-byte
+goldens:                        # frozen at CP-2; changing one requires a recorded instruction (I16)
   tz_probe: { epoch: 0, rendered: "YYYY-MM-DD HH:MM" }
   endpoints: { ref: "", corrected_min: 0.0, elapsed_min: 0.0, pace_min_per_100: 0.0 }
   module_canaries: {}           # e.g. { park: { boat: "Gemini II", u4: 31 } } — numbers, not "31%"
+  names_present: []             # I4 name-hygiene fixtures (dupes disambiguated, normalization)
+  names_absent: []
   finstrip_count: 0
-# ── selection filters (std since R2; division/class structure varies by race
-#    and scoring system, so both are per-race config, not shell constants) ──
-divisions: { prefix: "SDL", input_label: "+ SDL", placeholder: "class #, e.g. 3" }
-                                # class filter: enter a division number → select its boats.
-                                # Depends on meta.cls being filled from official results.
-rating_bands: { widths: [0.01, 0.02] }   # hero-centred rating-band chips (meta.tcf);
-                                # composes with the class filter as an intersection.
 ```
+
+`races/_template/config.yaml` is the fill-me copy of this schema, kept in
+lockstep: when the pipeline grows a key, the template and this block move
+together (DOC_GAPS #6 — the first cold-start had to reverse-engineer a dozen
+keys from pipeline code).
+
+**Presentation config is a separate file** — `races/<race>/presentation.js`
+(`window.__RACE_CONFIG__`): layout/section order, palette + group presentation,
+defaults, chart y-ranges + heights, KPI slots, `modules`/`overlays` lists, and
+the selection filters (`classFilter: { prefix, inputLabel, placeholder }` and
+`ratingBands: { widths: [...] }`, std since R2 — presence of a block renders
+its control; absence renders nothing, so one-design races simply omit them).
+Facts shared with `config.yaml` (course, hero/client boat, time) must MATCH —
+`shell/build.py` runs a consistency check and refuses the build on divergence.
+Narrative copy lives in `copy.js`/`copy.md`, never in either config. The worked
+example (`races/nb2026/presentation.js`) documents every key with its origin.
 
 ## events.yaml — narrative as data
 
