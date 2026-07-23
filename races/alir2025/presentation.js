@@ -45,6 +45,9 @@ window.__RACE_CONFIG__ = {
       fleet_dnf:   { label: 'Retired',    colors: ['#9AA5AC'] },
     },
     quick: ['hero', 'focus', 'spotlight'],
+    chipExtras: ['Wahoo', 'Phantom', 'Dolcezza',   // the other defaults (owner, round 4)
+                 "Sound's Great", 'Towhee'],       // + two that didn't make the default cut:
+                                                   // the documented boat and her rival in the split
     dnfKey: 'fleet_dnf', outsideKey: '', fallbackKey: 'fleet_other',
     buttons: {                          // each button = a defensible comparison set (5-7 boats);
                                         // names asserted subset of the payload by the harness

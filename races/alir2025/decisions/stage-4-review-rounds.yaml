@@ -1,5 +1,5 @@
 # stage-4 — Review-Round Log — ALIR 2025 — DRAFT (owner round pending; >=1 owner round is mandatory)
-rounds: 2                        # round 1 = headless self-review; round 2 = OWNER review (7 items)
+rounds: 4                        # 1 self-review · 2 owner (7 items) · 3 owner (map/milestones/speed) · 4 owner (chip row)
 defects:
   - found: "door module drew 6 dots on the live page vs 43 in the harness — it read t/dtf series,
       which the split build ships only for core boats until more.json loads (standalone embeds
@@ -58,6 +58,22 @@ defects:
       (shell/app/core.js); one fetch covers every lazy boat. All three races' chains green."
     assertion: "not expressible in the standalone harness (it embeds all tracks); verified in
       the served split build — 6/6 pace peers render after click"
-approved_to_productionize: false # owner confirms after seeing round 2
-confirmed_by: ""
-date: ""
+  # ---- round 3: owner, 2026-07-23 ----
+  - found: "map heightScale 1.6 was a misread of '75% vertical space' — owner meant 0.75"
+    fix: "charts.map.heightScale 0.75"
+    assertion: "not expressible (visual)"
+  - found: "won-and-lost milestones too coarse at 5 nm"
+    fix: "every 1 nm (201 points/boat; render cost imperceptible)"
+    assertion: "endpoint fixtures unchanged"
+  - found: "speed chart had no commentary"
+    fix: "SOG-mode note (reach peak, Glen Cove drift, what 5-min pings record of a 2-min squall)
+      + the existing VMC note"
+    assertion: "not expressible (copy)"
+  # ---- round 4: owner, 2026-07-23 ----
+  - found: "chip row showed only the three quick-group boats; owner wants all defaults + extras"
+    fix: "groups.chipExtras (existing shell hook): Wahoo, Phantom, Dolcezza + Sound's Great and
+      Towhee (the documented boat and her rival — not default-selected). 8 chips + More(41)."
+    assertion: "chip row verified in the served build; no payload change"
+approved_to_productionize: true
+confirmed_by: "Brad"
+date: "2026-07-23"
