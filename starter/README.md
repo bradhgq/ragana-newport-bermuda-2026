@@ -45,7 +45,7 @@ Copy [`starter/template/`](template/) to `races/<race>/`, drop the tracker
 export / results / scratch sheet into `raw/`, fill `config.yaml` (facts only —
 narrative goes in `events.yaml`) plus `presentation.js`, then run the one-command
 chain. See the skill's
-stage files for the checkpoint protocol; never skip CP-0 or CP-2.
+stage files for the stop protocol; never skip the stage-0 or stage-2 stops.
 
 The repo's one living log is [`docs/OPEN_THREADS.md`](../docs/OPEN_THREADS.md)
 (open/undecided/todo only — closed items are deleted, git history is the

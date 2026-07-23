@@ -1,6 +1,6 @@
 # Stage 1 — Research
 
-Runs in chat. Use the deep Research feature when available; otherwise fall back to iterative web search (including in Claude Code) — same targets, more manual synthesis. Requires the confirmed CP-0 record.
+Requires the confirmed stage-0 record. Research runs natively: iterative web search/fetch against the targets below, fanned out and cross-checked. **Optional owner input:** the owner may run a chat deep-research session for a full-web narrative sweep of external references for the race; its brief lands in `races/<race>/research/` (or is pasted) and folds in as one corroboration-tier input — never sole support for a claim.
 
 ## Mandatory first check — scoring controversies
 
@@ -21,4 +21,4 @@ Before anything else: official notices, protest and redress decisions, rescoring
 - **Claims-in-circulation list**: every checkable claim being made about the race — who won which phase, where the race was decided, what the weather story was, which boats "sailed the race of their lives." Collect these neutrally; each gets tested against the track in stage 3's discrepancy register. This list is where "insight others can't see" usually starts: the track frequently contradicts the circulating story.
 - **Confidence labels** throughout: verified-fact / testimony / inference.
 
-No hard checkpoint here: deliver the brief for the user's read and proceed to stage 2 on their go (or bundle the go with the CP-2 review if they prefer). The brief's claims feed stage 3; its controversy findings feed doctrine 6 enforcement.
+Soft stop: host the brief per the stop mechanic for the owner's read — this is also the natural moment for the optional chat deep-research sweep, offered as an owner task — and proceed to stage 2 on their go (or bundle the go with the stage-2 review). The brief's claims feed stage 3; its controversy findings feed doctrine check 6.

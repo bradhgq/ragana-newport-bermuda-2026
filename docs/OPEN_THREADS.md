@@ -19,7 +19,3 @@ introduction).
   "triangulated from six boats' official finish times" but no document
   records which six or the method; coordinates were taken from legacy code as
   given. Needs owner input (or a re-derivation exercise) to close.
-- **KICKOFF_TEMPLATE retirement** (owner, 2026-07-23): fold its checklist into
-  the skill's stage-0 intake (agent asks the user for anything not yet
-  provided, offers `starter/acquisition/` for data it can fetch), then delete
-  the file — scheduled for the CC-native skill PR.

@@ -1,6 +1,6 @@
 # Stage 4 — Visualization
 
-Runs in chat — this stage **is** the screenshot loop, and the loop is the quality engine. Requires the confirmed CP-3 record and the CP-2 module list.
+This stage **is** the review loop, and the loop is the quality engine. Requires the confirmed stage-3 record and the stage-2 module list.
 
 ## The core five (always render)
 
@@ -11,7 +11,7 @@ Runs in chat — this stage **is** the screenshot loop, and the loop is the qual
 5. **Race Log table** — every event, categorized, with position.
 6. **Distance sailed vs speed** (promoted to standard in R2) — one dot per scored boat, x = sailed distance, y = sailed ÷ time with an **elapsed | corrected** toggle; iso-time rays through the origin; rhumb reference line. Mode-aware outlier clamp (a much-faster boat peels off the elapsed scale and is labelled at the edge rather than flattening the pack). Needs `meta.sailedNm/avgKt` — standard fields, so it renders for any race.
 
-## Race-unique modules (1–3 per race, chosen at CP-2 — this is where the differentiating insight lives)
+## Race-unique modules (1–3 per race, chosen at the stage-2 stop — this is where the differentiating insight lives)
 
 | Module | Detection heuristic (defaults; provisional — calibrated on one race) |
 |---|---|
@@ -23,7 +23,7 @@ Runs in chat — this stage **is** the screenshot loop, and the loop is the qual
 | Watch-performance split | a watch schedule was supplied (client data — private by default) |
 | Squall / system crossing | evidence of a **moving** slowdown propagating through the fleet — requires a moving-frame metric, not a fixed band; treat as advanced and budget extra validation |
 
-Propose modules from the heuristics; the user disposes at CP-2. Vetoed modules stay vetoed.
+Propose modules from the heuristics; the owner disposes at the stage-2 stop. Vetoed modules stay vetoed.
 
 ## Build protocol
 
@@ -33,17 +33,18 @@ Propose modules from the heuristics; the user disposes at CP-2. Vetoed modules s
 - All chart x-values are timezone-naive local strings; never hand Date objects to the plotting layer (doctrine 3).
 - Build with the one-command chain — `.venv/bin/python starter/build_race.py races/<race>` — which runs the harness under both `TZ=America/New_York` and `TZ=UTC` in order; piecemeal invocations invite the stale-standalone trap (stage-5).
 
-## Screenshot loop (first-class, scheduled — not "iteration if needed")
+## Hosted review loop (first-class, scheduled — not "iteration if needed")
 
-- Expect 2–4 rounds; **minimum 1 before handoff**. Each round: user screenshots + verbal notes → fixes → rebuild → suite.
-- Every human-caught defect gets (a) fixed and (b) captured as a regression assertion when expressible (prime rule 5). Log the defect→assertion mapping in the CP-4 record.
+- **Host the build on a localhost preview and hand the owner links** — the owner clicks the real thing; screenshots are a chat-era artifact and are **never committed** (not to `docs/`, not to PR bodies). Self-verify headlessly before each round.
+- Expect 2–4 rounds; **minimum 1 before stage 5**. Each round: owner clicks + verbal notes → fixes → rebuild → suite → re-host.
+- Every human-caught defect gets (a) fixed and (b) captured as a regression assertion when expressible (prime rule 5). Log the defect→assertion mapping in the stage-4 record.
 - Aesthetic calls are conversation, not unilateral taste: when the decision is design rather than correctness, present options.
 - Copy discipline: propose microcopy freely (labels, errors, empty states, tap notes) — never author analysis claims; those come only from synthesis and the user.
 
 ## Public cut (Tier 2 → any public artifact)
 
-Strip private-log candor by default; re-admit items only with per-item opt-in (recorded in the CP-5 ledger). Events carry a `visibility` field in `events.yaml` — the cut itself is mechanical; the opt-ins are human decisions.
+Strip private-log candor by default; re-admit items only with per-item opt-in (recorded in the stage-5 ledger). Events carry a `visibility` field in `events.yaml` — the cut itself is mechanical; the opt-ins are human decisions. Remember prime rule 4: private source material that isn't shipping is discarded, never committed.
 
-## CP-4 Screenshot Log — hard stop
+## Stage-4 stop — review-round log (hard stop)
 
-Round count, the defect→assertion table, and the user's approval to hand off. Emit the template and **end the turn**.
+Round count, the defect→assertion table, and the owner's approval to productionize. Present per the stop mechanic; plan mode for stage 5.

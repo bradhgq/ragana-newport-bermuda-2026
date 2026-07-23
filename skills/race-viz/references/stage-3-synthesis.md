@@ -1,6 +1,6 @@
 # Stage 3 — Synthesis
 
-Runs in chat. Requires the confirmed CP-2 record; merges the analysis outputs with the stage-1 research brief.
+Requires the confirmed stage-2 record; merges the analysis outputs with the stage-1 research brief.
 
 ## Build
 
@@ -16,6 +16,6 @@ Runs in chat. Requires the confirmed CP-2 record; merges the analysis outputs wi
 - Margins under `noise_floor_min` are framed as inside scoring noise — mandatory framing, not optional nuance (doctrine 6). The stage-1 controversy check determines how hard this framing must be.
 - **Participant-supplied corrections are binding.** Record them, own them explicitly in the text (no silent fixes), and propagate each one to `events.yaml`, the dashboard data, and — when numeric — the regression assertions.
 
-## CP-3 Corrections Record — hard stop
+## Stage-3 stop — corrections record (hard stop)
 
-Present the narrative spine and the full discrepancy register. Collect corrections — the record may say "none," but it must say so explicitly. Emit the CP-3 template and **end the turn**. Tier 1 may merge this review into CP-2.
+Present the narrative spine and the full discrepancy register per the stop mechanic. Collect corrections — the record may say "none," but it must say so explicitly. Tier 1 may merge this review into the stage-2 stop.

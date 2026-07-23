@@ -44,7 +44,7 @@ name_overrides:                 # structured, not a flat map (I4)
   by_id: {}                     # tracker boat_id -> name (duplicate-name split)
   by_name: {}                   # tracker name -> name (syndicate/sponsor cleanup)
   display: {}                   # results name -> shipped display name (dupes by sail number)
-groups:                         # chip-group semantics; membership is CP-0/CP-2 judgment
+groups:                         # chip-group semantics; membership is stage-0/stage-2 judgment
   hero_key: hero
   by_rank: {}                   # e.g. { class: [3,7,9], podium: [1,2,3] }
   default_key: fleet_other
@@ -61,15 +61,15 @@ event_categories: [crew, systems, sail, tactics, insight, milestone]   # draw or
 zone_detection:                 # defaults find ZERO candidates on the worked example (NB2026's
   band_nm: 10                   # only sub-threshold run traverses ~3 h vs min 6) — they are
   collapse_frac: 0.5            # proposal knobs, not truth. Detection PROPOSES and logs its
-  min_traversal_hours: 6        # band-median table; CP-2 DECIDES; config RECORDS the decision:
-  # zone: { upper_nm: 180, lower_nm: 80 }   # authored CP-2 bounds (NB2026's shipped park)
+  min_traversal_hours: 6        # band-median table; the stage-2 stop DECIDES; config RECORDS it:
+  # zone: { upper_nm: 180, lower_nm: 80 }   # authored stage-2 bounds (NB2026's shipped park)
 finish_spread: { window_min: 30, min_boats: 10 }
 noise_floor_min: 30             # per-race; scoring-system dependent
 privacy: { default: private }
 output:
   dir: out/
-  # generated: 'YYYY-MM-DD'     # pin only to reproduce a frozen build byte-for-byte
-goldens:                        # frozen at CP-2; changing one requires a recorded instruction (I16)
+  # generated: 'YYYY-MM-DD'     # pin only to reproduce a shipped build byte-for-byte
+pinned_values:                  # pinned at the stage-2 stop; changing one requires a recorded instruction (I16)
   tz_probe: { epoch: 0, rendered: "YYYY-MM-DD HH:MM" }
   endpoints: { ref: "", corrected_min: 0.0, elapsed_min: 0.0 }
   module_canaries: {}           # e.g. { park: { boat: "Gemini II", u4: 31 } } — numbers, not "31%"
@@ -81,7 +81,7 @@ goldens:                        # frozen at CP-2; changing one requires a record
 `starter/template/config.yaml` is the fill-me copy of this schema, kept in
 lockstep: when the pipeline grows a key, the template and this block move
 together (the first cold-start had to reverse-engineer a dozen
-keys from pipeline code). The pace endpoint golden
+keys from pipeline code). The pace endpoint value
 (`endpoints.pace_min_per_100`) is deliberately NOT a config.yaml key: it lives
 in `tests/regression.json` only, asserted from the rendered traces by the
 harness; `shell/build.py`'s consistency check cross-checks just
@@ -106,7 +106,7 @@ example (`races/nb2026/presentation.js`) documents every key with its origin.
   label: ""
   txt: ""
   source: journal               # journal | navlog | transcript | analysis
-  visibility: private           # private | public — public requires a CP-5 opt-in
+  visibility: private           # private | public — public requires a stage-5 opt-in
 ```
 
 ## dashboard_data.json — canonical pipeline output
@@ -133,7 +133,7 @@ example (`races/nb2026/presentation.js`) documents every key with its origin.
   recon: [ { t, <matched_key>, log:[lat,lon], trk:[lat,lon], d, speed, course, wind,
              temp, verdict: match|warn, note } ], // matched-time key is named by config
                                                  // reconcile.matched_key (template default
-                                                 // matched_local; the NB2026 frozen payload
+                                                 // matched_local; the NB2026 snapshot payload
                                                  // ships matched_edt — parity won)
   mil: { milestones:[...], series:{...} },
   stats: { dist_sailed, rhumb, extra, avg_sog, max_sog, pct_under3, pct_under5,
@@ -142,17 +142,19 @@ example (`races/nb2026/presentation.js`) documents every key with its origin.
 }
 ```
 
-## Decision-record templates — `decisions/CP-*.yaml`
+## Stage-record templates — `decisions/stage-N-*.yaml`
 
-Emit as a fenced YAML block in chat, filled as a draft for the user to confirm or edit; the confirmed block is the artifact. When a repo exists, write confirmed records to `decisions/`.
+(Older races carry `CP-*.yaml` filenames — the same artifacts, historical.)
+
+Fill as a draft for the owner to confirm or edit at the stage stop; write the confirmed record to `races/<race>/decisions/` — the committed file is the artifact.
 
 ```yaml
-# CP-0 — Scope Record
+# stage-0 — Scope Record
 fleet_count: 0
 anomalies: []                   # every name-resolution miss, gap, duplicate
 reference_boats: [ { name: "", why: "" } ]
 tz: { official: "", probe: { boat: "", official_finish_local: "", track_epoch_utc: 0, offset: "" } }
-course_model: point_to_point    # or marks (escalation trigger)
+course_model: point_to_point    # or marks (routed distance-remaining via pipeline/route.py)
 divisions_in_scope: []
 tier: 1
 grid_minutes: 15
@@ -162,19 +164,19 @@ date: ""
 ```
 
 ```yaml
-# CP-2 — Findings & Modules Record
+# stage-2 — Findings & Modules Record
 modules_selected: []
 modules_vetoed: []
 reference_set_confirmed: true
 corrections: []                 # factual flags raised at review
-goldens_frozen: true
+values_pinned: true
 pipeline_invocation: ""         # exact command that produced the shipped numbers
 confirmed_by: ""
 date: ""
 ```
 
 ```yaml
-# CP-3 — Corrections Record
+# stage-3 — Corrections Record
 corrections:                    # may be empty, but the record must exist and say so
   - { before: "", after: "", source: "", propagated_to: [] }
 spine_approved: true
@@ -183,7 +185,7 @@ date: ""
 ```
 
 ```yaml
-# CP-4 — Screenshot Log
+# stage-4 — Review-Round Log
 rounds: 0                       # minimum 1
 defects:
   - { found: "", fix: "", assertion: "" }   # assertion: test id, or "not expressible"
@@ -193,7 +195,7 @@ date: ""
 ```
 
 ```yaml
-# CP-5 — Publication Ledger
+# stage-5 — Publication Ledger
 public_items:                   # each log-derived item going public, individually opted in
   - { item: "", opted_in: true }
 private_confirmed: true         # everything not listed stays private
@@ -209,37 +211,35 @@ date: ""
 2. **Proposed race-unique modules** — which heuristic fired, with its evidence.
 3. **Data-quality anomalies.**
 4. **Open questions** for the user.
-5. The CP-2 form, ready to confirm.
+5. The stage-2 record, ready to confirm.
 
 ## Discrepancy-register row (stage-3 output)
 
 | claim | source | what the track shows | verdict | note |
 Verdicts: confirmed / contradicted / partial / unresolvable.
 
-## Claude Code PROMPT.md skeleton (stage-5 handoff)
+## Stage-5 productionization checklist
 
 ```markdown
 # <RACE> dashboard — productionize
 
-## Context
-<race, edition, tier, client boat, where the project stands, repo layout>
-
-## Invariants — violating any of these is a failed handoff
+## Invariants — violating any of these fails the stage
 - Timezone-naive rendering: chart x-values are naive local strings; never Date objects.
 - Chart endpoints are exact official-results values.
 - State-model conventions: <one state object, pure build*() re-renders, axis helpers>.
 - The shell invariant list (shell/INVARIANTS.md, I1–I18) — I5–I13 and I15–I18 govern productionization work.
-- Golden values (frozen): <paste the config goldens block>.
-- <anything added during CP-4 rounds>
+- Pinned values: <the config pinned_values block>.
+- <anything added during stage-4 rounds>
 
 ## Do not touch
-Golden values; dashboard_data.json semantics; module math.
+Pinned values; dashboard_data.json semantics; module math.
 
 ## Jobs
 Mobile breakpoints; lazy-loading; performance budget; hosting; accessibility.
 
 ## Protocol
 Run the full chain — `.venv/bin/python starter/build_race.py races/<race>` (harness under both
-TZ=America/New_York and TZ=UTC, then the frozen-oracle compare) — BEFORE starting and AFTER
+TZ=America/New_York and TZ=UTC, then the snapshot compare) — BEFORE starting and AFTER
 finishing: all green both times. Any newly human-caught defect becomes a new assertion.
+Before shipping: scan docs/OPEN_THREADS.md — close what this round resolved, raise the rest.
 ```
