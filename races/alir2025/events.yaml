@@ -1,12 +1,35 @@
-# Narrative as data (never pipeline code). Times are naive local strings in the
-# race's official timezone. visibility: public requires a per-item stage-5 opt-in
-# when the row derives from private logs (prime rule 4).
-events:
-  - t: 'YYYY-MM-DD HH:MM'
-    cat: milestone              # one of event_categories in config.yaml
-    label: ''
-    txt: ''
-    source: journal             # journal | navlog | transcript | analysis
-    visibility: private         # private | public
+# ALIR 2025 — narrative events (data, never code). Naive official-TZ local times (I1).
+# Tier 1, public build: every entry here is public-by-decision at the stage-3 stop.
+# Sources: journal = owner's account from Daffodil's deck (participant-recollection,
+# given in-session 2026-07-23 for this project); transcript = Lenoble's published
+# first-person accounts (WindCheck + SailNet); analysis = derived from the pipeline.
 
-watches: []                     # optional crew watch spans: [['YYYY-MM-DD HH:MM', 'YYYY-MM-DD HH:MM'], ...]
+events:
+- t: "2025-07-25 15:36"
+  cat: insight
+  label: "Squall line enters the Sound"
+  txt: "Kings Point gusts 24.5 kt with a sharp direction reversal; NY Harbor 31.9 kt
+    at 16:40; offshore Islip 23.5 kt at 17:30 — the NWS logged a severe line crossing
+    Westchester/Fairfield into central Long Island 2:20-6:00 PM. Only three boats had
+    finished; Max was the last of them, 80 minutes earlier."
+  source: analysis
+  visibility: public
+- t: "2025-07-25 16:30"
+  cat: crew
+  label: "The squall hits Daffodil"
+  txt: "About 30 kt felt for roughly two minutes (buoy 44065 recorded a 31.9 kt gust
+    at 16:40). Main and jib down before/while it hit, jib-only after, then main back
+    up — 'a very needed push' in air that was ~2 kt either side of it. Owner's
+    account, corroborated by the buoy record and the track's near-stop at 16:20-16:50."
+  source: journal
+  visibility: public
+- t: "2025-07-26 00:15"
+  cat: insight
+  label: "Anchored 175 yards from the line"
+  txt: "Sound's Great, becalmed at midnight, anchored ~0.09 nm from the finish for
+    ~55 minutes until the new breeze arrived after 00:45 — the sharpest image of the
+    finish door shut. Published account (Lenoble), confirmed by the tracker."
+  source: transcript
+  visibility: public
+
+watches: []
