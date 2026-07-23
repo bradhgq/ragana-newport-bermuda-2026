@@ -19,3 +19,9 @@ introduction).
   "triangulated from six boats' official finish times" but no document
   records which six or the method; coordinates were taken from legacy code as
   given. Needs owner input (or a re-derivation exercise) to close.
+- **CI is NB-only and hand-sequenced** (noticed 2026-07-23 while fixing the
+  rename miss): `.github/workflows/ci.yml` predates the one-command chain —
+  it runs the steps piecemeal (the exact stale-standalone shape the wrapper
+  exists to prevent), covers nb2026 only, and skips the bir2026 suite.
+  Candidate fix: one job per race running `starter/build_race.py` after the
+  unit suites, with dist left uncommitted.
