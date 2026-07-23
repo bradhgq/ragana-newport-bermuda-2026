@@ -10,13 +10,18 @@
 #   downloaded Jul 2025 with an earlier scraper build) are row-for-row IDENTICAL to
 #   the fresh 2026-07-23 download. Zero source conflicts. Fresh set is canonical raw/.
 
-fleet_count:
+fleet_count:                     # every count below recounted from the raw CSVs, not carried over
   entries_scratch: 74            # 57 ACTIVE + 17 INACTIVE (withdrawn pre-race)
-  results_rows: 57               # 45 AOK + 7 RET + 2 DNC across 3 ALIR circles, + 8 ATI-course rows in 2 circles
+  results_rows: 57               # 49 AOK + 6 RET + 2 DNC
+  results_by_course:
+    around_long_island: 51       # 43 AOK + 6 RET + 2 DNC — IN SCOPE (Multihull 1, Non-Spin 14, Spin 36)
+    around_the_islands: 6        # 6 AOK — OUT OF SCOPE (different 250 nm course, none tracked)
   tracked: 50                    # 49 racers + COMMITTEE BOAT
-  in_scope_expectation: 49       # ALIR-course racers with tracks; every in-scope FINISHER is tracked
-  untracked: ["Wind Song (Div 1, DNC)", "Rocksteady (Div 0, DNC)",
+  in_scope_expectation: 49       # ALIR-course racers with tracks: 43 finishers + 6 RET
+  untracked: ["Wind Song (Non-Spin Div 1, DNC)", "Rocksteady (Spin Div 0, DNC)",
               "all 6 Around-the-Islands boats (different 250 nm course, out of scope)"]
+  pipeline_check: "A trial build on a scratch copy resolves exactly 43 scored boats + 6 fleet_dnf
+    (the RET boats, all tracked) + 6 name-misses (the ATI boats), 49 fleet ghost tracks. Matches."
 
 anomalies:
   - "TZ MISLABEL (adjudicated): results finish_time_utc is EDT wall clock with a spurious Z suffix.
@@ -26,16 +31,33 @@ anomalies:
      Consequence: derive_results_columns.py strips the fake Z with NO offset shift."
   - "Name joins (sail-only, proposed): Habiru->Habiru YCC, Little Texas->Little Texas YCC,
      Unbreakable->Unbreakable YCC (YB drops the Youth Challenge Cup suffix)."
-  - "Case joins (proposed): Pathfinder/PATHFINDER, Duet/DUET, Actaea/ACTAEA, Acadia/ACADIA,
-     Wanderer/WANDERER, Scapegoat/SCAPEGOAT. Display cleanup maps shipped names to mixed case."
+  - "Case-only differences (tracker mixed-case vs results ALL-CAPS): Pathfinder/PATHFINDER,
+     Duet/DUET, Actaea/ACTAEA, Acadia/ACADIA, Wanderer/WANDERER, Scapegoat/SCAPEGOAT. Handled by
+     name_overrides.display ONLY — the join normalizer casefolds, so a by_name entry would not help
+     the match while still rewriting the tracker name that ships as the fleet ghost's hover label."
   - "'Smoke &Mirrors' missing space in BOTH sources -> display override 'Smoke & Mirrors'."
   - "COMMITTEE BOAT present in tracks only -> exclude_boats."
   - "Wind Song + Rocksteady: DNC, no track -> proposed exclude_boats (the bir2026 'DNC at a
      mooring' precedent). Alternative: keep as meta-only DNF rows — owner's call."
-  - "16 UNMATCHED-YS name-join rows are the 16 INACTIVE withdrawn entries + the untracked set above
-     — fully accounted for; no name-resolution miss remains."
-  - "Duplicate-sail hazard: YB RaceSetup lists sail '181' ambiguity around Wanderer/Windancer;
-     joins resolved by name, no collision in shipped set."
+  - "Name-join composition, fully accounted for (74 rows): 45 matched by name, 1 by name+sail,
+     3 sail-only (the YCC suffix cases), 1 UNMATCHED-YB (COMMITTEE BOAT), 24 UNMATCHED-YS.
+     The 24 decompose as 16 INACTIVE withdrawn entries + 8 ACTIVE-but-untracked (the 6
+     Around-the-Islands boats + the 2 DNCs). No name-resolution miss remains."
+  - "DUPLICATE ENTRY NAME (resolved): the scratch sheet carries TWO boats named Dolcezza — the
+     racing one (Neill Parker Jr, sail 53, Hunter Legend 37.5, Non-Spin Div 2, finished 31:54:29)
+     and a withdrawn INACTIVE entry (Victor Lee, sail 0, Hunter 37). This is why 16 of 17 INACTIVE
+     entries are unmatched: the join correctly bound the tracker's Dolcezza to the ACTIVE boat by
+     name+sail. Doctrine 4 case; no action needed, but any re-join must preserve the sail tiebreak."
+  - "CORRECTION (a claim this record previously carried and that verification refuted): there is NO
+     Wanderer/Windancer duplicate-sail collision. WANDERER is sail 181, Windancer is USA25."
+  - "place_overall IS PER-CIRCLE, not fleet-wide. Three boats therefore carry overall rank 1
+     (Max in Spinnaker, Dolcezza in Non-Spinnaker, Daffodil in Multihull). The shell's ranked
+     list sorts on that field, so it would display '#1' three times. Stage-2 presentation decision:
+     either rank the unified ladder or scope the ranked list per circle. Flagged, not fixed here."
+  - "divisions_in_scope has NO code consumer (documentation only). The 6 Around-the-Islands boats
+     are kept out solely by being untracked. They are scored over 250 nm, so if one ever acquired a
+     track or were added to untracked_meta_only, the pipeline would silently score it at 207 nm and
+     be wrong by rating x 43 s. GUARD: untracked_meta_only stays empty for this race."
   - "Coverage: 50 tracked vs 57 active entries (fetch warning) — the gap is exactly the ATI
      course + 2 DNCs; spatial analysis is scoped to the ALIR course where coverage is COMPLETE."
   - "Sound-entry gate: 43/45 in-scope finishers used Plum Gut. 'The Race' crossings: Kitli, Vamonos
@@ -77,6 +99,30 @@ tz:
     official_finish_local: "2025-07-25 14:15:50"
     track_epoch_utc: 1753467303        # 2025-07-25T18:15:03Z, 0.14 nm from Glen Cove Breakwater light
     offset: "-4h (5-boat confirmation table in anomalies[0])"
+
+acquisition:
+  command: "python3 starter/acquisition/fetch_race.py 50029 --yb alir25 --prefix alir2025
+    --out-dir races/alir2025/raw/   (run 2026-07-23T02:49:22-0400)"
+  yb_id_provenance: "satTrackingUrl is EMPTY in the YS event metadata (allowSatTracking false), so
+    the normal YS-hands-you-the-YB-id chain is BROKEN for this event a year on. The id came from the
+    owner's July-2025 acquisition session and was re-verified by the full ritual rather than trusted."
+  warnings_raised: 2             # both carried into anomalies above, per 'report every warning'
+    # 1. "coverage: 50 tracked boats vs 57 active entries (74 incl. withdrawn) — spatial analysis
+    #     is limited to the tracked subset"  -> resolved: the gap is exactly the 6 ATI-course boats
+    #     plus the 2 DNCs; ALIR-course coverage is COMPLETE.
+    # 2. "28 name-join row(s) need review ... the join is a PROPOSAL, confirm at the stage-0 stop"
+    #     -> resolved: full composition recorded in anomalies; every row class accounted for.
+  cross_source_conflicts: "NONE. The owner-provided July-2025 CSVs are row-for-row identical to the
+    2026-07-23 re-download (results 57/57, scratch 74/74, tracks 26,177/26,177)."
+
+start_method:
+  method: finish_minus_elapsed
+  verification: "Reproduces warning-signal + 5 min EXACTLY for all 11 divisions (9 in scope), with
+    a single consistent start per division — no intra-division spread. Cross-checked against YB
+    RaceSetup.teams[].start, which carries 9 distinct epochs in TRUE UTC (1753369500 = 15:05Z =
+    11:05 EDT through 1753374300 = 16:25Z = 12:25 EDT), matching the same warning+5 pattern.
+    YS races[].startTime agrees on the clock values but repeats the EDT-labeled-as-Z defect."
+  note: "Staggered per-division starts do NOT break the default method here; no pursuit start."
 
 course_model: "marks (routed DTF via pipeline/route.py): start [40.7028,-74.0367] (SI line NE of
   Ellis Island) -> Verrazzano Narrows -> Ambrose Channel Red Bell Q R \"14\" [40.5281,-74.0094]
@@ -131,8 +177,12 @@ tier: 1                          # public data only; dual-focus presentation wit
 grid_minutes: 15                 # justified by ping_cadence above
 scoring:
   system: tod
-  params: { rating_column: rating, distance_nm: 207.0 }
-  probe_boats: ["Max", "Daffodil"]   # pre-verified exact; pipeline re-runs the probe at build
+  params: { rating_column: rating }   # NOTE: the ToD distance comes from course.official_length_nm
+                                      # (build_data reads it there and passes it to scoring). Do NOT
+                                      # add distance_nm to scoring.params — the key has no reader
+                                      # and would silently do nothing.
+  probe_boats: ["Max", "Daffodil"]    # trial build: both reproduce official corrected with 0.0 s
+                                      # error; all 43 in-scope finishers exact at 207.0 nm
 
 weather_evidence:                # EXPERIMENTAL stage-0 extra (owner-requested)
   landed: "races/alir2025/raw/weather/ (NDBC 44065+44025+MTKN6+KPTN6 yearly 2025 stdmet;

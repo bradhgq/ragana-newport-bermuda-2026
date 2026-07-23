@@ -108,16 +108,15 @@ tier: 1
 
 name_overrides:
   by_id: {}
-  by_name:                      # tracker (YB) name -> results (YS) name
+  by_name:                      # tracker (YB) name -> results (YS) name. ONLY the suffix cases
+                                # belong here: the join normalizer already casefolds, so a
+                                # case-only entry would be a no-op for matching while still
+                                # rewriting the stored tracker name — which ships as the fleet
+                                # ghost's hover label and would read ACADIA next to a chip
+                                # reading Acadia. Case is handled by `display` below instead.
     "Habiru": "Habiru YCC"
     "Little Texas": "Little Texas YCC"
     "Unbreakable": "Unbreakable YCC"
-    "Pathfinder": "PATHFINDER"
-    "Duet": "DUET"
-    "Actaea": "ACTAEA"
-    "Acadia": "ACADIA"
-    "Wanderer": "WANDERER"
-    "Scapegoat": "SCAPEGOAT"
   display:                      # results name -> shipped display name
     "PATHFINDER": "Pathfinder"
     "DUET": "Duet"
