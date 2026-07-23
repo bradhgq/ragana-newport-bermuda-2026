@@ -11,7 +11,7 @@ layer is [`skills/race-viz/`](../skills/race-viz/SKILL.md), the docs are
 ```
 shell/        generalized dashboard shell — index.template.html, styles/tokens,
               app/ (core.js + charts/), build.py, INVARIANTS.md
-pipeline/     build_data / scoring / zones / reconcile / route / assemble / compare_data
+pipeline/     build_data / scoring / zones / reconcile / route / compare_data
 adapters/     tracker-vendor format PARSERS → canonical track schema (adapters/README.md)
 acquisition/  race-data DOWNLOADERS — fetch raw data from YB / YachtScoring (network)
 tests/        parameterized JS regression harness (test_dashboard.js) + route tests
@@ -24,22 +24,27 @@ requirements.txt
 ## Build a race (run from the repo root)
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r starter/requirements.txt
-.venv/bin/python starter/pipeline/build_data.py races/nb2026/config.yaml   # → races/nb2026/out/
-.venv/bin/python starter/shell/build.py         races/nb2026               # → races/nb2026/dist/ (gated on tests)
-TZ=America/New_York node starter/tests/test_dashboard.js races/nb2026
+python3 -m venv .venv && .venv/bin/pip install -r starter/requirements.txt   # once
+.venv/bin/python starter/build_race.py races/<race>     # ONE command, always the full chain
 ```
+
+`build_race.py` runs, in order: `pipeline/build_data.py` → the race's
+`postprocess.py` (if any) → `shell/build.py` (refuses dist on a red harness,
+I10; `TZ=America/New_York`) → the harness again under `TZ=UTC` →
+`pipeline/compare_data.py` vs `frozen/` (tie-exempt). Piecemeal invocation
+invites the stale-standalone trap — dist embeds `out/`, tests read dist.
 
 `build_data.py` refuses to run fleet math until ≥2 probe boats reproduce their
 official corrected times within 1 s, and writes a run log (invocation + input
 hashes) next to every payload — shipped numbers come only from the pipeline
-(prime rule 1). `shell/build.py` refuses to build on a red harness (I10).
+(prime rule 1).
 
 ## Starting a new race
 
-Copy [`races/_template/`](../races/_template/) to `races/<race>/`, drop the tracker
+Copy [`starter/template/`](template/) to `races/<race>/`, drop the tracker
 export / results / scratch sheet into `raw/`, fill `config.yaml` (facts only —
-narrative goes in `events.yaml`), then run the three commands. See the skill's
+narrative goes in `events.yaml`) plus `presentation.js`, then run the one-command
+chain. See the skill's
 stage files for the checkpoint protocol; never skip CP-0 or CP-2.
 
 Build-status docs live in [`docs/`](../docs/): `REPO_NOTES.md` (spec deltas),

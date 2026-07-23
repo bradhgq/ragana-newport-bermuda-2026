@@ -4,7 +4,7 @@ Requires the confirmed CP-4 record and a green regression suite. The Claude Code
 
 ## Handoff package
 
-- Repo state: pipeline code, `config.yaml`, `events.yaml`, the template (or shell + race config, once that refactor lands), and `decisions/CP-*.yaml`.
+- Repo state: pipeline code, `config.yaml`, `events.yaml`, the shell + race presentation (`presentation.js`, `copy.js`/`copy.md`, `modules/`, `overlays/`), and `decisions/CP-*.yaml`.
 - `dashboard_data.json` plus the assembled reference build — the known-good HTML the chat session iterated to.
 - The test harness with the race's frozen goldens.
 - `PROMPT.md` (skeleton in `schemas.md`) containing:
@@ -22,8 +22,8 @@ Requires the confirmed CP-4 record and a green regression suite. The Claude Code
 
 ## Build/publish checklist (since R2)
 
-- **Run the full chain in order** before handing off: `starter/pipeline/build_data.py races/<race>/config.yaml` → `starter/shell/build.py races/<race>` → harness under both `TZ=America/New_York` and `TZ=UTC` → `starter/pipeline/compare_data.py` (GATE A). Green throughout.
-- **Stale-standalone trap:** the harness tests the *built* `dist/standalone.html`, so a source edit isn't seen until a rebuild. After editing shell/module/race source, rebuild **once with `--skip-tests`** to refresh `dist/`, then run the gated build — otherwise the test-then-build gate validates the previous artifact.
-- **Committed dist:** the deployed `races/<race>/dist/` must be force-added past the global `dist/` ignore — the nix flake input serves straight from the git tree, so an uncommitted dist ships nothing.
+- **One command, always the full chain**: `.venv/bin/python starter/build_race.py races/<race>` — build_data → race postprocess (if any) → shell/build (harness-gated, `TZ=America/New_York`) → harness under `TZ=UTC` → compare vs the frozen oracle. Green throughout, before handing off.
+- **Stale-standalone trap** (why the wrapper exists): dist embeds `out/`, and the harness tests the *built* `dist/standalone.html` — run steps piecemeal or out of order and the gate validates the previous artifact. It bit twice before the wrapper; don't hand-sequence the steps.
+- **Committed dist is production** (the nix flake input serves the git tree). After a verification rebuild, `git checkout -- races/*/dist` unless deploying is the point. When deploying NEW dist paths, `git add -f` them — the global `dist/` ignore silently drops them from `git add -A` (BIR's first shell deploy served a page whose every script 404'd this way; `build_race.py` now detects and warns).
 - **Hosting:** on silverbox, `races/<race>` maps to a nginx location aliased to `${inputs.race-viz-site}/races/<race>/dist/` under the hgq.fyi vhost; deploy = push monorepo main, then `nix flake update race-viz-site && sudo nixos-rebuild switch --flake .#silverbox`.
-- **Note:** there is no `KICKOFF_TEMPLATE.md` in the repo; if the skill loop wants one, extract it from this stage file rather than inventing it fresh.
+- **Kickoff prompts:** fill `docs/KICKOFF_TEMPLATE.md` (per-race slots) when starting the next race's fresh chat session — it encodes the checkpoint discipline (start at Stage 0, stop at CP-0).

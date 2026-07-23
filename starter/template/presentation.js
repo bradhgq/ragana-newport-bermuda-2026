@@ -3,8 +3,13 @@
    (course, hero/client_boat, time, defaults) must MATCH it — shell/build.py
    runs a consistency check and refuses to build on divergence. Presentation
    judgment (phases, KPI copy, map leader-labels, palette tweaks) lives only
-   here. The worked example (races/nb2026/presentation.js) documents every
-   key with its origin. */
+   here. Worked examples document every key with its origin:
+   races/nb2026/presentation.js (point-to-point) and
+   races/bir2026/presentation.js (marks course — division-scoped race block,
+   charts.map gates, acts overlays). OPTIONAL blocks not skeletoned below,
+   copy from a worked example when wanted: classFilter, ratingBands,
+   charts.sog.metrics (SOG|VMC toggle) + vmcYRange, distspeed, mapAnnotations,
+   groups.chipExtras/chipRank. */
 window.__RACE_CONFIG__ = {
   meta: { title: '', url: '', description: '', ogDescription: '', ogImage: 'og.png' },
   hero: { name: '', color: '#C2187E' },        // must equal config.yaml client_boat; color pairs with --magenta
@@ -28,10 +33,15 @@ window.__RACE_CONFIG__ = {
     ev: [], ref: '',
     fleet: true, rhumb: true,
     overlays: {},                              // overlay id -> bool
-    raceMode: 'h', raceView: 'p', axis: 'd',
+    // corrected + VMC are the house defaults (owner 2026-07-15); speedMetric
+    // only matters once charts.sog.metrics is configured
+    raceMode: 'h', raceView: 'p', axis: 'd', speedMetric: 'vmc',
   },
   race: { milestoneTop: 620, milestoneBottom: 30, milestoneStep: 10,
-          paceMinDone: 50, eventRowY: 19, ratingLabel: '' },
+          // paceMinDone guards only the done->0 blowup at the very start —
+          // keep it SMALL (NB 15, BIR 20); the original 50 blanked ~4 opening
+          // milestones and read as "the start isn't drawn" (shipped NB defect)
+          paceMinDone: 15, eventRowY: 19, ratingLabel: '' },
   charts: {
     dtf: { yRange: [0, 0], eventTopY: 0 },
     sog: { yRange: [0, 14], eventTopY: 0 },

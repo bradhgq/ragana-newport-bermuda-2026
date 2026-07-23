@@ -136,3 +136,39 @@ without guessing. (What I *did* about each is in `REPO_NOTES.md`.)
     188.7). With ±0.05 kt tolerance the two bases differ by more than the
     tolerance (5.30 vs 5.01 kt at BIR's elapsed). Fixtures must pin the
     dtf-at-gun basis; skill stage-2 amendment queued (skills/ frozen this run).
+
+- **#19 CLOSED** (skill-consolidation round, 2026-07-16): stage-2's VMC
+  integral check now pins the DTF-at-the-gun basis — routed polyline for marks
+  courses, `rhumb ÷ elapsed` only as the point-to-point special case — with the
+  BIR numbers as the cautionary example. The BIR fixture comment
+  (`races/bir2026/tests/regression.json`) had already recorded the basis; the
+  skill now matches it.
+
+- **#4 CLOSED** (skill-consolidation round, 2026-07-16): schemas.md's payload
+  contract now matches the frozen payload it documents — the recon matched-time
+  key is config-driven (`reconcile.matched_key`; template default
+  `matched_local`, NB2026 ships `matched_edt` per REPO_NOTES #6), verdicts are
+  `match|warn`, and `parkFair` u4/u2 (and the module-canary golden example) are
+  numbers, never `"31%"` strings.
+
+- **#9 CLOSED** (same round): the derived epoch (1782244492) has been recorded
+  in `races/nb2026/config.yaml time.tz_probe.track_epoch_utc` since Phase 1
+  (REPO_NOTES #13); nothing further to fix.
+
+- **#6 CLOSED** (skill-consolidation round, 2026-07-16): schemas.md's
+  `config.yaml` block now carries the full key set, folded back from
+  `races/_template/config.yaml` (the two are declared lockstep), including
+  every key on this item's list. The old block's `divisions:`/`rating_bands:`
+  lines were also mislocated — those are presentation.js keys
+  (`classFilter`/`ratingBands`); schemas.md now documents the
+  config.yaml/presentation.js split and the build-time consistency check.
+
+- **#3 CLOSED** (same round): stage-2 §6 has carried the resolution since the
+  R2 loop — detection PROPOSES (and always logs the band-median table), CP-2
+  DECIDES, config RECORDS (`zone_detection.zone`); schemas.md's config block
+  now says the same at the key itself.
+
+- **#5 CLOSED** (same round): the zone_detection defaults in schemas.md now
+  carry the note that they find zero candidates on the reference race — they
+  are proposal knobs, not truth.
+

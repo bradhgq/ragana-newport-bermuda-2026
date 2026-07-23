@@ -451,3 +451,63 @@ records what I *did* about it.
   never-pooled asserted on RENDERED strips; Crew-pill positive control; every
   band width asserted — ±0.01 golden added from the frozen oracle, same
   derivation as the R-round values). Oracles untouched and IDENTICAL.
+
+## Skill-consolidation round (2026-07-16, branch skill-consolidation)
+
+- **RETROSPECTIVE_ROUND2 §6 amendment table: fully landed.** The R2 loop had
+  already applied the SKILL.md rows (doctrine gates 7/8, prime rule 3 + I16)
+  and the schemas/stage-2/stage-4 standard-field + VMC material; this round
+  closed the remainder: the stage-5 row (one-command chain, stale-standalone
+  trap, KICKOFF_TEMPLATE pointer — plus the later-learned new-dist-paths
+  `git add -f` rule) and the queued I14 basis correction (integral basis is
+  DTF-AT-THE-GUN on the routed DTF, not official length — DOC_GAPS #19,
+  first exercised at BIR M1).
+- **DOC_GAPS closed in place: #3, #4, #5, #6, #9, #19** (closure notes
+  appended; audit trail intact). #4/#6 were the two places a future session
+  would have "corrected" shipped artifacts to match wrong documentation.
+- **`starter/shell/INVARIANTS.md` now carries I14–I18** (previously only in
+  RETROSPECTIVE_ROUND2 §3); the PROMPT.md handoff skeleton cites I1–I18.
+- **READMEs made actually authoritative** (#18 follow-through): root and
+  starter READMEs now show the one-command chain (`starter/build_race.py`)
+  and the shell-based BIR; the pre-shell BIR description and the retired
+  three-command flow are gone.
+- **stage-4 build protocol rewritten for the shell reality** — the v0
+  "no neutral shell exists yet / duplicate-and-edit" note is retired; module
+  ABI + I15 geometry + ctx.copy caption slots documented in its place.
+- **REPO_NOTES #32: closed** — its three legs all landed across R2→now
+  (finstrip height migrated, no `#finstrip` rule remains in shell CSS;
+  build_race.py; distspeed/schema promotion into the skill docs).
+- Scope discipline: skills/, docs/, READMEs, INVARIANTS.md, and the
+  races/_template header only — no pipeline/shell/test code, no oracles, no
+  goldens, no analysis numbers. Both chains green before and after the round
+  (NB 19/19, BIR 29/29, both oracles IDENTICAL); dist churn reset per the
+  committed-dist rule.
+
+
+- **Skill-consolidation review round (2026-07-16):** 10 confirmed findings
+  applied — schemas.md's config block dropped the fixture-only
+  `pace_min_per_100` key (and now says where the pace golden actually lives);
+  stage-2/INVARIANTS I14 corrected to the real BIR fixture tolerance (±0.06 kt,
+  5.02 vs 4.96 basis gap) and to the fixture's real home (tests/regression.json,
+  not `goldens.vmc`); stage-2 recon vocabulary aligned to the payload enum
+  (`match | warn`); the races/_template header edit was reverted as out of
+  branch scope. QUEUED for a races/-scope follow-up: the template header's
+  `skill/race-viz` path typo (should be `skills/`) and its stale "+ repo
+  additions" clause.
+
+- **Code organization (owner, 2026-07-16): `races/` holds race-specific work
+  ONLY.** The race template moved `races/_template/` → `starter/template/`
+  (it is engine-generic — generalizable changes belong in starter/); all live
+  references updated (READMEs, schemas.md lockstep; historical docs untouched).
+  While moving, the template's rot was fixed: `tests/regression.json` now
+  declares the MANDATORY `expected_checks` (the runner refuses to run without
+  it — copying the old template produced an instantly-failing suite) and
+  documents the optional round-2 fixture blocks; `presentation.js` drops the
+  shipped-defect `paceMinDone: 50` (the value NB's own comment records as
+  blanking the opening milestones), gains the corrected+VMC defaults, and
+  cites both worked examples. Also: `starter/pipeline/assemble.py` deleted —
+  dead since the no-legacy policy (its default template path pointed at a
+  `legacy/` dir that no longer exists; nothing invokes it; git history keeps
+  it) — and NB's results file moved to the `raw/results.csv` convention
+  (`races/nb2026/official_results.csv` → `raw/`, same bytes, config path
+  updated; closes the DOC_GAPS #13 drift).

@@ -8,21 +8,22 @@ drives it, and every race deployed from it.
 
 ```
 starter/            the reusable engine (raw code only)
-  shell/            generalized dashboard shell (charts, controls, build)
+  shell/            generalized dashboard shell (charts, controls, build, INVARIANTS.md)
   pipeline/         data pipeline (tracks → dashboard_data.json)
   adapters/         tracker-vendor format parsers → canonical schema
   acquisition/      race-data downloaders (fetch from YB / YachtScoring)
   tests/            parameterized regression harness
+  template/         copy me to races/<race>/ to start a race
+  build_race.py     the one-command build+verify chain — use this, not the steps
   requirements.txt
 skills/race-viz/    the /race-viz skill — process & judgment, source of truth
 docs/               REPO_SPEC, build logs, retrospectives, gate reports
 races/
-  _template/        copy me to start a race
   nb2026/           Newport Bermuda 2026 (LIVE) — the shell-based worked example
                     (config, data, modules, overlays, committed dist/)
-  bir2026/          Block Island Race 2026 (LIVE) — self-contained build
-                    (src/ + build.py + jsdom test gate; docs/ holds the memo,
-                    retrospective, decision ledgers and the FURTHER_WORK backlog)
+  bir2026/          Block Island Race 2026 (LIVE) — shell-based, marks course
+                    (routed DTF) with a race postprocess step; docs/ holds the
+                    memo, retrospective, decision ledgers and FURTHER_WORK backlog
 ```
 
 `adapters/` vs `acquisition/`: **acquisition** *fetches* raw data from a tracking
@@ -43,21 +44,27 @@ from the git tree.
 
 ## Build a race
 
-Shell-based races (nb2026, and the default for new races):
+One command, always the full chain (both races; from the repo root, pinned venv):
 
 ```
-python3 starter/pipeline/build_data.py races/<race>/config.yaml   # tracks → dashboard_data.json
-python3 starter/shell/build.py races/<race>                        # → races/<race>/dist (gated on tests)
-TZ=America/New_York node starter/tests/test_dashboard.js races/<race>
+python3 -m venv .venv && .venv/bin/pip install -r starter/requirements.txt   # once
+.venv/bin/python starter/build_race.py races/<race>
 ```
 
-bir2026 predates the shell migration and is self-contained (see
-[`races/bir2026/docs/RETROSPECTIVE.md`](races/bir2026/docs/RETROSPECTIVE.md) for why):
+The chain runs, in order: build_data → race postprocess (if any) → shell/build
+(harness-gated under `TZ=America/New_York`) → harness again under `TZ=UTC` →
+compare vs the frozen oracle. Running the steps piecemeal invites the
+stale-standalone trap (dist embeds `out/`; tests read dist). After a
+verification rebuild, `git checkout -- races/*/dist` — committed dist is
+production, per above.
 
-```
-cd races/bir2026 && python3 build.py --public   # → dist/, gated on its 34-test suite
-```
+New race: copy [`starter/template/`](starter/template/) to `races/<race>/`, drop
+raw data in `raw/`, fill `config.yaml` + `presentation.js`, and follow the
+skill's checkpoint protocol (never skip CP-0 or CP-2). Kickoff prompt template:
+[`docs/KICKOFF_TEMPLATE.md`](docs/KICKOFF_TEMPLATE.md).
 
-See [`starter/README.md`](starter/README.md) for the engine doctrines and
-[`docs/REPO_SPEC_v1.1.md`](docs/REPO_SPEC_v1.1.md) for the full spec. The `/race-viz`
-skill in [`skills/race-viz/`](skills/race-viz/SKILL.md) is the authoritative process layer.
+See [`starter/README.md`](starter/README.md) for the engine doctrines. The
+`/race-viz` skill in [`skills/race-viz/`](skills/race-viz/SKILL.md) is the
+authoritative process layer. `docs/REPO_SPEC_v1.1.md` is a frozen historical
+archive — for current layout and invocations, this README is authoritative
+(DOC_GAPS #18).

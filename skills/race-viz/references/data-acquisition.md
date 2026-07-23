@@ -20,12 +20,12 @@ emit the paste-ready acquisition prompt below.
 - **Order matters:** YachtScoring first; it hands you the YB id. Some races are YB-only (Newport
   Bermuda) — results then come from the organizer's site.
 
-## Run (scripts live in the repo's `acquisition/`)
+## Run (scripts live in `starter/acquisition/`; run from the repo root)
 
 ```
-python3 acquisition/yachtscoring_download.py <eventId> --prefix <race>
-python3 acquisition/yb_tracker_download.py <ybRaceId>
-# or one command: python3 acquisition/fetch_race.py <eventId>
+python3 starter/acquisition/yachtscoring_download.py <eventId> --prefix <race>
+python3 starter/acquisition/yb_tracker_download.py <ybRaceId>
+# or one command: python3 starter/acquisition/fetch_race.py <eventId>
 ```
 
 Outputs: `<race>_tracks.csv` (already canonical — boat_id, boat_name, timestamp_utc, epoch, lat, lon;
@@ -54,8 +54,8 @@ the YB adapter maps it 1:1), `<race>_scratch_sheet.csv` (ratings joined from res
 ## Acquisition handoff prompt (fill and hand to Claude Code)
 
 ```
-Pull race data for <RACE NAME / EDITION> using the acquisition scripts in <repo>/acquisition/ —
-read acquisition/README.md first. Identifiers: YachtScoring event <id> / YB race <id, or "take it
+Pull race data for <RACE NAME / EDITION> using the acquisition scripts in <repo>/starter/acquisition/ —
+read starter/acquisition/README.md first. Identifiers: YachtScoring event <id> / YB race <id, or "take it
 from satTrackingUrl">. Deliver: tracks, scratch sheet, results CSVs + manifest.json. Run the full
 verification ritual (geography, start epochs, coverage vs entries, proposed name-join) and report
 every warning. Stop after reporting — the CP-0 review happens in chat.

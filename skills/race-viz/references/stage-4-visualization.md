@@ -27,10 +27,11 @@ Propose modules from the heuristics; the user disposes at CP-2. Vetoed modules s
 
 ## Build protocol
 
-- Template and state-model conventions come from the starter repo; data injects at the placeholder via the assemble step.
-- v0 reality: until the shell/module split lands (REPO_SPEC, SEAM 1), the template **is** the worked example — race-unique DOM sections, copy blocks, and the client-boat key get hand-edited per race (duplicate-and-edit). Do not promise a neutral shell that doesn't exist yet.
+- The neutral shell **exists** (`starter/shell/` — both deployed races build through it): a race is `config.yaml` (facts) + `presentation.js` (presentation config) + `copy.js`/`copy.md` (narrative slots) + `events.yaml` + optional `modules/`/`overlays/`. New races are config + modules — **never duplicate-and-edit a monolith** (that era is retired to tags).
+- Race-unique charts go through the frozen ctx ABI (`registerModule`/`registerOverlay`, `shell/INVARIANTS.md`): scoped re-rendering, tap-to-inspect, and the mobile touch contract come free; ABI amendments are additive-only, each logged in REPO_NOTES. Modules own their geometry (I15) — a `kind:plot` module declares `section.height`; needing a shell-CSS edit for a module is a bug. (Origin: a zero-height chart found by screenshot.)
+- Shared shell modules read per-race captions from `COPY.<module id>` slots via `ctx.copy` — narrative never lives in shared module code. (Origin: the promoted dist-vs-speed module shipping NB2026 claims verbatim on the BIR page.)
 - All chart x-values are timezone-naive local strings; never hand Date objects to the plotting layer (doctrine 3).
-- Run the regression suite on every build, under a non-UTC `TZ`.
+- Build with the one-command chain — `.venv/bin/python starter/build_race.py races/<race>` — which runs the harness under both `TZ=America/New_York` and `TZ=UTC` in order; piecemeal invocations invite the stale-standalone trap (stage-5).
 
 ## Screenshot loop (first-class, scheduled — not "iteration if needed")
 

@@ -1,0 +1,12 @@
+{
+  "_comment": "Per-race frozen goldens — freeze at CP-2 (prime rule 3); values must agree with config.yaml goldens (shell/build.py cross-checks). The four I10 categories are fixed; every human-caught defect adds an assertion. expected_checks is MANDATORY (the runner refuses to run without it — fixed-count discipline): set it to the exact number of checks that fire for this race's fixture set and keep it updated as fixtures land. OPTIONAL fixture blocks, copy shapes from the worked examples when the feature ships: vmc {hero_mean_kt, tol, y_range} + vmc_caption (nb2026+bir2026), class_filter + tcf_bands (nb2026), bir_bands + upwind + finstrip_bands (bir2026), distspeed {dots, hero, rhumb_x, iso_check_days}, names_meta_only, corrections.",
+  "expected_checks": 0,
+  "tz_probe": { "epoch": 0, "rendered": "YYYY-MM-DD HH:MM" },
+  "endpoints": { "ref": "", "corrected_min": 0.0, "elapsed_min": 0.0, "pace_min_per_100": 0.0 },
+  "module_canaries": {},
+  "names_present": [],
+  "names_absent": [],
+  "finstrip_count": 0,
+  "duration_roundtrip": { "str": "", "seconds": 0 },
+  "start_window": { "boat": "", "date": "YYYY-MM-DD", "hm_min": "00:00", "hm_max": "23:59" }
+}
