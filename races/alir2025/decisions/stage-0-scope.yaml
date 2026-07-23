@@ -42,11 +42,19 @@ anomalies:
      (both RET — likely post-retirement deliveries). Yopo (finisher) closest-approach 3.7 nm off the
      Plum Gut centerpoint — possibly a Gull-passage transit; verify at stage 2 before any per-boat
      gate claim. Course polyline routes via Plum Gut."
-  - "Overall podium margin Max->Phantom is 4:05 corrected — inside any plausible noise floor
-     (proposed noise_floor_min: 10 for ToD x 207 nm). Doctrine 6: stage-1 controversy check gates
-     tight-margin narration. Related claims-in-circulation item: WindCheck headline says
-     'Sound's Great wins 2025 ALIR' while results show 22nd overall Spinnaker circle / 1st Div 5
-     — likely a club-trophy framing; resolve at stage 1."
+  - "NOISE FLOOR IS LOAD-BEARING FOR THIS RACE'S HEADLINE. Measured corrected margins at the top
+     of the Spinnaker circle: Max 27:02:56, Phantom +4:05, Wahoo +4:50 — THREE boats inside five
+     minutes after 27 hours (0.25% of elapsed). Max's own-division margin over Wahoo is 4 min;
+     Habiru YCC won Division X by 6 min; Dolcezza won the Non-Spinnaker circle by 3:54.
+     Against the proposed floor (rating uncertainty ~3 s/mi x 207 nm ~ 10 min) every one of those
+     placings is sub-floor. Doctrine 6 therefore binds the copy: Max's overall win is OFFICIAL and
+     stated as such, but the top three must be narrated as a rating-scale dead heat, never as a
+     margin Max sailed for. Stage-1 controversy check (protests/redress/rescoring) runs before any
+     tight-margin sentence is written."
+  - "Claims-in-circulation: WindCheck headline reads 'Sound's Great wins 2025 ALIR' while the
+     results show that boat 22nd overall in the Spinnaker circle and 1st in Division 5 — likely a
+     club/divisional trophy framing. Site is bot-walled (403 to plain fetch); resolve at stage 1
+     before it contaminates the narrative."
 
 focus_boats:                     # co-equal, NOT hero-and-challenger (see narrative_framing)
   - { name: "Daffodil", why: "Corsair F31R trimaran, only multihull entered, Division M winner; owner aboard as watch captain. Also the pipeline pivot (config client_boat) — a mechanical requirement, not a claim about protagonism" }
@@ -86,8 +94,12 @@ divisions_in_scope: ["Around Long Island Course: Non-Spin 1, Non-Spin 2, Spin 4,
 
 cross_circle_comparison: "PROPOSED: ship a unified UNOFFICIAL corrected ladder across all three
   ALIR circles. Basis: every rating (incl. Daffodil's NEMA -20) is sec/mi on the identical 207.0 nm
-  ToD formula — verified exact for all 45 AOK boats. Official scoring stays per-circle; the unified
-  view is labeled unofficial. This is what lets Daffodil-vs-monohulls comparisons exist."
+  ToD formula — verified EXACT (0 mismatches) for all 49 scored boats. Official scoring stays
+  per-circle; the unified view is labeled unofficial.
+  WHY IT MATTERS MORE THAN USUAL HERE: Daffodil was the only multihull ENTERED, so her official
+  result is 1-of-1 and carries no comparison whatsoever. On the unified 43-boat ladder she places
+  30th, +5:57:46 behind the leader. Without this view she has no measurable peers; with it she has
+  42. Exploratory numbers — stage 2 re-derives everything through the pipeline."
 
 narrative_framing:               # owner directive, 2026-07-23 — binding on stages 2-4
   dual_focus_not_duel: "Daffodil and Max are TWO SEPARATE FOCUSES, never a head-to-head.
