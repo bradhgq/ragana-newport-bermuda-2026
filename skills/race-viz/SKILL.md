@@ -6,9 +6,9 @@ description: Turn yacht-race tracker data plus supporting documents into researc
 # race-viz — staged race analysis and visualization
 
 Three tiers, each a strict superset of the previous:
-1. ** Fleet commentary** (public data: map, race shape, phases, duels, 1–2 race-unique metrics)
-2. ** Boat-annotated debrief** (+ client boat highlighted, log events on the track, log↔tracker reconciliation, benchmarks, private debrief)
-3. ** Story site** (+ narrative post with embedded visualizations, hosted)
+1. **Fleet commentary** (public data: map, race shape, phases, duels, 1–2 race-unique metrics)
+2. **Boat-annotated debrief** (+ client boat highlighted, log events on the track, log↔tracker reconciliation, benchmarks, private debrief)
+3. **Story site** (+ narrative post with embedded visualizations, hosted)
 
 Worked examples: `races/nb2026/` (point-to-point) and `races/bir2026/` (marks course — routed distance-remaining, division-scoped scoring). Their numbers are settled pinned values — never re-derive or "correct" them.
 
