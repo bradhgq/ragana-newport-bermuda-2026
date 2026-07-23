@@ -6,7 +6,9 @@
 
 module.exports = async ({ check, approx, assert, plots, render, S, FIX }) => {
   const door = FIX.module_canaries && FIX.module_canaries.door;
-
+  // guard: a future edit that drops the canary must skip the check (and decrement
+  // expected_checks), not throw at suite load on door.boat below
+  if (door)
   check('derived-metric', `door canary: ${door.boat} entered ${door.enter}, ${door.hours} h for the last 15 nm`, () => {
     assert.ok(plots.door, 'door module did not render');
     const tr = plots.door.traces[0];

@@ -28,7 +28,6 @@ registerModule({
   },
   build(ctx) {
     const { D, S, cfg, h } = ctx;
-    const off = cfg.time.utcOffset;
     // door metrics ride meta (postprocess.py) so every finisher renders from
     // core.json alone — the round-1 defect was reading t/dtf series here, which
     // the split build carries only for the core boats until more.json loads.
