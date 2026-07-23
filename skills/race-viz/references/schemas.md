@@ -78,7 +78,7 @@ goldens:                        # frozen at CP-2; changing one requires a record
   finstrip_count: 0
 ```
 
-`races/_template/config.yaml` is the fill-me copy of this schema, kept in
+`starter/template/config.yaml` is the fill-me copy of this schema, kept in
 lockstep: when the pipeline grows a key, the template and this block move
 together (DOC_GAPS #6 — the first cold-start had to reverse-engineer a dozen
 keys from pipeline code). The pace endpoint golden

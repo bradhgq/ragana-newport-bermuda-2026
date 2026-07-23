@@ -1,7 +1,9 @@
-# Race config template — copy races/_template/ to races/<race>/ and fill in.
-# Schema of record: skill/race-viz/references/schemas.md (+ repo additions, all
-# shown here). Facts about the race live here; judgment lives in the skill;
-# narrative lives in events.yaml; code lives in the repo.
+# Race config template — copy starter/template/ to races/<race>/ and fill in.
+# Schema of record: skills/race-viz/references/schemas.md (kept in lockstep with
+# this file). Facts about the race live here; judgment lives in the skill;
+# narrative lives in events.yaml; code lives in the repo. This template lives
+# under starter/ because it is engine-generic — races/ holds only race-specific
+# work (owner, 2026-07-16).
 
 race:
   name: ""

@@ -494,3 +494,20 @@ records what I *did* about it.
   branch scope. QUEUED for a races/-scope follow-up: the template header's
   `skill/race-viz` path typo (should be `skills/`) and its stale "+ repo
   additions" clause.
+
+- **Code organization (owner, 2026-07-16): `races/` holds race-specific work
+  ONLY.** The race template moved `races/_template/` → `starter/template/`
+  (it is engine-generic — generalizable changes belong in starter/); all live
+  references updated (READMEs, schemas.md lockstep; historical docs untouched).
+  While moving, the template's rot was fixed: `tests/regression.json` now
+  declares the MANDATORY `expected_checks` (the runner refuses to run without
+  it — copying the old template produced an instantly-failing suite) and
+  documents the optional round-2 fixture blocks; `presentation.js` drops the
+  shipped-defect `paceMinDone: 50` (the value NB's own comment records as
+  blanking the opening milestones), gains the corrected+VMC defaults, and
+  cites both worked examples. Also: `starter/pipeline/assemble.py` deleted —
+  dead since the no-legacy policy (its default template path pointed at a
+  `legacy/` dir that no longer exists; nothing invokes it; git history keeps
+  it) — and NB's results file moved to the `raw/results.csv` convention
+  (`races/nb2026/official_results.csv` → `raw/`, same bytes, config path
+  updated; closes the DOC_GAPS #13 drift).

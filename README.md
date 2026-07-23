@@ -13,12 +13,12 @@ starter/            the reusable engine (raw code only)
   adapters/         tracker-vendor format parsers → canonical schema
   acquisition/      race-data downloaders (fetch from YB / YachtScoring)
   tests/            parameterized regression harness
+  template/         copy me to races/<race>/ to start a race
   build_race.py     the one-command build+verify chain — use this, not the steps
   requirements.txt
 skills/race-viz/    the /race-viz skill — process & judgment, source of truth
 docs/               REPO_SPEC, build logs, retrospectives, gate reports
 races/
-  _template/        copy me to start a race
   nb2026/           Newport Bermuda 2026 (LIVE) — the shell-based worked example
                     (config, data, modules, overlays, committed dist/)
   bir2026/          Block Island Race 2026 (LIVE) — shell-based, marks course
@@ -58,7 +58,7 @@ stale-standalone trap (dist embeds `out/`; tests read dist). After a
 verification rebuild, `git checkout -- races/*/dist` — committed dist is
 production, per above.
 
-New race: copy [`races/_template/`](races/_template/) to `races/<race>/`, drop
+New race: copy [`starter/template/`](starter/template/) to `races/<race>/`, drop
 raw data in `raw/`, fill `config.yaml` + `presentation.js`, and follow the
 skill's checkpoint protocol (never skip CP-0 or CP-2). Kickoff prompt template:
 [`docs/KICKOFF_TEMPLATE.md`](docs/KICKOFF_TEMPLATE.md).

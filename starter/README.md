@@ -11,7 +11,7 @@ layer is [`skills/race-viz/`](../skills/race-viz/SKILL.md), the docs are
 ```
 shell/        generalized dashboard shell — index.template.html, styles/tokens,
               app/ (core.js + charts/), build.py, INVARIANTS.md
-pipeline/     build_data / scoring / zones / reconcile / route / assemble / compare_data
+pipeline/     build_data / scoring / zones / reconcile / route / compare_data
 adapters/     tracker-vendor format PARSERS → canonical track schema (adapters/README.md)
 acquisition/  race-data DOWNLOADERS — fetch raw data from YB / YachtScoring (network)
 tests/        parameterized JS regression harness (test_dashboard.js) + route tests
@@ -41,7 +41,7 @@ hashes) next to every payload — shipped numbers come only from the pipeline
 
 ## Starting a new race
 
-Copy [`races/_template/`](../races/_template/) to `races/<race>/`, drop the tracker
+Copy [`starter/template/`](template/) to `races/<race>/`, drop the tracker
 export / results / scratch sheet into `raw/`, fill `config.yaml` (facts only —
 narrative goes in `events.yaml`) plus `presentation.js`, then run the one-command
 chain. See the skill's

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """BIR2026 payload postprocess — reproducible, logged (prime rule 1).
 
-Run AFTER build_data.py, BEFORE assemble/shell build:
+Run AFTER build_data.py, BEFORE the shell build:
     ../../.venv/bin/python postprocess.py
 
 Only the genuinely race-specific analysis channels remain here; the original
