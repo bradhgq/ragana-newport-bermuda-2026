@@ -21,8 +21,14 @@ window.__RACE_CONFIG__ = {
     mapRange: { lon: [-74.15, -71.65], lat: [40.44, 41.36] },  // trimmed-fleet bbox + margin
     startLabel: 'START — Ellis Island', finishLabel: 'FINISH — Glen Cove',
   },
-  phases: [],                             // authored at stage 3/4 (start–R14, south-shore reach,
-                                          // Montauk, the Sound, the park)
+  phases: [                               // names per owner (stage-2 stop): self-explanatory,
+                                          // "door" always reads "finish door"
+    [206, 196, 'HARBOR START'],           // Ellis Island line, the Narrows, Ambrose R"14"
+    [196, 95, 'THE OCEAN REACH'],         // south shore to the Montauk approach
+    [95, 65, 'THE MONTAUK CORNER'],       // rounding, Gardiners Bay, Plum Gut
+    [65, 15, 'THE SOUND BEAT'],           // upwind down the Sound; the squall crosses here
+    [15, 0, 'THE FINISH DOOR'],           // open before ~14:00 Fri, shut until ~midnight
+  ],
   groups: {
     palette: {
       hero:        { label: 'Daffodil',   colors: ['#C2187E'] },

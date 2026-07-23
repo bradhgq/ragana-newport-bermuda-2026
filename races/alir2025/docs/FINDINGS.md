@@ -39,16 +39,41 @@ Wahoo 8.00, Daffodil 8.25** — then Habiru 9.00 and everyone else ≥9.25; flee
 than the fleet median, is the "built for this" claim confirmed. Benchmark: the whole
 fleet's own traversals of the same band.
 
-**H5 — "I sailed too low / too far north" — PARTIALLY CONTRADICTED, medium.**
-On the night leg Montauk→Plum Gut (DTF 88→70, entered 23:45 Thursday): Daffodil
-sailed ~18.4 nm against the fleet-median ~17.0 on an 18.0 nm leg — about 1.4 nm
-(~14 min at her leg speed) of extra distance, mean cross-track 0.66 nm north of the
-leg line. But **Max sailed the same leg with a LARGER mean northerly offset (1.02 nm,
-peaking 2.4)** and Habiru matched Daffodil's 0.66. Verdict: the northerly bow-down
-was real but modest, and the class leaders did the same or more. The recollected sin
-does not survive as a decisive loss; the door (H3), not the night leg, is where
-Daffodil's finish time went. *Owner's hypothesis, tested per doctrine 7; verdict
-ships in the caption whichever chart displays this leg.*
+**H5 — the owner's watch. REVISED after the stop's look-harder round: both stories
+are true, and the loss lives one leg later than remembered. Confidence: high on the
+where/how-much; wind angles are ERA5-model-supported (say so in captions).**
+
+*The night corner (Montauk → Plum Gut, DTF 95→65, ~22:45 Thu–03:45 Fri) is clean.*
+Daffodil was the **3rd most direct of 48 boats** through it (sailed/straight 1.19×
+vs fleet median 1.29×; Max 1.28×, Wahoo 1.38×), with zero large maneuvers at 15-min
+resolution and reaching wind angles throughout. Whatever it felt like from the helm,
+the corner cost nothing against any benchmark.
+
+*The Sound beat (DTF 65→15, Friday ~04:00–14:30) is where the hours went.* The whole
+morning was upwind — ERA5 has the sou'wester at TWA 20–58° on her heading, softening
+11→7 kt — a trimaran's worst mode, and the raw pings show the tacks the gridded view
+smoothed away. Own-window comparison, benchmark named (doctrine 5):
+
+| | hours (DTF 65→15) | sailed | ratio | tacks/gybes | made good 04:00–14:30 |
+|---|---|---|---|---|---|
+| Habiru YCC | 8.50 | 56.5 nm | 1.11× | 4 | 59.2 nm |
+| Max (1.5 h earlier, more breeze) | 8.75 | 60.9 | 1.24× | 8 | — |
+| **Daffodil** | **10.50** | **62.9** | **1.26×** | **9** | **49.9 nm** |
+
+Against Habiru — overlapping water, overlapping hours — Daffodil gave up **~2.0 h,
+6.4 nm of extra sailing, and 9.3 nm of made-good**. That is the recollected "sailed
+higher than necessary, tacked more, sailed more distance," relocated from the night
+corner to the Friday-morning beat.
+
+*The counterfactual the owner asked for (bounded, assumptions visible):* sail the
+Sound at Habiru's pace → enter the final 15 nm ≈ 12:30 instead of 14:30 → the door
+table puts a ~12:30 entry at ≈3 h, not 5.78 → finish ≈ 15:30–16:00 Friday, about
+**4.5 h earlier**, landing ≈ 28:30 corrected — roughly 5th–8th on the unified ladder
+instead of 30th. Entering **with** Max needed a door entry by ~11:45; even a perfect
+Sound leg leaves her ~45 min short of that, so "in the door with Max" was out of
+reach by the Sound alone — the reach and corner were already as good as the fleet's
+best. Two compounding assumptions (Habiru-pace + earlier door cohort); ship it only
+with both stated.
 
 **H6 — The Sound's Great / Towhee split is real. CONFIRMED, high.**
 Across the central Sound (lon −73.3..−72.6), Sound's Great held mean lat 41.048
@@ -79,12 +104,20 @@ anomaly, and assert no cause (C7's dismasting hearsay stays unsourced).
    band and park night shaded. This is H1+H3 in one picture and the race's
    differentiating insight. Custom module (registerModule), data via a small
    postprocess step; canary: Daffodil (enter 14:30 EDT Fri, 5.78 h).
-2. **`squall` — as an OVERLAY, not a per-boat claim (RECOMMEND, reduced scope).**
-   Verified station gust timeline (KPTN6 24.5 kt 15:36 → 44065 31.9 kt 16:40 →
-   44025 23.5 kt 17:30) drawn as map/time annotations, plus the two eyewitness
-   accounts as events. The full moving-frame per-boat crossing analysis is the
-   skill's "advanced, budget extra validation" case — H2's signal doesn't yet
-   support it; propose deferring it (decisions/ entry if vetoed permanently).
+2. **`squall` — OVERLAY, and it renders as a TIME object (owner question answered).**
+   The squall is a time concept, so it lives only on time-axised surfaces:
+   (a) on the clock-time views of the DTF/SOG charts, a shaded x-band 15:36–18:15
+   EDT Friday with three station tick-marks (KPTN6 24.5 kt 15:36 → 44065 31.9 kt
+   16:40 → 44025 23.5 kt 17:30), caption naming the NWS event page and the
+   model/observation caveats; (b) two entries in the race log/events row (owner
+   testimony from Daffodil's deck; Lenoble's published account), which the shell
+   already renders on every chart's event lane; (c) NOTHING on distance-axis
+   views — a fixed x-band there would be a wall-clock window painted onto space,
+   exactly the doctrine-1 artifact class, and each boat met the squall at a
+   different DTF anyway (that per-boat mapping is the deferred moving-frame work).
+   The door chart carries the squall's *consequence*; the overlay carries its
+   *occurrence*. Explanatory captions are part of the module spec (owner: "explain
+   in the visuals").
 3. **Unified-ladder rank strip (RECOMMEND as presentation, not module).** The
    owner-approved unofficial cross-circle ladder (Daffodil 30/43) likely needs only
    the existing ranked list scoped to the unified scale + an "unofficial" caption —
@@ -109,27 +142,48 @@ anomaly, and assert no cause (C7's dismasting hearsay stays unsourced).
   the finish-spread heuristic legitimately never fires.
 - 5-min ping cadence under-resolves the ~2-min squall (limits H2 forever).
 
-## 4. Open questions for the owner
+## 4. Owner decisions at the stop (2026-07-23) — and what they changed
 
-1. Module picks/vetoes above — especially whether the squall stays overlay-scope.
-2. Pinned values + snapshot: confirm the pins (config `pinned_values` +
-   `tests/regression.json`, derivations in its `_comment`) and authorize freezing
-   `snapshot/dashboard_data.json` from this build.
-3. H5's verdict contradicts your recollection in an interesting way — comfortable
-   shipping "the night leg was fine; the door was the story"?
-4. Phases for the charts (stage 3/4): proposed acts = Harbor & ocean reach /
-   Montauk corner / the Sound & the squall / the door. Naming welcome.
+1. **door: selected**, with the requirement that the visuals explain themselves —
+   explanatory captions are part of the module spec, not garnish.
+2. **squall overlay: selected**, scoped as a time object (see §2.2 for the design
+   that answers "it's a time concept, not positional"). Per-boat moving-frame:
+   deferred.
+3. **Pins: confirmed.** Snapshot frozen from the post-correction build.
+4. **H5: owner pushed back — "look harder" — and was right to.** The deeper pass
+   relocated the loss from the night corner (clean, 3rd most direct of 48) to the
+   Friday-morning Sound beat (~2 h and 9.3 nm made-good vs Habiru). §1 H5 carries
+   the revised verdict and the bounded counterfactual. Correction recorded.
+5. **Phases named** (self-explanatory per owner): HARBOR START / THE OCEAN REACH /
+   THE MONTAUK CORNER / THE SOUND BEAT / THE FINISH DOOR. In `presentation.js`.
+6. **Ranked list: multiple #1s ruled confusing.** Fixed via `postprocess.py`:
+   `meta.sdl` is now the unified unofficial ladder (1..43, unique — Max 1,
+   Phantom 2, Wahoo 3, Habiru 4, Daffodil 30) and the official per-circle standing
+   is preserved verbatim in `meta.note` for the detail surface, so both renders
+   exist. The postprocess asserts it can reproduce every official circle rank
+   before overwriting anything.
 
-## 5. Stage-2 record (draft — confirm to proceed)
+## 5. Stage-2 record — CONFIRMED
 
 ```yaml
-# stage-2 — Findings & Modules Record — ALIR 2025 — DRAFT
-modules_selected: [door, squall_overlay, unified_ladder_presentation]   # owner edits
-modules_vetoed: [squall_moving_frame_per_boat (deferred), any hero-vs-focus duel (framing)]
+# stage-2 — Findings & Modules Record — ALIR 2025 — CONFIRMED at the stop
+modules_selected: [door (with explanatory captions), squall_overlay (time-axis + events only),
+                   unified_ladder (postprocess meta.sdl + meta.note, both ranks rendered)]
+modules_vetoed: [squall_moving_frame_per_boat (deferred — 5-min pings under-resolve it),
+                 hero-vs-focus duel of any kind (narrative_framing)]
 reference_set_confirmed: true    # Max, Habiru YCC, Wahoo, Phantom, Dolcezza (+ SG/Towhee as story)
-corrections: []
-values_pinned: true              # config pinned_values == tests/regression.json; snapshot frozen on confirm
+corrections:
+  - { before: "H5: night leg partially contradicted, door is the whole story",
+      after: "H5: night corner clean (3rd most direct of 48); the loss is the Friday-morning
+              Sound beat, ~2 h / 9.3 nm made-good vs Habiru (ERA5-supported upwind angles);
+              bounded counterfactual ~4.5 h, still short of Max's door cohort",
+      source: "owner look-harder instruction at the stage-2 stop; raw-ping + ERA5 recheck",
+      propagated_to: [docs/FINDINGS.md] }
+  - { before: "meta.sdl = per-circle place_overall (three #1s)",
+      after: "meta.sdl = unified ladder 1..43; official circle rank kept in meta.note",
+      source: "owner screenshot at the stop", propagated_to: [postprocess.py, snapshot] }
+values_pinned: true              # config pinned_values == tests/regression.json == snapshot build
 pipeline_invocation: ".venv/bin/python starter/build_race.py races/alir2025"
-confirmed_by: ""
-date: ""
+confirmed_by: "Brad"
+date: "2026-07-23"
 ```
