@@ -28,11 +28,11 @@ jobs:
       - name: Build data payload from the raw tracker export
         run: python3 starter/pipeline/build_data.py races/nb2026/config.yaml
 
-      - name: GATE A — semantic parity vs the frozen payload (tie-exempt rule)
+      - name: Snapshot compare — semantic parity vs the snapshot reference (tie-exempt)
         run: |
           python3 starter/pipeline/compare_data.py \
             races/nb2026/out/dashboard_data.json \
-            races/nb2026/frozen/dashboard_data.json \
+            races/nb2026/snapshot/dashboard_data.json \
             --ties races/nb2026/out/rounding_ties.json
 
       - name: Build the dashboard (runs the regression harness as its gate)
