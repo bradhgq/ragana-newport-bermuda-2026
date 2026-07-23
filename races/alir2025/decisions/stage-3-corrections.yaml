@@ -1,0 +1,25 @@
+# stage-3 — Corrections Record — ALIR 2025 — CONFIRMED
+# Narrative pack: docs/SYNTHESIS.md (acts, decompositions, register, cases, lessons).
+corrections:
+  - { before: "H5 verdict located the loss on the night-corner question alone",
+      after: "loss relocated to the Friday Sound beat; night corner clean",
+      source: "owner, stage-2 stop", propagated_to: [docs/FINDINGS.md, docs/SYNTHESIS.md] }
+  - { before: "register carried the WindCheck headline dispute (C1) and the Div 5 three-peat (C2)",
+      after: "C1 reduced to the verified division win; C2 dropped — owner ruling: no narrative
+              weight; the stage-1 brief remains the source archive",
+      source: "owner, stage-3 stop", propagated_to: [docs/SYNTHESIS.md] }
+  - { before: "dismastings 'unresolvable'; Towhee halyard 'causation unresolvable'",
+      after: "both labeled RUMOUR — the owner independently heard the dismasting reports, so the
+              copy may say 'rumours of dismastings' / 'reportedly', and never more (no named boat,
+              no track signature)",
+      source: "owner, stage-3 stop", propagated_to: [docs/SYNTHESIS.md] }
+  - { before: "four lessons, the fourth on timestamp hygiene",
+      after: "three lessons — the fourth dropped as process craft rather than sailing",
+      source: "owner, stage-3 stop", propagated_to: [docs/SYNTHESIS.md] }
+snapshot_refreeze:
+  diff_class: "events: 0 -> 3 (squall line / squall on Daffodil / the anchor); no other key"
+  instruction: "owner supplied the squall account for the viz (2026-07-23); stage-3 language rule
+    propagates participant corrections to events.yaml; re-freeze confirmed with this record (I16)"
+spine_approved: true            # acts (§1), both decomposition tables (§2), case studies (§4) approved as presented
+confirmed_by: "Brad"
+date: "2026-07-23"

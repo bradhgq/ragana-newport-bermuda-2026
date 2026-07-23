@@ -88,15 +88,14 @@ they are parallel stories by owner directive.
 
 | # | claim (source, label) | track verdict | evidence |
 |---|---|---|---|
-| C1 | "Sound's Great wins 2025 ALIR" (WindCheck headline) | **partial** | trophy page: Max holds the overall trophy; SG 1st Div 5, 22/32 in-circle corrected; unified 26/43 |
-| C2 | SG's third straight Div 5 win (testimony) | **unresolvable here** | 2025 leg verified; 2023–24 outside our data |
+| C1 | Sound's Great's division win (the headline's true core) | **confirmed** | results: 1st, Spinnaker Div 5 — verified. Owner ruling at this stop: the headline dispute and the three-peat carry no narrative weight; dropped from the story (the stage-1 brief keeps the source record) |
 | C3 | Wahoo line honors, 2nd division, 3rd overall (verified-fact) | **confirmed** | payload: elapsed 24:11:49 fleet-fastest; unified #3 |
 | C4 | Fast first half; R14 1:29 PM; Montauk 03:30 "record time" (testimony) | **confirmed** (times); *record* unresolvable | tracker: SG at R14 13:30, Montauk 03:20 Friday; article's "Saturday" label refuted by its own arithmetic + tracker |
 | C5 | Two squalls Friday; second >35 kt near Northport (testimony) | **confirmed as to occurrence/timing**; magnitudes are station-plausible | NWS event page; gust sequence 24.5→31.9→23.5 kt west→east 15:36–17:30 EDT; per-boat SOG disturbance ordering |
 | C6 | Daffodil: ~30 kt squall, ~2 min, douse, jib-only, "a very needed push" in ~2 kt air (participant-recollection) | **corroborated** | 44065 gust 31.9 kt 16:40 EDT; Daffodil near-stops 16:20–16:50 then 5–6.3 kt 17:00–17:45 vs ~1–3 kt before |
-| C7 | Dismastings/shredded sails after squall two (unsourced) | **unresolvable** | 6 RET tracked, none stops at squall time except Kitli (15:30 entry to Sound); no cause visible in any track |
+| C7 | Dismastings/shredded sails after squall two | **rumour** (owner ruling: two independent hearings — Lenoble's relay and the owner's own — but no named boat, no visible track signature; the copy may say "rumours of dismastings", never more) | 6 RET tracked; only Kitli stops near squall time (15:30, entering the Sound); no cause visible in any track |
 | C8 | The Sound went calm; a boat anchored ~100 yd out at midnight (testimony) | **confirmed** | SG parked at 0.09 nm, 0.05–0.35 kt, 00:15–01:05; door table: entries 18:45–21:30 took 5.5–6.7 h for 15 nm |
-| C9 | SG/Towhee shore split decided Div 5; Towhee halyard broke (testimony + inference) | **split confirmed; causation unresolvable** | mean lat across mid-Sound 41.048 vs 41.123 (~4.5 nm); a track cannot see a halyard |
+| C9 | SG/Towhee shore split decided Div 5; Towhee halyard broke (testimony + inference) | **split confirmed; the halyard is rumour** (owner ruling — one relayed report about a rival's boat; copy says "reportedly", never asserts) | mean lat across mid-Sound 41.048 vs 41.123 (~4.5 nm); a track cannot see a halyard |
 | C10 | Matinecock 9:40 PM, 3 nm out, ~3 h to finish (testimony) | **confirmed** | SG track: 21:40 at 0.87 nm off Matinecock; finish 01:09:55 |
 | C11 | Plum Gut or The Race both legal; fleet chose the Gut (verified-fact) | **confirmed** | 42/43 finishers within 0.52 nm of the Gut; Yopo via the Sluiceway; only RETs crossed The Race |
 | H5 | Owner: "sailed too low / too north at night; later: higher, more tacks, more distance" (participant-recollection) | **partial — relocated** | night corner 3rd most direct of 48 (clean); Friday Sound beat: +2:07 vs Habiru, 9 maneuvers vs 4, made-good 49.9 vs 59.2 nm; ERA5 TWA 20–58° upwind (model-supported) |
@@ -148,9 +147,9 @@ sailing problem.
 3. **Ratings are the third boat in every duel.** Wahoo beat Max around the course by
    1:49 and lost by 4:50-inside-noise; Daffodil owed Habiru two hours before the gun.
    Narrate mechanisms, not margins. (From §2; doctrine 6.)
-4. **A committee's clock is not a tracker's clock.** The published finish column was
-   EDT wearing a Z; the published article put Montauk on the wrong day. Every
-   external timestamp got probed before use — keep doing that. (From stage 0/1.)
+
+(An earlier fourth lesson on timestamp hygiene was dropped at the stop — owner
+ruling: process craft, not sailing; it lives on in the stage-0/1 records.)
 
 ## 6. Corrections propagated (language rule: participant corrections are binding)
 
@@ -161,20 +160,12 @@ sailing problem.
 - Ranked-list confusion → `postprocess.py` unified ladder; official circle ranks
   preserved in `meta.note`.
 
-## Stage-3 stop — corrections record (hard stop)
+## Stage-3 stop — CONFIRMED
 
-```yaml
-# stage-3 — Corrections Record — ALIR 2025 — DRAFT (owner confirms or edits)
-corrections:
-  - { before: "H5 verdict located the loss on the night corner question alone",
-      after: "loss relocated to the Friday Sound beat; night corner clean",
-      source: "owner, stage-2 stop", propagated_to: [docs/FINDINGS.md, docs/SYNTHESIS.md] }
-snapshot_refreeze:
-  diff_class: "events: 0 -> 3 (squall line / squall on Daffodil / the anchor); no other key"
-  instruction: "owner supplied the squall account for the viz (2026-07-23) and the
-    stage-3 language rule propagates participant corrections to events.yaml; the
-    re-freeze itself is confirmed by confirming this record (I16)"
-spine_approved: false   # set true to confirm the act structure + both decomposition tables
-confirmed_by: ""
-date: ""
-```
+The corrections record is the committed ledger file
+`decisions/stage-3-corrections.yaml` (confirmed_by Brad, 2026-07-23): acts,
+decomposition tables and case studies approved as presented; the register edited at
+the stop (C1 reduced to the verified division win, C2 dropped, C7/C9's breakage
+claims labeled **rumour** — the owner independently heard the dismasting reports,
+so the copy may say "rumours of", never more); the fourth lesson dropped as process
+craft; the events snapshot re-freeze confirmed.

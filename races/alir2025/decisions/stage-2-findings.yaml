@@ -1,0 +1,25 @@
+# stage-2 — Findings & Modules Record — ALIR 2025 — CONFIRMED
+# Full memo: docs/FINDINGS.md (headlines H1-H7, module specs, anomalies).
+modules_selected:
+  - "door — the closing-door scatter (enter final 15 nm vs hours to cross); explanatory captions are part of the spec (owner: 'explain in the visuals')"
+  - "squall_overlay — a TIME object: shaded band + station gust ticks on clock-axis views + two event-lane entries; never painted onto distance axes (doctrine 1)"
+  - "unified_ladder — postprocess.py rewrites meta.sdl to the unofficial unified rank 1..43 and preserves the official per-circle standing in meta.note (both ranks render)"
+modules_vetoed:
+  - "squall moving-frame per-boat table — deferred: 5-min pings under-resolve a 2-min event"
+  - "any hero-vs-focus duel view — excluded by narrative_framing (dual focus, never a duel)"
+reference_set_confirmed: true   # Max, Habiru YCC, Wahoo, Phantom, Dolcezza (+ Sound's Great / Towhee as story boats)
+corrections:
+  - { before: "H5: night leg partially contradicted; door is the whole story",
+      after: "H5: night corner clean (3rd most direct of 48); the loss is the Friday-morning Sound
+              beat, ~2 h / 9.3 nm made-good vs Habiru (ERA5-supported upwind angles); bounded
+              counterfactual ~4.5 h, still ~45 min short of Max's door cohort",
+      source: "owner look-harder instruction at the stage-2 stop; raw-ping + ERA5 recheck",
+      propagated_to: [docs/FINDINGS.md, docs/SYNTHESIS.md] }
+  - { before: "meta.sdl = per-circle place_overall (three boats rendered #1)",
+      after: "meta.sdl = unified ladder 1..43; official circle rank preserved in meta.note",
+      source: "owner screenshot at the stage-2 stop",
+      propagated_to: [postprocess.py, snapshot/dashboard_data.json] }
+values_pinned: true             # config pinned_values == tests/regression.json == snapshot build
+pipeline_invocation: ".venv/bin/python starter/build_race.py races/alir2025"
+confirmed_by: "Brad"
+date: "2026-07-23"
