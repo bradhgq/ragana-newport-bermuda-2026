@@ -1,6 +1,8 @@
 # Pinned to reproduce the frozen NB2026 payload as closely as this platform
-# allows — see GATE_A_REPORT.md and REPO_NOTES.md #10 for the 39-sample
-# half-boundary rounding caveat (platform 1-ulp interpolation differences).
+# allows. Cross-platform caveat (the GATE-A finding, 2026-07-09): 1-ulp
+# interpolation differences put ~39 samples exactly on a rounding half-boundary
+# vs the frozen oracle — compare_data's --ties mechanism exempts recorded ties;
+# everything else must be byte-identical.
 # pandas 3.x also works (same output) once its [s]-resolution epoch default is
 # neutralized by the adapters' explicit datetime64[ns] cast.
 pandas==2.2.3

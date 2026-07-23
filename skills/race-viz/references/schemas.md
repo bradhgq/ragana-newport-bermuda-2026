@@ -80,7 +80,7 @@ goldens:                        # frozen at CP-2; changing one requires a record
 
 `starter/template/config.yaml` is the fill-me copy of this schema, kept in
 lockstep: when the pipeline grows a key, the template and this block move
-together (DOC_GAPS #6 — the first cold-start had to reverse-engineer a dozen
+together (the first cold-start had to reverse-engineer a dozen
 keys from pipeline code). The pace endpoint golden
 (`endpoints.pace_min_per_100`) is deliberately NOT a config.yaml key: it lives
 in `tests/regression.json` only, asserted from the rendered traces by the

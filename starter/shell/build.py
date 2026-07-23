@@ -70,7 +70,7 @@ def compact(obj):
 
 
 def consistency_check(race_dir, cfg):
-    """REPO_SPEC v1.1 'two-config drift, resolved': config.yaml stays the
+    """Two-config drift, resolved (round-1 doctrine): config.yaml stays the
     analysis source of record; the keys presentation.js shares with it must
     match exactly, and the frozen goldens must agree with the runner fixtures.
     Divergence refuses the build."""

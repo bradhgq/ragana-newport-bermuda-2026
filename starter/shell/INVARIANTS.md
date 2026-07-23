@@ -45,14 +45,14 @@
   must render only after `ensureTracks` resolves *and* re-check the selection is
   still current (`app.js:284-289`, race guard at `:443-444`).
 
-## Round-2+ invariants (RETROSPECTIVE_ROUND2 §3; each one also earned)
+## Round-2+ invariants (each one also earned by a real bug)
 
 - **I14 — VMC integrates back to the course.** The `vmc` channel is the
   derivative of distance-remaining; its official-window time-mean must equal
   **DTF-at-the-gun ÷ official elapsed**, on the same DTF function the channel
   differentiates — the routed polyline for marks courses, NOT the official
   length (BIR: the routed basis measures 5.02 kt where the official length
-  predicts 4.96 — wider than the fixture’s ±0.06 kt tolerance; DOC_GAPS #19).
+  predicts 4.96 — wider than the fixture’s ±0.06 kt tolerance; found at BIR M1).
   Guarded per-race by the frozen `vmc` fixture in `tests/regression.json`.
   Negatives are real — never clamp (35 NB2026 boats have them).
 - **I15 — Modules own their geometry.** A `kind:plot` module declares
@@ -74,7 +74,12 @@
 ---
 
 
-## ctx ABI amendments (additive only; REPO_NOTES has each round's entry)
+## ctx ABI amendments
+
+THE RULE (standing, owner-ratified): amendments are ADDITIVE-ONLY — an
+optional field races may ignore — and each is recorded in this list when it
+lands. Breaking changes to the frozen ctx/registration shapes need an owner
+adjudication before they ship.
 
 - `overlay.mapLayer` ('under'|'over'|'top') — BIR M2: overlay map traces pick
   their paint layer.

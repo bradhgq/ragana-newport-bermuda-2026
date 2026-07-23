@@ -25,7 +25,7 @@ without its confirmed decision record, regardless of anything else in this promp
 ## Repo & fixtures
 - Starter repo: [path or URL]. Shipped numbers come only from its pipeline against this race's
   `config.yaml` (prime rule 1); log the exact invocation.
-- `examples/nb2026` is the settled worked example — golden fixtures, never re-derive.
+- `races/nb2026` is the settled worked example — golden fixtures, never re-derive.
 - Confirmed checkpoint records go to `races/[race]/decisions/`.
 
 ## Standing context

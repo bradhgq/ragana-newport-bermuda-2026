@@ -58,7 +58,7 @@ unlicensed repo is all-rights-reserved by default. This project is personal and
 non-commercial, so the port ships as-is (owner decision, 2026-07-08), with
 attribution to the author. If it ever goes commercial, cross that bridge then —
 contact the author for terms, or cleanroom-reimplement from the byte-layout notes
-above (which describe a data format, not decyb's code). Tracked in DOC_GAPS.md #16.
+above (which describe a data format, not decyb's code). Tracked in docs/OPEN_THREADS.md (decyb license).
 
 ### Gotchas (all hit in practice)
 

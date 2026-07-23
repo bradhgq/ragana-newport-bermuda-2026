@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """One-command build chain for a race — kills the stale-standalone trap
-(RETROSPECTIVE_ROUND2 §2: dist embeds out/, tests read dist; running steps out
-of order silently tests the previous build).
+(dist embeds out/, tests read dist; running steps out of order silently tests
+the previous build).
 
     .venv/bin/python starter/build_race.py races/<race>
 

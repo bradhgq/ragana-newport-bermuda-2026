@@ -1,7 +1,8 @@
 # RETROSPECTIVE — BIR 2026, the second race through the pattern
 
-Companion to the repo spec ([`docs/REPO_SPEC_v1.1.md`](../../../docs/REPO_SPEC_v1.1.md),
-which inherited the nb2026 round-1 retrospective's predictions), where §"marginal
+Companion to the round-1 repo spec (REPO_SPEC v1.1 — retired from the tree
+2026-07-16, retrievable from git history / the archives-2026-07 release; it
+inherited the nb2026 round-1 retrospective's predictions), where §"marginal
 cost of race #2" priced the second race assuming a shell refactor that never
 actually happened. This is the empirical readout: what productionizing a *second*
 race cost when the shell was still a worked example, not an extracted library.
