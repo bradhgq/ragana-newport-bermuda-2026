@@ -91,7 +91,7 @@ ref/corrected_min/elapsed_min between config and fixtures.
 (`window.__RACE_CONFIG__`): layout/section order, palette + group presentation,
 defaults, chart y-ranges + heights, KPI slots, `modules`/`overlays` lists, and
 the selection filters (`classFilter: { prefix, inputLabel, placeholder }` and
-`ratingBands: { widths: [...] }`, std since R2 — presence of a block renders
+`ratingBands: { widths: [...] }` — presence of a block renders
 its control; absence renders nothing, so one-design races simply omit them).
 Facts shared with `config.yaml` (course, hero/client boat, time) must MATCH —
 `shell/build.py` runs a consistency check and refuses the build on divergence.
@@ -115,15 +115,15 @@ example (`races/nb2026/presentation.js`) documents every key with its origin.
 {
   start: [lat, lon], fin: [lat, lon],
   boats: { <displayName>: { t:[epochUTC...], lat:[], lon:[], dtf:[], xte:[], sog:[],
-           vmc:[],                               // std since R2: closing speed on the finish =
+           vmc:[],                               // standard: closing speed on the finish =
                                                  // centered diff of gridded dtf (~30-min window),
                                                  // knots; negatives are real (tacks / sailing away).
                                                  // For mark courses, requires routed dtf (route.py).
            meta: { grp, typ, sail, tcf, el:"4d 01:34:52", corr:"2d 10:00:43",
                    fin:"YYYY-MM-DD HH:MM:SS", sdl:<rank>, retireReason?,
-                   sailedNm, avgKt,              // std since R2: total sailed distance from raw pings,
+                   sailedNm, avgKt,              // standard: total sailed distance from raw pings,
                                                  // and sailedNm ÷ official elapsed (dist-vs-speed chart)
-                   cls, clsPos } } },            // std since R2: division label + rank-in-division
+                   cls, clsPos } } },            // standard: division label + rank-in-division
                                                  // (from official results; drives class/rating filters)
   fleet: [ { name, lat:[], lon:[] } ],           // hourly ghost layer, all boats
   events: [ { t, cat, label, txt } ],            // from events.yaml, post privacy cut

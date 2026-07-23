@@ -2,14 +2,16 @@
 
 This stage **is** the review loop, and the loop is the quality engine. Requires the confirmed stage-3 record and the stage-2 module list.
 
-## The core five (always render)
+## The core six (always render)
 
 1. **The Course** — lat/lon tracks, rhumb or course line, hourly fleet ghosts, phase labels with leader lines, event pins.
 2. **The Race** — distance-remaining vs time, compact and introductory, with phase divides.
 3. **Where the Race Was Won and Lost** — milestone deltas versus a selectable reference boat; handicap/elapsed toggle; Pace (min/100 nm) vs Total toggle; events overlaid; endpoints taken exactly from official results.
 4. **Distance/Speed pair** — XTE and SOG on a shared, central time↔distance axis toggle. SOG carries a **SOG | VMC** y-metric toggle (VMC = closing speed on the finish; **label it VMC, never VMG — no wind data**, I18); in distance-aligned VMC view the park-zone shading is the sharpest "who kept making progress" read.
 5. **Race Log table** — every event, categorized, with position.
-6. **Distance sailed vs speed** (promoted to standard in R2) — one dot per scored boat, x = sailed distance, y = sailed ÷ time with an **elapsed | corrected** toggle; iso-time rays through the origin; rhumb reference line. Mode-aware outlier clamp (a much-faster boat peels off the elapsed scale and is labelled at the edge rather than flattening the pack). Needs `meta.sailedNm/avgKt` — standard fields, so it renders for any race.
+6. **Distance sailed vs speed** — one dot per scored boat, x = sailed distance, y = sailed ÷ time with an **elapsed | corrected** toggle; iso-time rays through the origin; rhumb reference line. Mode-aware outlier clamp (a much-faster boat peels off the elapsed scale and is labelled at the edge rather than flattening the pack). Needs `meta.sailedNm/avgKt` — standard fields, so it renders for any race.
+
+**Toggle defaults (owner standing decision, 2026-07-15):** wherever a corrected|elapsed or SOG|VMC toggle exists, the page **boots corrected and VMC** — the scoreboard view and the closing-speed view lead; elapsed and SOG stay one click away. The starter reflects this (`starter/template/presentation.js` boots `raceMode: 'h'` + `speedMetric: 'vmc'`; both worked examples also default their distspeed toggle to `'h'`); a race shipping different defaults is a defect unless the owner ruled otherwise for that race.
 
 ## Race-unique modules (1–3 per race, chosen at the stage-2 stop — this is where the differentiating insight lives)
 
