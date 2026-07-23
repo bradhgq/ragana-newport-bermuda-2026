@@ -368,7 +368,16 @@ function buildControls() {
     const btn = document.createElement('button'); btn.type = 'button';
     btn.className = 'grpbtn' + (on ? ' allon' : ''); btn.textContent = (on ? '− ' : '+ ') + g;
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    btn.onclick = () => { const all = names.every(n => S.boats.has(n)); names.forEach(n => all ? S.boats.delete(n) : S.boats.add(n)); render('boats'); };
+    btn.onclick = () => {
+      const all = names.every(n => S.boats.has(n));
+      names.forEach(n => all ? S.boats.delete(n) : S.boats.add(n));
+      // a group may name boats whose tracks live in more.json (first race to do
+      // so: alir2025 — nb/bir buttons only referenced core-shipped boats, which
+      // hid this); one ensureTracks suffices, more.json carries every lazy boat
+      const missing = names.filter(n => S.boats.has(n) && !hasTrack(n));
+      if (missing.length) ensureTracks(missing[0]).then(() => render('boats')).catch(() => {});
+      render('boats');
+    };
     gb.appendChild(btn);
   }
   const clr = document.createElement('button'); clr.type = 'button'; clr.className = 'grpbtn';

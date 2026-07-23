@@ -51,6 +51,13 @@ defects:
     fix: "postprocess compacts meta.cls to Div 0/Div X/NS Div 1/DH Div 7/Multihull etc.; full
       strings remain in config and raw results"
     assertion: "covered by the same snapshot refreeze class"
+  - found: "clicking a group button showed only one boat (owner) — the handler added names to
+      the selection but never triggered the lazy more.json load, so boats without core-shipped
+      tracks silently drew nothing. nb/bir never hit it: their buttons only named core boats."
+    fix: "engine: group-button onclick now mirrors the filter path's ensureTracks pattern
+      (shell/app/core.js); one fetch covers every lazy boat. All three races' chains green."
+    assertion: "not expressible in the standalone harness (it embeds all tracks); verified in
+      the served split build — 6/6 pace peers render after click"
 approved_to_productionize: false # owner confirms after seeing round 2
 confirmed_by: ""
 date: ""
