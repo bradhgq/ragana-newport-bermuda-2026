@@ -1,0 +1,196 @@
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--water);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45}
+.wrap{max-width:1240px;margin:0 auto;padding:20px 18px 60px}
+
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--magenta);outline-offset:2px;border-radius:4px}
+
+.titleblock{background:var(--paper);border:1.5px solid var(--ink);padding:22px 26px 18px;position:relative;margin-bottom:16px}
+.titleblock::before,.titleblock::after{content:"";position:absolute;left:0;right:0;height:6px;
+  background-image:repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 40px)}
+.titleblock::before{top:4px}.titleblock::after{bottom:4px}
+.tb-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--ink2);text-transform:uppercase}
+h1{font-size:26px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin:6px 0 2px}
+h1 .mag{color:var(--magenta)}
+.tb-sub{font-size:13px;color:var(--ink2)}
+.tb-result{font-family:var(--mono);font-size:12.5px;margin-top:10px;padding-top:10px;border-top:1px solid var(--rule);display:flex;gap:26px;flex-wrap:wrap}
+.tb-result b{color:var(--ink)}
+.tzn{font-family:var(--mono);font-size:11px;color:var(--ink2);margin-top:6px}
+
+/* ═══ loading / error / noscript states ═══ */
+.appstate{background:var(--card);border:1px solid var(--grid);border-radius:6px;padding:28px 20px;margin-bottom:14px;text-align:center;font-family:var(--mono);font-size:12.5px;color:var(--ink2)}
+.appstate.err{border-color:#C0392B;color:#A33}
+.appstate .retry{display:inline-block;margin-top:10px;border:1px solid var(--ink);border-radius:999px;padding:5px 16px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.appstate .retry:hover{background:var(--ink);color:#fff}
+noscript .appstate{text-align:left}
+.plot{width:100%;position:relative}
+.plot:empty{background:repeating-linear-gradient(-45deg,#FDFEFD 0 14px,#F6FAFA 14px 28px);border:1px dashed var(--grid);border-radius:4px}
+.plot:empty::after{content:"chart loading…";position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:11px;color:var(--ink2)}
+@keyframes none{}
+
+/* ═══ controls ═══ */
+.controls{background:var(--card);border:1px solid var(--grid);border-radius:6px;padding:12px 14px;margin-bottom:14px;position:sticky;top:0;z-index:20;font-size:12px;transition:padding .15s,box-shadow .15s}
+.controls.scrolled{box-shadow:0 2px 10px rgba(23,41,58,0.10);padding-top:8px;padding-bottom:8px}
+/* phone bottom-sheet chrome (activated ≤760px) */
+#sheetBar{position:fixed;left:14px;right:14px;bottom:max(12px,env(safe-area-inset-bottom));z-index:45;
+  display:none;align-items:center;justify-content:center;gap:8px;padding:14px 16px;min-height:48px;
+  background:var(--ink);color:#fff;border-radius:999px;font-family:var(--mono);font-size:12px;
+  letter-spacing:.08em;text-transform:uppercase;box-shadow:0 4px 18px rgba(23,41,58,0.35);cursor:pointer}
+#sheetBar .dot{width:9px;height:9px;background:var(--magenta);transform:rotate(45deg);flex:none}
+#scrim{position:fixed;inset:0;background:rgba(23,41,58,0.4);z-index:50}
+.ctl-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ctl-title{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.ctl-collapse{font-family:var(--mono);font-size:10px;letter-spacing:.08em;border:1px solid var(--grid);background:#F3F7F8;border-radius:4px;padding:3px 9px;color:var(--ink2)}
+.ctl-collapse:hover{border-color:var(--ink2)}
+.ctl-row{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.ctl-row:last-child{margin-bottom:0}
+.ctl-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);min-width:64px;padding-top:4px}
+.ctl-label.big{font-size:10.5px;color:var(--ink);padding-top:5px}
+.ctl-hint{font-size:11px;color:var(--ink2)}
+.chips{display:flex;flex-wrap:wrap;gap:4px;flex:1;min-width:0}
+/* boat chips: compact dashed style so 27 boats fit ~2 rows */
+.chip{border:1px dashed var(--rule);background:transparent;border-radius:4px;padding:2px 7px;font-size:10.5px;font-family:var(--mono);letter-spacing:.02em;cursor:pointer;user-select:none;color:var(--ink2);display:inline-flex;align-items:center;gap:4px;transition:all .12s}
+.chip .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.4;flex:none}
+.chip:hover{border-color:currentColor}
+.chip.on{color:#fff;border-style:solid;border-color:transparent}
+.chip.on .dot{opacity:1;background:#fff}
+.chip.locked{cursor:default}
+/* overlay pills: round like the Groups row, tinted per overlay */
+.pill{border:1px solid;border-radius:999px;padding:3px 11px;font-size:11px;font-family:var(--sans);letter-spacing:0;cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:5px;background:#fff;color:var(--ink2);transition:all .12s}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.pill:hover{color:var(--ink)}
+.pill.on{color:#fff}
+.pill.on .dot{background:#fff}
+/* Groups: the prominent pill row */
+.chips.big .grpbtn{font-size:11.5px;padding:5px 12px;border-style:solid;border-radius:999px;font-family:var(--sans);letter-spacing:0;background:#F3F7F8;color:var(--ink)}
+.chips.big .grpbtn:hover{border-color:var(--ink)}
+.chips.big .grpbtn.allon{background:var(--ink);color:#fff;border-color:var(--ink)}
+.grpbtn{font-family:var(--mono);font-size:10px;letter-spacing:.08em;border:1px dashed var(--rule);background:transparent;border-radius:4px;padding:3px 8px;cursor:pointer;color:var(--ink2)}
+.grpbtn:hover{border-color:var(--ink2)}
+.axis-toggle{display:inline-flex;border:1px solid var(--ink);border-radius:5px;overflow:hidden}
+.axis-toggle button{font-family:var(--mono);font-size:11px;border:none;background:#fff;padding:5px 12px;cursor:pointer;color:var(--ink2)}
+.axis-toggle button.on{background:var(--ink);color:#fff}
+/* class-number input + rating-band controls (round 2) — live in the Groups row */
+.clsadd,.bandrow{display:inline-flex;align-items:center;gap:5px}
+.clsadd-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--ink2);text-transform:uppercase}
+#clsInput{font-family:var(--mono);font-size:11.5px;border:1px dashed var(--rule);border-radius:999px;padding:4px 10px;width:104px;background:#fff;color:var(--ink)}
+#clsInput:focus{border-style:solid;border-color:var(--ink2);outline:none}
+.bandnum{font-family:var(--mono);font-size:11.5px;border:1px dashed var(--rule);border-radius:999px;padding:4px 8px;width:64px;background:#fff;color:var(--ink)}
+.bandnum:focus{border-style:solid;border-color:var(--ink2);outline:none}
+.clserr{font-family:var(--mono);font-size:10.5px;color:#A33;align-self:center}
+.more-cols{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
+.more-head{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid var(--grid)}
+.more-list{max-height:280px;overflow-y:auto;border:1px solid var(--grid);border-radius:4px}
+.more-row{display:flex;width:100%;text-align:left;align-items:center;gap:8px;padding:4px 8px;font-family:var(--mono);font-size:11.5px;cursor:pointer;border-bottom:1px solid #F0F4F5}
+.more-row:last-child{border-bottom:none}
+.more-row:hover{background:#F3F7F8}
+.more-row.on{background:var(--magenta);color:#fff}
+.more-row.on .more-type,.more-row.on .more-corr{color:rgba(255,255,255,0.75)}
+/* boats matched by the class/band filters read as a marked rail */
+.more-row.match{box-shadow:inset 3px 0 0 var(--magenta)}
+.more-row.match .more-rank{opacity:1;color:var(--magenta)}
+.more-row.on.match .more-rank{color:#fff}
+.more-row.loading{opacity:.5;cursor:progress}
+.more-rank{width:32px;flex:none;opacity:.7}
+.more-name{flex:1;min-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.more-type{flex:1;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10.5px}
+.more-corr{width:76px;flex:none;text-align:right}
+select{font-family:var(--mono);font-size:12px;border:1px solid var(--grid);border-radius:4px;padding:4px 8px;background:#fff;color:var(--ink)}
+.modebtn{font-family:var(--mono);font-size:11px;border:1px solid var(--grid);background:#F3F7F8;border-radius:4px;padding:3px 10px;cursor:pointer;color:var(--ink2)}
+.modebtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--grid);border-radius:6px;padding:12px 14px}
+.kpi .lab{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+.kpi .val{font-size:22px;font-weight:700;margin-top:3px}
+.kpi .sub{font-size:11.5px;color:var(--ink2);margin-top:2px}
+.kpi .val .u{font-size:13px;font-weight:500;color:var(--ink2)}
+
+.card{background:var(--card);border:1px solid var(--grid);border-radius:6px;padding:16px 16px 8px;margin-bottom:14px}
+.card h2{font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.card .note{font-size:12px;color:var(--ink2);margin:3px 0 6px;max-width:980px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hd{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.hd .tools{font-family:var(--mono);font-weight:400;font-size:11px;text-transform:none;letter-spacing:0;display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+/* tap-to-inspect detail line (fills in on Plotly click; the touch equivalent of hover) */
+.tapnote{font-family:var(--mono);font-size:11px;color:var(--ink2);border-top:1px dashed var(--grid);margin-top:4px;padding:5px 2px 6px;min-height:0;display:none}
+.tapnote.show{display:block}
+.tapnote b{color:var(--ink)}
+
+/* chart heights (Plotly needs explicit heights; tuned per breakpoint below) */
+:root{--map-scale:1}
+#map{height:calc(min(640px,88vw)*var(--map-scale))}
+#dtf{height:min(340px,80vw)}
+#race{height:min(540px,92vw)}
+#xte,#sog{height:420px}
+
+#eventtable,#recon,.tblwrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px;margin:8px 0 10px;min-width:720px}
+th{text-align:left;padding:6px 8px;border-bottom:1.5px solid var(--ink);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);white-space:nowrap;background:var(--card)}
+td{padding:6px 8px;border-bottom:1px solid #EDF2F4;white-space:nowrap;background:var(--card);vertical-align:top}
+/* sticky first column so wide tables stay readable while scrolling */
+th:first-child,td:first-child{position:sticky;left:0;z-index:1}
+th:first-child{z-index:2}
+tr.bad td{background:#FDF1F1}
+tr.hero td{background:#FBEAF3;font-weight:600}
+.badge{display:inline-block;border-radius:3px;padding:1px 6px;font-size:10px;letter-spacing:.04em}
+.badge.ok{background:#E4F1E8;color:var(--green)}
+.badge.err{background:#F9E3E3;color:#A33}
+.badge.warn{background:#F7EFD9;color:#8A6D00}
+
+.swipehint{display:none}
+@media(max-width:760px){.swipehint{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em}}
+
+.foot{font-size:12px;color:var(--ink2);border-top:1px solid var(--rule);padding-top:14px;margin-top:6px}
+.foot h3{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-family:var(--mono);margin:12px 0 4px;color:var(--ink)}
+.foot ul{margin:4px 0 8px 18px}
+.foot li{margin-bottom:3px}
+kbd{font-family:var(--mono);background:#EDF2F4;border-radius:3px;padding:0 5px;font-size:11px}
+
+/* ═══ responsive ═══ */
+@media(max-width:1024px){
+  #xte,#sog{height:380px}
+}
+@media(max-width:960px){.two{grid-template-columns:1fr}}
+@media(max-width:760px){
+  /* room for the fixed bottom bar */
+  .wrap{padding:12px 10px 92px}
+  h1{font-size:19px;letter-spacing:.08em}
+  .tb-result{gap:12px;font-size:11px}
+  .more-cols{grid-template-columns:1fr}
+  .card{padding:12px 10px 6px}
+  #sheetBar{display:flex}
+  /* the controls panel becomes a bottom sheet: fixed, slid off-screen until open */
+  .controls{position:fixed;top:auto;left:0;right:0;bottom:0;z-index:60;margin:0;
+    max-height:78vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    border-radius:14px 14px 0 0;border-bottom:none;padding:14px 14px max(18px,env(safe-area-inset-bottom));
+    box-shadow:0 -8px 30px rgba(23,41,58,0.28);
+    transform:translateY(102%);visibility:hidden;transition:transform .28s ease,visibility 0s .28s}
+  .controls.open{transform:none;visibility:visible;transition:transform .28s ease}
+  .controls.scrolled{box-shadow:0 -8px 30px rgba(23,41,58,0.28);padding-top:14px;padding-bottom:max(18px,env(safe-area-inset-bottom))}
+  .ctl-head{position:sticky;top:-14px;background:var(--card);margin:-14px -14px 10px;padding:12px 14px;border-bottom:1px solid var(--grid);z-index:1}
+  .ctl-collapse{padding:8px 16px;min-height:40px}
+  .ctl-label{min-width:100%;padding-top:0;margin-bottom:4px}
+  .chips{gap:7px}
+  /* thumb-first targets (~44px) — rows wrap inside the scrollable sheet */
+  .chip{padding:11px 13px;font-size:12px}
+  .chip .dot{width:8px;height:8px}
+  .pill{padding:11px 15px;font-size:12.5px}
+  .chips.big .grpbtn{padding:11px 16px;font-size:12.5px}
+  .modebtn{padding:10px 13px;min-height:42px}
+  .axis-toggle button{padding:12px 13px}
+  #clsInput,.bandnum{padding:11px 12px;font-size:12.5px}
+  .clsadd,.bandrow{flex-wrap:wrap}
+  .more-row{padding:12px 8px}
+  .more-list{max-height:38vh}
+  select{padding:10px 8px}
+  #map{height:calc(min(118vw,72vh)*var(--map-scale))}
+  #dtf{height:80vw}
+  #race{height:96vw}
+  #xte,#sog{height:74vw}
+  table{min-width:600px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALIR 2025 — Around Long Island Regatta</title>
+<meta name="description" content="Around Long Island Regatta 2025 — 207 nm, NY Harbor to Hempstead Harbour. Fleet analysis.">
+<link rel="canonical" href="">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ALIR 2025 — Around Long Island Regatta">
+<meta property="og:description" content="ALIR 2025: the reach, the squall, the park — 43 finishers around Long Island.">
+<meta property="og:url" content="">
+<meta property="og:image" content="og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ALIR 2025 — Around Long Island Regatta">
+<meta name="twitter:description" content="ALIR 2025: the reach, the squall, the park — 43 finishers around Long Island.">
+<meta name="twitter:image" content="og.png">
+<link rel="icon" href="favicon.svg?v=3de5c5cecc" type="image/svg+xml">
+<link rel="stylesheet" href="tokens.css?v=3de5c5cecc">
+<link rel="stylesheet" href="styles.css?v=3de5c5cecc">
+<!-- DATA:FETCH — start the core payload download before the deferred scripts arrive -->
+<script>window.__CORE_FETCH=fetch('data/core.json?v=3de5c5cecc').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});</script>
+<!-- /DATA:FETCH -->
+<script src="app/helpers.js?v=3de5c5cecc" defer></script>
+<script src="app/tokens.js?v=3de5c5cecc" defer></script>
+<script src="app/core.js?v=3de5c5cecc" defer></script>
+<script src="app/charts/map.js?v=3de5c5cecc" defer></script>
+<script src="app/charts/dtf.js?v=3de5c5cecc" defer></script>
+<script src="app/charts/race.js?v=3de5c5cecc" defer></script>
+<script src="app/charts/xte.js?v=3de5c5cecc" defer></script>
+<script src="app/charts/sog.js?v=3de5c5cecc" defer></script>
+<script src="race/presentation.js?v=3de5c5cecc" defer></script>
+<script src="race/copy.js?v=3de5c5cecc" defer></script>
+<script src="race/modules/distspeed.js?v=3de5c5cecc" defer></script>
+<script src="race/modules/door.js?v=3de5c5cecc" defer></script>
+<script src="race/overlays/squall.js?v=3de5c5cecc" defer></script>
+<script src="race/overlays/courseline.js?v=3de5c5cecc" defer></script>
+<script src="vendor/plotly-basic-2.35.2.min.js" id="plotlyjs" defer></script>
+</head>
+<body>
+<div class="wrap">
+
+<header class="titleblock">
+  <div class="tb-eyebrow">Chart of the Race · Around Long Island Regatta 2025 · 24–26 July · 207 NM</div>
+  <h1><span class="mag">Daffodil</span> · <span style="color:#0E8A8A">Max</span> · and the finish door</h1>
+  <div class="tb-sub">New York Harbor, down the Narrows and out past Ambrose R“14”, the long ocean reach to Montauk, through Plum Gut, and a beat down a dying Sound to Glen Cove — where the race stopped being about speed and became about arrival time.</div>
+  <div class="tb-result"><span>ALIR Trophy <b>Max</b> · Pogo 50</span><span>Multihull line honors <b>Daffodil</b> · Corsair F31R (sole multihull)</span><span>Monohull line honors <b>Wahoo</b> · 24:11:49</span><span>Finishers <b>43 / 51</b> starters</span></div>
+  <div class="tzn">All times EDT. Finish times verified against the tracker (the published results carry EDT wall clock mislabeled as UTC — corrected here).</div>
+</header>
+
+<noscript>
+  <div class="appstate err">This dashboard is interactive and needs JavaScript to draw its charts. The underlying data is plain JSON in <a href="data/core.json">data/core.json</a> if you'd rather read it raw.</div>
+</noscript>
+
+<main>
+
+<div class="appstate" id="appstate" role="status">Loading the race record…</div>
+
+<section class="controls" id="controls" aria-label="Boat and overlay controls" hidden>
+  <div class="ctl-head">
+    <span class="ctl-title">Compare boats &amp; overlays</span>
+    <button type="button" class="ctl-collapse" id="ctlCollapse" aria-expanded="true">Hide controls ▲</button>
+  </div>
+  <div id="ctlBody">
+    <div class="ctl-row"><div class="ctl-label big">Groups</div><div class="chips big" id="grpbtns"></div></div>
+    <div class="ctl-row" id="filterRow"><div class="ctl-label">Filter</div><div class="chips" id="filterctl"></div></div>
+    <div class="ctl-row"><div class="ctl-label">Boats</div><div class="chips" id="chips"></div></div>
+    <div id="morePanel" style="display:none;margin:2px 0 10px;padding-top:10px;border-top:1px dashed var(--rule)"></div>
+    <div class="ctl-row"><div class="ctl-label">Overlays</div><div class="chips" id="overlays"></div></div>
+    <div class="ctl-row">
+      <div class="ctl-label">Time axis</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div class="axis-toggle" id="axisToggle">
+          <button type="button" data-ax="t">By clock time</button>
+          <button type="button" data-ax="d">By distance to finish</button>
+        </div>
+        <span class="ctl-hint">Sets the x-axis on the offset, speed, and won-and-lost charts. <b>Distance</b> lines every boat up on the same water; <b>clock</b> shows what was happening when. The squall band appears only on clock views — every boat met it at a different point on the course.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- phone-width only: the controls live in a bottom sheet behind this bar -->
+<div id="scrim" hidden></div>
+<button type="button" id="sheetBar" aria-controls="controls" aria-expanded="false" hidden>
+  <span class="dot" aria-hidden="true"></span><span id="sheetBarLabel">Boats &amp; overlays</span>
+</button>
+
+<section class="kpis" id="kpis" aria-label="Key results"></section>
+
+<section class="card">
+  <h2>The course</h2>
+  <div class="note" id="map_note">Fifty trackers, five-minute pings. The dashed magenta line is the scored course (207 nm by the SIs; routed here at 205.8) — its one mandatory mark is Ambrose Channel R“14”, lower left. 42 of 43 finishers entered the Sound through Plum Gut — <b>Yopo</b> alone took the Sluiceway.</div>
+  <div id="map" class="plot"></div>
+  <div class="tapnote" id="tap_map"></div>
+</section>
+
+<section class="card">
+  <div class="hd"><h2>The race</h2><span class="tools">x-axis: clock time</span></div>
+  <div class="note" id="dtf_note">Distance to the finish against the clock. The flat shelves on Friday night are real: the post-frontal calm parked the mid-fleet within sight of Glen Cove. The tinted band is the squall line crossing the Sound.</div>
+  <div id="dtf" class="plot"></div>
+  <div class="tapnote" id="tap_dtf"></div>
+</section>
+
+<section class="card">
+  <div class="hd">
+    <h2>Where the race was won and lost — vs <span id="refname" style="color:var(--magenta)"></span></h2>
+    <span class="tools">
+      <button type="button" class="modebtn" id="mode_h">Corrected (handicap)</button>
+      <button type="button" class="modebtn" id="mode_e">Elapsed (boat-for-boat)</button>
+      &nbsp;·&nbsp;
+      <button type="button" class="modebtn" id="view_p">Pace (min/100nm)</button>
+      <button type="button" class="modebtn" id="view_t">Total (min)</button>
+      &nbsp;·&nbsp; <label for="refsel">Reference</label> <select id="refsel"></select>
+    </span>
+  </div>
+  <div class="note" id="racenote"></div>
+  <div id="race" class="plot"></div>
+  <div class="tapnote" id="tap_race"></div>
+</section>
+
+<section class="card" id="sec_door" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="door" data-mount></div>
+  <div class="tapnote" id="tap_door"></div>
+</section>
+
+<section class="card" id="sec_distspeed" hidden>
+  <div class="hd"><h2></h2><span class="tools"><button type="button" class="modebtn" id="mtog_distspeed_e">Elapsed</button><button type="button" class="modebtn" id="mtog_distspeed_h">Corrected</button></span></div>
+  <div class="note"></div>
+  <div id="distspeed" data-mount></div>
+  <div class="tapnote" id="tap_distspeed"></div>
+</section>
+
+<div class="two">
+<section class="card">
+  <div class="hd"><h2>Offset from the course line</h2><span class="tools" id="xte_axnote"></span></div>
+  <div class="note" id="xte_note">Signed distance off the routed course. The south-shore spine of this course is drawn from the fleet's own sailed median, so large offsets here are sailing-angle choices, not errors — this is not an off-course meter.</div>
+  <div id="xte" class="plot"></div>
+  <div class="tapnote" id="tap_xte"></div>
+</section>
+<section class="card">
+  <div class="hd"><h2>Speed</h2><span class="tools"><button type="button" class="modebtn" id="sogm_s">SOG</button><button type="button" class="modebtn" id="sogm_v">VMC (toward finish)</button>&nbsp;·&nbsp;<span id="sog_axnote"></span></span></div>
+  <div class="note" id="sog_note">Speed over ground, smoothed on a 30-minute window. The race's fastest sustained sailing is the ocean reach — <span class="mag">Daffodil</span> peaks at 13.8 kt there, pacing boats 20 feet longer — and the slowest is Friday night off Glen Cove, where the mid-fleet drifts under 1 kt for hours. The tinted band on clock views is the squall: a two-minute, ~30 kt event a 5-minute tracker mostly records as the near-stops around it (crews dousing sail), not the gust itself.</div>
+  <div id="sog" class="plot"></div>
+  <div class="tapnote" id="tap_sog"></div>
+</section>
+</div>
+
+<section class="card">
+  <h2>Race log — every marked moment</h2>
+  <div class="note">Nine public entries, each source-labeled: verified analysis waypoints (the east turn, the reach, Montauk, the upwind Sound, line honors, Max and the door), the squall line from the station record, the squall on Daffodil from the owner's deck account (corroborated by buoy 44065), and the midnight anchor 175 yards from the line (Lenoble's published account, confirmed by the tracker).</div>
+  <div id="eventtable" style="max-height:520px;overflow-y:auto"></div>
+</section>
+
+</main>
+
+<footer class="foot">
+<h3>How to read this</h3>
+  <ul>
+  <li><b>Two focuses, no duel.</b> Daffodil (the only multihull entered; the owner crewed her) and Max (overall winner) are told in parallel — same water, same weather, different problems. Their curves are never a head-to-head.</li>
+  <li><b>The door, not the margin.</b> Max, Phantom and Wahoo finished within 4:50 corrected after 27 hours — inside the ~10-minute rating noise floor for a 207 nm time-on-distance race. The verifiable difference is timing: only three boats finished before the squall line entered the Sound, Max last among them by 80 minutes, hours before the post-frontal calm shut the last 15 nm.</li>
+  <li><b>Daffodil's race in one line:</b> fourth-fastest of 43 through the ocean reach (8¼ h where the fleet median was 12), a clean Montauk corner, then a trimaran's worst mode — a light-air beat down the Sound — and a shut door. Rumours of dismastings in the squall remain rumours: no track shows one, and no boat is named.</li>
+  </ul>
+  <h3>Sources &amp; method</h3>
+  <ul>
+  <li>YB tracker (race alir25) and YachtScoring event 50029, re-downloaded and verified identical to the July 2025 originals; official Sailing Instructions v1.3 for the course and the 207 nm scoring distance.</li>
+  <li>Weather evidence: NOAA buoys 44065/44025, Kings Point; NWS OKX event page for 25 July 2025; ERA5 reanalysis (model — the Montauk corner and central Sound had no working 2025 wind platform); NOAA current predictions for Plum Gut. Wind claims from model data say so.</li>
+  <li>Corrected times reproduce the official results exactly (time-on-distance, rating × 207 nm, verified for all 43 finishers). Distances-remaining are routed along the course polyline. Timezone verified by finish-line probe on five boats.</li>
+  </ul>
+  <div style="margin-top:10px;font-family:var(--mono);font-size:11px">Built from the race record · build 2026-07-23</div>
+</footer>
+
+</div>
+</body>
+</html>

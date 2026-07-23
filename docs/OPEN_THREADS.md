@@ -25,21 +25,15 @@ introduction).
   `module_canaries.upwind_excess` can drift between config and
   tests/regression.json unchecked. Fix: iterate whatever keys both sides
   carry instead of a hardcoded list.
-- **Weather-evidence acquisition (ALIR 2025 experiment)** (2026-07-23):
-  stage 0 landed NDBC stdmet + ERA5 point winds + CO-OPS current predictions
-  under `races/alir2025/raw/weather/` (provenance + scope guard in its
-  MANIFEST.md — evidence only, no pipeline numbers). If the layer earns its
-  keep by stage 3, bake it into `starter/acquisition/` + the skill's stage-0/1
-  references as a first-class optional source; the fetch commands are in the
-  manifest. Known gap either way: no 2025 observation platform in central LI
-  Sound (44017/44039/44040 dead) — park-zone wind is model-only.
-- **One pivot, two protagonists** (owner, 2026-07-23): ALIR 2025 has two
-  co-equal focus boats (Daffodil and Max) but `build_data.py` pivots
-  stats/groups on a single `client_boat`. The dual focus is currently carried by
-  `groups` (a `hero` key plus a `focus` key of equal visual weight), which may
-  be enough. Judge at stage 2/4 whether that shape is clunky in practice; if it
-  is, teach the engine to accept multiple pivots rather than bending the race
-  config around one. Related: the hero-less Tier-1 thread below.
+- **Weather-evidence acquisition — promotion trigger FIRED** (2026-07-23):
+  the ALIR 2025 layer earned its keep — it corroborated the owner's squall
+  account (31.9 kt observed vs ~30 felt), timed the squall line across three
+  stations, explained the park via the forecast gradient collapse, and fed the
+  door narrative. Follow-up owed: bake weather acquisition into
+  `starter/acquisition/` + the skill's stage-0/1 references as a first-class
+  optional source (fetch commands + verified-coverage ritual are in
+  `races/alir2025/raw/weather/MANIFEST.md`; include the negative-station
+  checks — MTKN6 existed but was empty). Spawned as its own session task.
 - **Promote per-boat track trimming into `starter/`** (2026-07-23): the racing-
   window trim is now a stage-0 procedure step in the skill, with
   `races/alir2025/trim_tracks.py` as the reference implementation (dedup +

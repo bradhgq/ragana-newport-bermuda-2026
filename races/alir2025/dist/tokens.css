@@ -1,0 +1,17 @@
+/* Design tokens — the chart-paper / NOAA-chart identity (RETROSPECTIVE §3).
+   Race-agnostic except --magenta, the HERO ACCENT: per-boat re-skin = change
+   this + hero.color in presentation.js (they must match; Plotly can't read
+   CSS vars). Other Plotly copies live in app/tokens.js — keep in sync:
+     --ink2 4C6274 = AXFONT.color (AA-checked 4.5:1+ on white and #F3F7F8)
+     --rule B9CBD4 = GAX linecolor/zeroline
+   Palette roles: --water page ground · --paper title block · --card charts ·
+   --ink primary/headings · --ink2 muted · --grid hairlines · --rule dashed
+   rules/chip borders · --gold/--green semantic (watch bands / ok badges).
+   Type: system stacks only; --mono for coordinates/timestamps/labels
+   (letter-spacing .08–.22em, uppercase labels), --sans for body. */
+:root{
+  --water:#EEF4F6; --paper:#FBFCFB; --card:#FFFFFF; --ink:#17293A; --ink2:#4C6274;
+  --grid:#D9E4E9; --magenta:#C2187E; --gold:#B98A00; --green:#2E7D4F; --rule:#B9CBD4;
+  --mono:"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+}

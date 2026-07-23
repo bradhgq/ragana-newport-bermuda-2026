@@ -1,4 +1,4 @@
-# stage-4 — Review-Round Log — ALIR 2025 — DRAFT (owner round pending; >=1 owner round is mandatory)
+# stage-4 — Review-Round Log — ALIR 2025 — CONFIRMED (four rounds; approved to productionize)
 rounds: 4                        # 1 self-review · 2 owner (7 items) · 3 owner (map/milestones/speed) · 4 owner (chip row)
 defects:
   - found: "door module drew 6 dots on the live page vs 43 in the harness — it read t/dtf series,
