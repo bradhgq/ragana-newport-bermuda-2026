@@ -3,7 +3,8 @@ name: ci
 on: [push, pull_request]
 
 jobs:
-  nb2026:
+  # engine unit suites — race-independent, run once
+  engine:
     runs-on: ubuntu-latest
     env:
       TZ: America/New_York   # I1: the suite must run under a non-UTC zone
@@ -11,32 +12,42 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
-      - uses: actions/setup-node@v4
-        with: { node-version: '22' }
       - run: pip install -r starter/requirements.txt
-
-      # engine tests import the pipeline package (starter/ on sys.path) — run from starter/
       - name: Acquisition decoder regression (offline fixture — network paths stay out of CI)
         working-directory: starter
         run: python3 -m unittest discover -s acquisition/tests
-
       - name: Routed distance-remaining (marks courses — synthetic geometry suite)
         working-directory: starter
         run: python3 -m unittest tests.test_route
 
-      # build/harness take a race dir; races/ live at the repo root now
-      - name: Build data payload from the raw tracker export
-        run: python3 starter/pipeline/build_data.py races/nb2026/config.yaml
+  # every directory under races/ is a race; future races join CI automatically
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      races: ${{ steps.list.outputs.races }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: list
+        run: echo "races=$(ls -d races/*/ | xargs -n1 basename | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"
 
-      - name: Snapshot compare — semantic parity vs the snapshot reference (tie-exempt)
-        run: |
-          python3 starter/pipeline/compare_data.py \
-            races/nb2026/out/dashboard_data.json \
-            races/nb2026/snapshot/dashboard_data.json \
-            --ties races/nb2026/out/rounding_ties.json
-
-      - name: Build the dashboard (runs the regression harness as its gate)
-        run: python3 starter/shell/build.py races/nb2026
-
-      - name: Regression harness, explicitly, under UTC as well
-        run: TZ=UTC node starter/tests/test_dashboard.js races/nb2026
+  race:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        race: ${{ fromJson(needs.discover.outputs.races) }}
+    env:
+      TZ: America/New_York   # the chain runs the harness under this AND TZ=UTC
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: pip install -r starter/requirements.txt
+      # the one-command chain: build_data → race postprocess → harness-gated
+      # shell build → harness under TZ=UTC → snapshot compare (tie-exempt).
+      # Piecemeal steps are exactly the stale-standalone trap the wrapper kills.
+      - name: Full chain (build → harness both TZs → snapshot compare)
+        run: python3 starter/build_race.py races/${{ matrix.race }}
