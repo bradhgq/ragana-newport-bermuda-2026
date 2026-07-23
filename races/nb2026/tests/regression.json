@@ -71,7 +71,7 @@
     "recon_contains": "Coast Guard",
     "absent": "illegible"
   },
-  "expected_checks": 19,
+  "expected_checks": 28,
   "vmc_caption": [
     "not wind-VMG",
     "boatspeed"

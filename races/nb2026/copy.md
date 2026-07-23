@@ -98,3 +98,48 @@ Built from the 2026 race record · times EDT (UTC−4) · build `__BUILT__`
   rhumb-offset and speed charts.
 - **distspeed hover/labels** now write the unit as `kts` (page convention;
   they read `kt`).
+
+## round-3 opinion layer (owner-directed 2026-07-15 — tier-1 elevation)
+
+Three authored panels were added; **every claim is an existing synthesized
+conclusion** (the five insight events in `events.yaml` + the frozen section
+copy above). No new analysis number was authored; the harness machine-checks
+the sourcing (verdict cards ↔ insight events; lesson cites ↔ log timestamps;
+decomposition bars ↔ official margins).
+
+- **verdict** — "The verdict — where we think the race was won and lost":
+  five cards restating the five insight events, each linking to its evidence
+  chart. Slots in `copy.js` under `verdict.{title,note,items}`.
+- **phasegap** — "Where the minutes went — phase by phase": caption for the
+  decomposition waterfall (runtime slots {ref}/{mode}/{margin}; the numbers
+  are derived from the payload at render time, never written into copy).
+- **lessons** — "What we'd do differently — the lessons, as logged": the
+  journal's own lessons grouped as a next-race checklist, each item citing its
+  log timestamp. Slots under `lessons.{title,note,groups}`.
+
+## round-3b: Sebastian's five takeaways (owner-provided 2026-07-16)
+
+Sebastian's five NBR'26 takeaways arrived verbatim from the owner and lead the
+lessons section, **each paired with a chart zoomed into the moment that taught
+it** (modules `tw{helm,reef,night,east,park}.js`; copy slots under
+`takeaways.<id>.{title,note}`). His wording is kept except one edit, marked in
+the lessons intro: takeaway 4's "VMG to Waypoint" reads as *closing speed on
+the waypoint (VMC)* — I18, the tracker carries no wind data.
+
+1. **One person in charge, others provide input** → `twhelm`: VMC, Monday
+   12:00–22:00, tactics calls pinned (the 14:00 three-way helm split).
+2. **Reef early, shake late** → `twreef`: SOG through the heavy running,
+   all five sail calls pinned (the 10:30 "late, reactive" 2nd reef).
+3. **Minimize sail changes shorthanded / at night** → `twnight`: elapsed gap
+   to Christopher Dragon across the chaos window (DTF 620→395), night calls
+   pinned; the 90–130-min price is the existing cost-of-chaos insight.
+4. **Minimize distance sailed unless it pays dividends** → `tweast`: rhumb
+   offset DTF 320→60 — the Sunday beat pays, the park presents the bill
+   (existing insights 2 and 4).
+5. **Practice light-wind sailing** → `twpark`: t = 100 nm ÷ v drawn as a
+   curve with each selected boat's own park traversal on it; the two
+   "+1 kt saves…" brackets are the same division evaluated at 3.5 and
+   5.5 kts, computed at render time (arithmetic, not authored numbers).
+
+The lessons checklist keeps everything logged; its "Sail handling" reefing and
+night-change items now point at takeaways 2–3 (charts carry those stories).

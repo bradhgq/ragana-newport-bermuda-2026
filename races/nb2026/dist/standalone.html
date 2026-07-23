@@ -17,7 +17,7 @@
 <meta name="twitter:title" content="RAGANA · Newport Bermuda 2026 · Race Analysis">
 <meta name="twitter:description" content="A crew's-eye reconstruction of the 2026 Newport Bermuda Race from the YB tracker and the nav log.">
 <meta name="twitter:image" content="https://hgq.fyi/ragana-newport-bermuda-2026/og.png">
-<link rel="icon" href="favicon.svg?v=5055081eb8" type="image/svg+xml">
+<link rel="icon" href="favicon.svg?v=590c270065" type="image/svg+xml">
 <style>
 /* Design tokens — the chart-paper / NOAA-chart identity (RETROSPECTIVE §3).
    Race-agnostic except --magenta, the HERO ACCENT: per-boat re-skin = change
@@ -255,6 +255,14 @@ kbd{font-family:var(--mono);background:#EDF2F4;border-radius:3px;padding:0 5px;f
 
 
 
+
+
+
+
+
+
+
+
 </head>
 <body>
 <div class="wrap">
@@ -307,6 +315,13 @@ kbd{font-family:var(--mono);background:#EDF2F4;border-radius:3px;padding:0 5px;f
 
 <section class="kpis" id="kpis" aria-label="Key results"></section>
 
+<section class="card" id="sec_verdict" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="verdict" data-mount></div>
+  <div class="tapnote" id="tap_verdict"></div>
+</section>
+
 <section class="card">
   <h2>The course</h2>
   <div class="note" id="map_note">Every selected boat's track, the rhumb line, and the Gulf Stream band as RAGANA measured it (74°F entry 17:21 Sat → 80°F core → 75°F exit 05:01 Sun, from the nav log). It's a plain lat/lon plot stretched to fill the width — positions are exact but the aspect isn't to scale. Grey ghosts are the tracked fleet. Hover — or tap — anything.</div>
@@ -336,6 +351,13 @@ kbd{font-family:var(--mono);background:#EDF2F4;border-radius:3px;padding:0 5px;f
   <div class="note" id="racenote"></div>
   <div id="race" class="plot"></div>
   <div class="tapnote" id="tap_race"></div>
+</section>
+
+<section class="card" id="sec_phasegap" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="phasegap" data-mount></div>
+  <div class="tapnote" id="tap_phasegap"></div>
 </section>
 
 <section class="card" id="sec_finstrip" hidden>
@@ -378,6 +400,48 @@ kbd{font-family:var(--mono);background:#EDF2F4;border-radius:3px;padding:0 5px;f
   <h2>Race log — every marked moment</h2>
   <div class="note">Everything driving the markers and shading above, in order, with the boat's distance-to-finish at each point. Includes the analysis notes (the "insight" rows). Filter by category in the Overlays row.</div>
   <div id="eventtable" style="max-height:520px;overflow-y:auto"></div>
+</section>
+
+<section class="card" id="sec_lessons" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="lessons" data-mount></div>
+  <div class="tapnote" id="tap_lessons"></div>
+</section>
+
+<section class="card" id="sec_twhelm" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="twhelm" data-mount></div>
+  <div class="tapnote" id="tap_twhelm"></div>
+</section>
+
+<section class="card" id="sec_twreef" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="twreef" data-mount></div>
+  <div class="tapnote" id="tap_twreef"></div>
+</section>
+
+<section class="card" id="sec_twnight" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="twnight" data-mount></div>
+  <div class="tapnote" id="tap_twnight"></div>
+</section>
+
+<section class="card" id="sec_tweast" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="tweast" data-mount></div>
+  <div class="tapnote" id="tap_tweast"></div>
+</section>
+
+<section class="card" id="sec_twpark" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="twpark" data-mount></div>
+  <div class="tapnote" id="tap_twpark"></div>
 </section>
 
 <section class="card" id="sec_navlog" hidden>
@@ -560,7 +624,7 @@ const plotlyReady = new Promise(res => {
   else go();
 });
 
-function dataURL(name) { return 'data/' + name + '?v=5055081eb8'; }
+function dataURL(name) { return 'data/' + name + '?v=590c270065'; }
 async function loadJSON(name) {
   const r = await fetch(dataURL(name));
   if (!r.ok) throw new Error(name + ': HTTP ' + r.status);
@@ -1723,8 +1787,13 @@ window.__RACE_CONFIG__ = {
   controls: {                    // overlay-pill row order after the event categories (app.js:275-279)
     pills: ['navlog', '@ghosts', 'gulfstream', '@rhumb', 'watches'],
   },
-  layout: ['map', 'dtf', 'race', '@finstrip', '@distspeed', 'two:xte,sog', '@parkfair', 'events', '@navlog'],
-  modules: ['parkfair', 'finstrip', 'distspeed', 'navlog'],
+  // round 3 (tier-1 opinion layer, owner 2026-07-15): verdict leads the page,
+  // the phase decomposition rides directly under the won/lost chart it cuts,
+  // lessons close the story after the log
+  layout: ['@verdict', 'map', 'dtf', 'race', '@phasegap', '@finstrip', '@distspeed', 'two:xte,sog', '@parkfair', 'events', '@lessons',
+           '@twhelm', '@twreef', '@twnight', '@tweast', '@twpark', '@navlog'],
+  modules: ['verdict', 'phasegap', 'parkfair', 'finstrip', 'distspeed', 'navlog', 'lessons',
+            'twhelm', 'twreef', 'twnight', 'tweast', 'twpark'],
   overlays: ['gulfstream', 'watches'],
 };
 
@@ -1781,6 +1850,108 @@ window.__COPY__ = {
     xNote: 'right of the dashed line is miles beyond the rhumb',
   },
   controlsHint: 'Sets the x-axis on the rhumb-offset, speed, and won-and-lost charts. <b>Distance</b> lines every boat up on the same water; <b>clock</b> shows what was happening when.',
+  // ── round 3: the tier-1 opinion layer (owner-directed 2026-07-15). Every
+  // claim below is an existing synthesized conclusion: the five verdict cards
+  // restate the five insight events (events.yaml, source: analysis) and the
+  // park/xte/vmc section copy; the lessons restate what the journal logged in
+  // the moment (each item carries its log timestamp, machine-checked against
+  // D.events by the harness). No new analysis numbers were authored here. ──
+  verdict: {
+    title: 'The verdict — where we think the race was won and lost',
+    note: 'The analysis, distilled to five calls. These are the same conclusions pinned as <span style="color:var(--magenta)">◆</span> insight markers on the charts below — this panel just says them plainly. Each card links to the chart that carries its evidence; the opinions are ours, the numbers are the record\'s.',
+    items: [
+      { k: 'Fri night – Sat · heavy running', c: '#B23A2E',
+        t: 'The race was lost in the chaos, not in the park.',
+        body: 'RAGANA bled roughly 90–130 minutes to her rating twin across Friday night and Saturday — the window with the un-carded 01:45 all-hands sail change, the reactive reefs, and the lost sheet. Against the class winner Gesture, most of the final deficit accrued here.',
+        link: { href: '#race', label: 'See the won-and-lost chart' },
+        src: 'INSIGHT · The cost of chaos' },
+      { k: 'Sunday · the beat', c: '#0E7C7B',
+        t: 'The Sunday beat is what this boat is for.',
+        body: 'From 265 to 180 nm to go, the east lane gained ~20 minutes per 10 nm on Christopher Dragon\'s west lane — continuously, for 80 nm — flipping a 94-minute deficit into a 75-minute lead. The gain was boatspeed at equal distance sailed (7.6 vs 6.2 kt on the rating twin), not shorter routing: upwind in 8–11 kts of flat water is the design sweet spot.',
+        link: { href: '#race', label: 'See the won-and-lost chart' },
+        src: 'INSIGHT · The Sunday beat paid' },
+      { k: 'Monday · the park', c: '#4C6274',
+        t: 'The park was an honest penalty — two to four hours, not the race.',
+        body: 'Measured fairly — each boat\'s own run through the same water — everyone in the comparison set parked (16–38% of each traversal under 4 kts) and the whole spread was 5.5 hours. RAGANA\'s 27.9 h was second-slowest in that set: the price of the most-east lane, with the speedo failure and the sail repair both landing inside the dead core.',
+        link: { href: '#sec_parkfair', label: 'See the park table' },
+        src: 'INSIGHT · Everyone parked' },
+      { k: 'The lanes', c: '#7D3C98',
+        t: 'Lane and arrival timing mattered together — east wasn\'t simply wrong.',
+        body: 'Within the cohort entering the light air the same evening, boats nearer the rhumb got through it 1.5–4 hours faster (Carina: same entry hour, ~10 nm further west, 3.7 h quicker). Yet the podium won from the east — as lower-rated boats they arrived 3–5 hours later, when the Monday-evening rebuild was closer.',
+        link: { href: '#xte', label: 'See the rhumb-offset chart' },
+        src: 'INSIGHT · Position × timing' },
+      { k: 'The back half', c: '#C2187E',
+        t: 'The back half was sailed well — 9 minutes short of a 159-minute comeback.',
+        body: 'RAGANA closed Hissy Fit II from 159 minutes behind at 400 nm to go to just 9 minutes at 20 to go, and lost to her by 2m15s corrected. The recovery was real; it started from the hole dug on Saturday.',
+        link: { href: '#dtf', label: 'See the race overview' },
+        src: 'INSIGHT · The near-catch' },
+    ],
+  },
+  phasegap: {
+    note: 'Each bar is the {mode} time <span class="mag">RAGANA</span> gained (teal, downward) or lost (rust, upward) against {ref} inside each phase — the same milestone math as the chart above, cut at the six phase boundaries. The running total ends on the official margin ({margin} min) by construction: a decomposition that doesn\'t reconcile to the scoreboard is a story, not an analysis. Change the reference or switch corrected/elapsed above — the bars follow.',
+  },
+  lessons: {
+    title: 'What we\'d do differently — Sebastian\'s five takeaways, then the checklist',
+    note: 'Sebastian\'s five takeaways from the race lead this section — each paired below with a chart zoomed into the moment that taught it (his wording, lightly edited to this page\'s VMC terminology; the tracker carries no wind data). The checklist items were logged during the race, not reconstructed after it — the race log above carries each one at the cited time.',
+    // the five takeaway cards follow this one in the layout; jump links render
+    // from this list (href = the paired chart's div id)
+    fiveUp: [
+      { n: 1, href: '#twhelm', txt: 'One person in charge, others provide input' },
+      { n: 2, href: '#twreef', txt: 'Reef early, shake late' },
+      { n: 3, href: '#twnight', txt: 'Minimize sail changes when shorthanded — especially at night' },
+      { n: 4, href: '#tweast', txt: 'Minimize distance sailed unless it pays dividends' },
+      { n: 5, href: '#twpark', txt: 'Practice light-wind sailing' },
+    ],
+    groups: [
+      { head: 'Before the start', items: [
+        { txt: 'Build the maneuver card and walk the boat as a full crew — the 01:45 all-hands change was coordinated by yelling because no card existed.', cite: 'Sat 01:45', t: '2026-06-20 01:45' },
+        { txt: 'Pre-medicate for seasickness — cheap insurance; two of five felt Friday\'s sea state.', cite: 'Fri 16:00', t: '2026-06-19 16:00' },
+        { txt: 'Vet the galley\'s electrolyte mixes for artificial sweeteners.', cite: 'Fri 16:00', t: '2026-06-19 16:00' },
+        { txt: 'Drill the whole satcomm workflow — GRIBs, phone, every app — before the dock.', cite: 'Sun 18:00', t: '2026-06-21 18:00' },
+        { txt: 'Foulies on before the start, not after the first wave.', cite: 'Fri 14:20', t: '2026-06-19 14:20' },
+      ]},
+      { head: 'Sail handling', items: [
+        { txt: 'Stopper knots on every sheet end — a bare end cost the Reacher a douse instead of a furl.', cite: 'Sat 13:30', t: '2026-06-20 13:30' },
+        { txt: 'Reefing and night changes: see takeaways 2 and 3 below — the charts carry the story.', cite: 'Sat 01:45', t: '2026-06-20 01:45' },
+      ]},
+      { head: 'Systems', items: [
+        { txt: 'Charge on a schedule, not on memory — the house bank died at 01:00 and took every instrument with it.', cite: 'Sun 01:00', t: '2026-06-21 01:00' },
+        { txt: 'Build display fallback profiles (including a no-boatspeed page) and helm hot-keys before the race needs them.', cite: 'Mon 11:45', t: '2026-06-22 11:45' },
+        { txt: 'GPS speed is the failover — steering to SOG worked the moment the paddlewheel quit.', cite: 'Mon 02:45', t: '2026-06-22 02:45' },
+      ]},
+      { head: 'Crew & rest', items: [
+        { txt: 'Bank rest in the calm windows — the midday recovery stretch paid for the light-air night that followed.', cite: 'Sun 12:00', t: '2026-06-21 12:00' },
+        { txt: 'Watch pairs covered for the unwell without drama — keep the flexible-extension norm.', cite: 'Sat 06:00', t: '2026-06-20 06:00' },
+      ]},
+    ],
+  },
+  // ── Sebastian's five takeaways (owner-provided 2026-07-16), each the title
+  // of a zoomed chart module (modules/tw*.js). The notes restate his rules and
+  // the record's EXISTING claims (insight events / section copy) — no new
+  // analysis numbers; chart-derived values (the t=100/v curve) are arithmetic
+  // computed at render time. ──
+  takeaways: {
+    twhelm: {
+      title: 'Takeaway 1 · One person in charge, others provide input',
+      note: 'Monday afternoon, 130 nm out, the log shows the opposite of Sebastian\'s rule: a <b>three-way helm split</b> (14:00) — closing speed, boat speed, and layline, each helm steering their own idea while the fleet visibly sailed higher. Steve committed to the layline at 16:45. The chart zooms into that afternoon: VMC toward the finish for RAGANA and the boats around her, with the log\'s tactics calls pinned. Dips below zero are real — moments sailing away from Bermuda.',
+    },
+    twreef: {
+      title: 'Takeaway 2 · Reef early, shake late',
+      note: 'Saturday is the case study. The first reef went in at the 01:45 all-hands; the <b>2nd reef went in late and reactive</b> at 10:30 — after the eased main had chafed a visible mark into itself at the first spreader — and most of Brad\'s day was broach management on the vang and main. The chart zooms into the heavy running: GPS speed with every sail call pinned, from the midnight all-hands to shaking the reef back out at 18:30.',
+    },
+    twnight: {
+      title: 'Takeaway 3 · Minimize sail changes when shorthanded — especially at night',
+      note: 'The 01:45 all-hands reef-plus-Reacher was coordinated by yelling and relay — no maneuver card, confusion over halyard and sheets, two crew on the foredeck at night. The analysis priced the whole window: <b>roughly 90–130 minutes bled to the rating twin across Friday night and Saturday</b>, and against the class winner most of the final deficit accrued here — not in the light air. The chart zooms the boat-for-boat gap to Christopher Dragon through exactly that stretch, with the night\'s calls pinned where they happened.',
+    },
+    tweast: {
+      title: 'Takeaway 4 · Minimize distance sailed unless it pays dividends',
+      note: 'Sebastian\'s rule is about leaving the rhumb line at the cost of closing speed on the waypoint — and RAGANA bought <b>52 extra miles</b>, most of them east. This chart shows both sides of that bet on one axis. The Sunday beat: the east lane flipped a 94-minute deficit into a 75-minute lead over 80 nm. The park: among boats entering the light air the same evening, the ones nearer the rhumb got through 1.5–4 hours faster. The bet paid, then charged interest.',
+    },
+    twpark: {
+      title: 'Takeaway 5 · Practice light-wind sailing',
+      note: 'Sebastian\'s arithmetic: <b>an extra knot at 2 kts is worth roughly three times an extra knot at 6</b>. The curve below is that arithmetic drawn — the time to cross the park\'s 100 nm at a given made-good speed, pure division, no model. The dots are the boats you\'ve selected, placed by their own traversal (same fair basis as the park table). At the slow end of the curve an extra knot returns hours, not minutes.',
+    },
+  },
   pills: { ghosts: 'Ghosts', rhumb: 'Rhumb line' },
   filters: {
     noSuchClass: 'No class “{x}” in the record.',
@@ -1811,6 +1982,149 @@ window.__COPY__ = {
   </ul>
   <div style="margin-top:10px;font-family:var(--mono);font-size:11px">Built from the 2026 race record · times EDT (UTC−4) · build 2026-07-16</div>`,
 };
+
+</script>
+<script>
+/* Verdict panel (round 3 — the tier-1 opinion layer, owner-directed
+   2026-07-15): the analysis conclusions, stated as conclusions. Every card is
+   an existing synthesized claim — the same claims pinned as insight markers on
+   the charts — surfaced from COPY.verdict; this module is pure presentation
+   and carries NO narrative of its own (copy discipline: claims live in
+   copy.js/copy.md, sourced from events.yaml's insight rows). Each card links
+   to the chart that shows its evidence. */
+"use strict";
+
+registerModule({
+  id: 'verdict',
+  deps: [],   // static — authored copy, renders once at boot
+  section: {
+    kind: 'html',
+    title: '',   // set from COPY.verdict.title at build (copy owns the words)
+    note: '',
+  },
+  build(ctx) {
+    const v = ctx.copy && ctx.copy.verdict;
+    if (!ctx.el || !v) return;
+    const card = typeof ctx.el.closest === 'function' ? ctx.el.closest('.card') : null;
+    if (card) {
+      const h2 = card.querySelector('h2'); if (h2) h2.innerHTML = v.title;
+      const note = card.querySelector('.note'); if (note) note.innerHTML = v.note;
+    }
+    ctx.el.innerHTML =
+      `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;margin-top:10px">` +
+      v.items.map(it =>
+        `<div style="border:1px solid var(--grid);border-left:3px solid ${it.c || 'var(--magenta)'};border-radius:6px;padding:12px 14px;background:#FDFEFD">
+           <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)">${it.k}</div>
+           <div style="font-weight:700;font-size:14.5px;margin:5px 0 6px;color:var(--ink)">${it.t}</div>
+           <div style="font-size:12.5px;line-height:1.5;color:var(--ink)">${it.body}</div>
+           <a href="${it.link.href}" style="display:inline-block;margin-top:8px;font-family:var(--mono);font-size:10.5px;color:var(--magenta);text-decoration:none">${it.link.label} ↓</a>
+         </div>`).join('') +
+      `</div>`;
+  },
+});
+
+</script>
+<script>
+/* Phase decomposition (round 3 — the tier-1 opinion layer): where the minutes
+   went, phase by phase, vs the selected reference. A waterfall over the same
+   milestone math as the won/lost chart (race.js), cut at the authored phase
+   boundaries (CFG.phases): each bar = the corrected|elapsed minutes gained or
+   lost inside that phase; the running total ends EXACTLY on the official
+   finish margin (I2 endpoints), so the decomposition reconciles to the
+   scoreboard by construction — doctrine gate 5 ("loss decomposition is
+   benchmark-dependent... arithmetic reconciles to the official delta") as a
+   chart, for ANY reference the reader picks. Every number is derived at
+   runtime from the shipped payload; nothing here is authored. */
+"use strict";
+
+registerModule({
+  id: 'phasegap',
+  deps: ['race'],   // follows the reference select and the corrected|elapsed mode
+  section: {
+    kind: 'plot',
+    height: 'min(380px, 88vw)',
+    title: 'Where the minutes went — phase by phase',
+    note: '',   // per-mode caption from COPY.phasegap (slots {ref}/{mode}/{margin})
+  },
+  build(ctx) {
+    const { D, S, h, cfg } = ctx, hero = cfg.hero.name;
+    const pgCopy = (ctx.copy && ctx.copy.phasegap) || {};
+    const heroB = D.boats[hero], refB = D.boats[S.ref];
+    const corrected = S.raceMode === 'h';
+    const key = corrected ? 'corr' : 'el';
+    if (!refB || !refB.meta[key] || !heroB.meta[key] || !h.hasTrack(S.ref)) return null;
+    const heroTcf = heroB.meta.tcf || 1, refTcf = refB.meta.tcf || 1;
+    const h0 = h.startOf(heroB), r0 = h.startOf(refB);
+
+    // gap vs ref at a DTF milestone — identical math to race.js's trace loop
+    const gapAt = m => {
+      const tH = h.hitTime(heroB, m), tR = h.hitTime(refB, m);
+      if (tH == null || tR == null) return null;
+      return corrected ? ((tH - h0) * heroTcf - (tR - r0) * refTcf) / 60
+                       : ((tH - h0) - (tR - r0)) / 60;
+    };
+    // official finish margin — exact endpoints, never the last tracker point (I2)
+    const margin = (h.parseDur(heroB.meta[key]) - h.parseDur(refB.meta[key])) / 60;
+
+    // boundary values: 0 at the gun (start-sequence offsets are removed, so the
+    // gap is zero by construction), gapAt() at interior phase edges, the
+    // official margin at the finish
+    const phases = cfg.phases;
+    const bounds = phases.map(([a]) => a).concat([0]);
+    const vals = bounds.map((m, i) =>
+      i === 0 ? 0 : i === bounds.length - 1 ? margin : gapAt(m));
+
+    const labels = phases.map(p => p[2]);
+    // full precision in the geometry — rounding per bar would accumulate and
+    // break the exact reconciliation; labels round for display only
+    const bars = phases.map((p, i) =>
+      (vals[i] == null || vals[i + 1] == null) ? null : vals[i + 1] - vals[i]);
+    const bases = phases.map((p, i) => vals[i]);
+    const GAIN = '#0E7C7B', LOSS = '#B23A2E';
+
+    const traces = [{
+      type: 'bar', x: labels, y: bars, base: bases,
+      marker: { color: bars.map(b => (b == null || b > 0) ? LOSS : GAIN), opacity: .85,
+                line: { width: 1, color: '#fff' } },
+      text: bars.map(b => b == null ? '' : (b > 0 ? '+' : '') + b.toFixed(1)),
+      textposition: 'outside', textfont: { ...h.AXFONT, size: 10 },
+      hovertext: phases.map((p, i) => bars[i] == null ? '' :
+        `${p[2]} (DTF ${p[0]}→${p[1]}) · ${bars[i] > 0 ? 'lost ' + bars[i].toFixed(1) : 'gained ' + (-bars[i]).toFixed(1)} min vs ${S.ref}` +
+        ` · running total ${vals[i + 1] >= 0 ? '+' : ''}${vals[i + 1].toFixed(1)}`),
+      hoverinfo: 'text', showlegend: false,
+    }];
+
+    const shapes = [
+      { type: 'line', xref: 'paper', yref: 'y', x0: 0, x1: 1, y0: 0, y1: 0,
+        line: { color: '#B9CBD4', width: 1 } },
+      // the reconciliation line: the official margin the bars must land on
+      { type: 'line', xref: 'paper', yref: 'y', x0: 0, x1: 1, y0: margin, y1: margin,
+        line: { color: cfg.hero.color, width: 1, dash: 'dash' }, opacity: .65 }];
+    // label sits at the LEFT end of the dashed margin line — the running total
+    // only reaches it at the right edge, so the left side is always clear
+    const ann = [{ x: 0, y: margin, xref: 'paper', yref: 'y', xanchor: 'left',
+      yanchor: margin >= 0 ? 'bottom' : 'top',
+      text: `official margin ${margin >= 0 ? '+' : ''}${margin.toFixed(1)} min — the bars sum to this`,
+      showarrow: false, font: { ...h.AXFONT, size: 9, color: cfg.hero.color } }];
+
+    // caption: authored copy with runtime slots (the numbers are derived here,
+    // never written into the copy)
+    const card = ctx.el && typeof ctx.el.closest === 'function' ? ctx.el.closest('.card') : null;
+    const noteEl = card && card.querySelector('.note');
+    if (noteEl && pgCopy.note) noteEl.innerHTML = pgCopy.note
+      .replace(/\{ref\}/g, S.ref)
+      .replace('{mode}', corrected ? 'corrected' : 'elapsed')
+      .replace('{margin}', `${margin >= 0 ? '+' : ''}${margin.toFixed(1)}`);
+
+    const layout = { ...h.BASE(), shapes, annotations: ann, showlegend: false,
+      margin: { ...h.BASE().margin, t: 24, b: h.narrow() ? 90 : 56 },
+      xaxis: { ...h.GAX, tickfont: { ...h.AXFONT, size: h.narrow() ? 7.5 : 9 },
+               tickangle: h.narrow() ? 35 : 0 },
+      yaxis: { ...h.GAX,
+        title: { text: `Minutes vs ${S.ref} — running total (+ = behind)`, font: h.AXFONT } } };
+    return { traces, layout };
+  },
+});
 
 </script>
 <script>
@@ -2082,6 +2396,378 @@ registerOverlay({
       marker: { symbol: 'cross-thin', size: 10, color: '#C0392B', line: { width: 1.4, color: '#C0392B' } },
       text: D.recon.map(r => r.temp ? r.temp + '°' : ''), textposition: 'middle right', textfont: { size: 10, color: '#C0392B', family: 'SF Mono, Menlo, monospace' },
       name: 'Nav log + water temp', hovertext: D.recon.map(r => h.wrapText(`Log ${r.t} (true ${r.matched_edt}) · ${r.log[0]}, ${r.log[1]}${r.temp ? ' · ' + r.temp + '°F' : ''} — ${r.d} nm from tracker`)), hoverinfo: 'text' }];
+  },
+});
+
+</script>
+<script>
+/* Lessons panel (round 3 — the tier-1 opinion layer): the race's logged
+   lessons, grouped as a next-race checklist. Every item was logged in the
+   moment and lives in the race log (events.yaml) — each cites its log
+   timestamp. This module is pure presentation over COPY.lessons; it authors
+   nothing (copy discipline). */
+"use strict";
+
+registerModule({
+  id: 'lessons',
+  deps: [],   // static — authored copy, renders once at boot
+  section: {
+    kind: 'html',
+    title: '',   // set from COPY.lessons.title at build
+    note: '',
+  },
+  build(ctx) {
+    const L = ctx.copy && ctx.copy.lessons;
+    if (!ctx.el || !L) return;
+    const card = typeof ctx.el.closest === 'function' ? ctx.el.closest('.card') : null;
+    if (card) {
+      const h2 = card.querySelector('h2'); if (h2) h2.innerHTML = L.title;
+      const note = card.querySelector('.note'); if (note) note.innerHTML = L.note;
+    }
+    // Sebastian's five, as jump links to their paired charts (below this card)
+    const five = !L.fiveUp ? '' :
+      `<ol style="margin:12px 0 2px;padding-left:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px 24px">` +
+      L.fiveUp.map(f =>
+        `<li style="font-size:13px;line-height:1.55"><a href="${f.href}" style="color:var(--ink);text-decoration:none;font-weight:600">${f.txt}</a>
+           <a href="${f.href}" style="font-family:var(--mono);font-size:10px;color:var(--magenta);text-decoration:none;white-space:nowrap"> chart ↓</a></li>`).join('') +
+      `</ol><div style="border-bottom:1px solid var(--grid);margin:12px 0 2px"></div>`;
+    ctx.el.innerHTML = five +
+      `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:10px">` +
+      L.groups.map(g =>
+        `<div>
+           <div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--grid);padding-bottom:5px;margin-bottom:8px">${g.head}</div>
+           ${g.items.map(it =>
+             `<div style="font-size:12.5px;line-height:1.5;margin-bottom:8px;color:var(--ink)">${it.txt}
+                <span style="font-family:var(--mono);font-size:9.5px;color:var(--ink2);white-space:nowrap"> · log ${it.cite}</span>
+              </div>`).join('')}
+         </div>`).join('') +
+      `</div>`;
+  },
+});
+
+</script>
+<script>
+/* Takeaway 1 — "One person in charge, others provide input" (Sebastian,
+   2026-07-16). Zoom: Monday afternoon's three-way helm split, told through
+   VMC toward the finish for RAGANA and the boats around her, with the log's
+   tactics calls pinned. Fixed comparison set (the story's cast, stated in the
+   caption); title/caption live in COPY.takeaways.twhelm (copy discipline). */
+"use strict";
+
+registerModule({
+  id: 'twhelm',
+  deps: ['ev'],   // pins re-render with the log; content is otherwise static
+  section: { kind: 'plot', height: 'min(320px, 82vw)', title: '', note: '' },
+  build(ctx) {
+    const { D, S, h, cfg } = ctx;
+    const tw = (ctx.copy && ctx.copy.takeaways && ctx.copy.takeaways.twhelm) || {};
+    const card = ctx.el && typeof ctx.el.closest === 'function' ? ctx.el.closest('.card') : null;
+    if (card) {
+      const h2 = card.querySelector('h2'); if (h2 && tw.title) h2.innerHTML = tw.title;
+      const nt = card.querySelector('.note'); if (nt && tw.note) nt.innerHTML = tw.note;
+    }
+    const off = cfg.time.utcOffset;
+    const E = s => Date.parse(s.replace(' ', 'T') + ((off <= 0 ? '-' : '+') + String(Math.abs(off)).padStart(2, '0') + ':00')) / 1000;
+    const W0 = E('2026-06-22 12:00'), W1 = E('2026-06-22 22:00');
+    const BOATS = ['RAGANA', 'Christopher Dragon', 'Hissy Fit II', 'Carina'];
+
+    const traces = [];
+    let yMax = 2;
+    for (const nm of BOATS) {
+      const b = D.boats[nm]; if (!b || !b.t || !b.vmc) continue;
+      const xs = [], ys = [];
+      for (let i = 0; i < b.t.length; i++) {
+        if (b.t[i] < W0 || b.t[i] > W1 || b.vmc[i] == null) continue;
+        xs.push(h.tzStr(b.t[i])); ys.push(b.vmc[i]);
+        if (b.vmc[i] > yMax) yMax = b.vmc[i];
+      }
+      traces.push({ x: xs, y: ys, mode: 'lines', name: nm,
+        line: { color: h.boatColor[nm], width: nm === cfg.hero.name ? 2.6 : 1.3 },
+        opacity: nm === cfg.hero.name ? 1 : .8,
+        hovertemplate: `${nm} · %{x} · %{y} kts VMC<extra></extra>` });
+    }
+
+    const EVCAT = cfg.eventCategories;
+    const evs = D.events.filter(e => e.cat === 'tactics' && e.t >= W0 && e.t <= W1);
+    const shapes = evs.map(e => ({ type: 'line', xref: 'x', yref: 'paper', x0: h.tzStr(e.t), x1: h.tzStr(e.t),
+      y0: 0, y1: 1, line: { color: EVCAT.tactics.c, width: 1, dash: 'dot' }, opacity: .55 }));
+    shapes.push({ type: 'line', xref: 'paper', yref: 'y', x0: 0, x1: 1, y0: 0, y1: 0,
+      line: { color: '#B9CBD4', width: 1, dash: 'dash' } });
+    if (evs.length) traces.push({ x: evs.map(e => h.tzStr(e.t)), y: evs.map(() => yMax + 0.6),
+      mode: 'markers', marker: { symbol: EVCAT.tactics.sym, size: 11, color: EVCAT.tactics.c, line: { width: 1, color: '#fff' } },
+      text: evs.map(e => h.wrapText(`${e.label} · ${h.fmt(e.t)} ${cfg.time.tzLabel} — ${e.txt}`)),
+      hoverinfo: 'text', showlegend: false });
+
+    return { traces, layout: { ...h.BASE(), shapes,
+      margin: { ...h.BASE().margin, t: 18, b: 40 },
+      xaxis: { ...h.GAX, tickformat: '%a %H:%M', type: 'date' },
+      yaxis: { ...h.GAX, range: [-2.2, yMax + 1.4],
+        title: { text: 'VMC toward the finish (kts)', font: h.AXFONT } } } };
+  },
+});
+
+</script>
+<script>
+/* Takeaway 2 — "Reef early, shake late" (Sebastian, 2026-07-16). Zoom:
+   Saturday's heavy running — GPS speed for RAGANA and the rating twin with
+   every sail call pinned, from the 01:45 all-hands to shaking the reef out at
+   18:30. Title/caption in COPY.takeaways.twreef (copy discipline). */
+"use strict";
+
+registerModule({
+  id: 'twreef',
+  deps: ['ev'],
+  section: { kind: 'plot', height: 'min(320px, 82vw)', title: '', note: '' },
+  build(ctx) {
+    const { D, S, h, cfg } = ctx;
+    const tw = (ctx.copy && ctx.copy.takeaways && ctx.copy.takeaways.twreef) || {};
+    const card = ctx.el && typeof ctx.el.closest === 'function' ? ctx.el.closest('.card') : null;
+    if (card) {
+      const h2 = card.querySelector('h2'); if (h2 && tw.title) h2.innerHTML = tw.title;
+      const nt = card.querySelector('.note'); if (nt && tw.note) nt.innerHTML = tw.note;
+    }
+    const off = cfg.time.utcOffset;
+    const E = s => Date.parse(s.replace(' ', 'T') + ((off <= 0 ? '-' : '+') + String(Math.abs(off)).padStart(2, '0') + ':00')) / 1000;
+    const W0 = E('2026-06-19 19:00'), W1 = E('2026-06-20 20:00');
+    const BOATS = ['RAGANA', 'Christopher Dragon'];
+
+    const traces = [];
+    let yMax = 6;
+    for (const nm of BOATS) {
+      const b = D.boats[nm]; if (!b || !b.t || !b.sog) continue;
+      const xs = [], ys = [];
+      for (let i = 0; i < b.t.length; i++) {
+        if (b.t[i] < W0 || b.t[i] > W1 || b.sog[i] == null) continue;
+        xs.push(h.tzStr(b.t[i])); ys.push(b.sog[i]);
+        if (b.sog[i] > yMax) yMax = b.sog[i];
+      }
+      traces.push({ x: xs, y: ys, mode: 'lines', name: nm,
+        line: { color: h.boatColor[nm], width: nm === cfg.hero.name ? 2.6 : 1.3 },
+        opacity: nm === cfg.hero.name ? 1 : .8,
+        hovertemplate: `${nm} · %{x} · %{y} kts<extra></extra>` });
+    }
+
+    const EVCAT = cfg.eventCategories;
+    const evs = D.events.filter(e => e.cat === 'sail' && e.t >= W0 && e.t <= W1);
+    const shapes = evs.map(e => ({ type: 'line', xref: 'x', yref: 'paper', x0: h.tzStr(e.t), x1: h.tzStr(e.t),
+      y0: 0, y1: 1, line: { color: EVCAT.sail.c, width: 1, dash: 'dot' }, opacity: .55 }));
+    if (evs.length) traces.push({ x: evs.map(e => h.tzStr(e.t)), y: evs.map(() => yMax + 0.7),
+      mode: 'markers', marker: { symbol: EVCAT.sail.sym, size: 11, color: EVCAT.sail.c, line: { width: 1, color: '#fff' } },
+      text: evs.map(e => h.wrapText(`${e.label} · ${h.fmt(e.t)} ${cfg.time.tzLabel} — ${e.txt}`)),
+      hoverinfo: 'text', showlegend: false });
+
+    return { traces, layout: { ...h.BASE(), shapes,
+      margin: { ...h.BASE().margin, t: 18, b: 40 },
+      xaxis: { ...h.GAX, tickformat: '%a %H:%M', type: 'date' },
+      yaxis: { ...h.GAX, range: [0, yMax + 1.6],
+        title: { text: 'Speed over ground (kts)', font: h.AXFONT } } } };
+  },
+});
+
+</script>
+<script>
+/* Takeaway 3 — "Minimize sail changes when shorthanded, especially at night"
+   (Sebastian, 2026-07-16). Zoom: the boat-for-boat (elapsed) gap to the rating
+   twin through the chaos window — the same milestone math as the won/lost
+   chart, cut to phases 1–2 (DTF 620→395), with the night's sail/crew/systems
+   calls pinned at RAGANA's position when each happened. The 90–130-minute
+   price is the record's existing claim (INSIGHT · The cost of chaos); this
+   chart is its evidence window. Title/caption in COPY.takeaways.twnight. */
+"use strict";
+
+registerModule({
+  id: 'twnight',
+  deps: ['ev'],
+  section: { kind: 'plot', height: 'min(320px, 82vw)', title: '', note: '' },
+  build(ctx) {
+    const { D, S, h, cfg } = ctx;
+    const tw = (ctx.copy && ctx.copy.takeaways && ctx.copy.takeaways.twnight) || {};
+    const card = ctx.el && typeof ctx.el.closest === 'function' ? ctx.el.closest('.card') : null;
+    if (card) {
+      const h2 = card.querySelector('h2'); if (h2 && tw.title) h2.innerHTML = tw.title;
+      const nt = card.querySelector('.note'); if (nt && tw.note) nt.innerHTML = tw.note;
+    }
+    const hero = cfg.hero.name, REF = 'Christopher Dragon';
+    const heroB = D.boats[hero], refB = D.boats[REF];
+    if (!refB || !h.hasTrack(REF)) return null;
+    const h0 = h.startOf(heroB), r0 = h.startOf(refB);
+    const M0 = 620, M1 = 400;   // phases 1–2 (edge 395; 400 is the nearest on-grid milestone)
+
+    const xs = [], ys = [];
+    for (let m = M0; m >= M1; m -= cfg.race.milestoneStep) {
+      const tH = h.hitTime(heroB, m), tR = h.hitTime(refB, m);
+      xs.push(m); ys.push(tH == null || tR == null ? null : ((tH - h0) - (tR - r0)) / 60);
+    }
+    const yTop = Math.max(20, ...ys.filter(v => v != null)) + 14;
+    const traces = [{ x: xs, y: ys, mode: 'lines+markers', name: hero, connectgaps: false,
+      marker: { size: 4 }, line: { color: cfg.hero.color, width: 2.4 },
+      hovertemplate: `%{x} nm to go · %{y:.0f} min behind ${REF} (elapsed)<extra></extra>` }];
+
+    // the night's calls, pinned at the hero's DTF when each happened
+    const EVCAT = cfg.eventCategories;
+    const off = cfg.time.utcOffset;
+    const E = s => Date.parse(s.replace(' ', 'T') + ((off <= 0 ? '-' : '+') + String(Math.abs(off)).padStart(2, '0') + ':00')) / 1000;
+    const W1 = E('2026-06-21 00:00');
+    const evs = D.events.filter(e => ['sail', 'crew', 'systems'].includes(e.cat) && e.t <= W1)
+      .map(e => ({ ...e, m: h.heroDTFat(e.t) }))
+      .filter(e => e.m <= M0 && e.m >= 395);
+    const shapes = evs.map(e => ({ type: 'line', xref: 'x', yref: 'paper', x0: e.m, x1: e.m,
+      y0: 0, y1: 1, line: { color: EVCAT[e.cat].c, width: 1, dash: 'dot' }, opacity: .5 }));
+    shapes.push({ type: 'line', xref: 'paper', yref: 'y', x0: 0, x1: 1, y0: 0, y1: 0,
+      line: { color: '#B9CBD4', width: 1 } });
+    if (evs.length) traces.push({ x: evs.map(e => e.m), y: evs.map(() => yTop),
+      mode: 'markers', marker: { symbol: evs.map(e => EVCAT[e.cat].sym), size: 10,
+        color: evs.map(e => EVCAT[e.cat].c), line: { width: 1, color: '#fff' } },
+      text: evs.map(e => h.wrapText(`${e.label} · ${h.fmt(e.t)} ${cfg.time.tzLabel} — ${e.txt}`)),
+      hoverinfo: 'text', showlegend: false });
+
+    return { traces, layout: { ...h.BASE(), shapes, showlegend: false,
+      margin: { ...h.BASE().margin, t: 18, b: 42 },
+      xaxis: { ...h.GAX, autorange: 'reversed',
+        title: { text: 'Distance to finish (nm) — race runs right to left ⟵', font: h.AXFONT } },
+      yaxis: { ...h.GAX, range: [-15, yTop + 12],
+        title: { text: `Minutes behind (+) ${REF} — elapsed`, font: h.AXFONT } } } };
+  },
+});
+
+</script>
+<script>
+/* Takeaway 4 — "Minimize distance sailed unless it pays dividends"
+   (Sebastian, 2026-07-16). Zoom: both sides of the east bet on one axis —
+   rhumb offset through the Sunday beat (where the east lane paid: INSIGHT ·
+   The Sunday beat paid) into the park (where boats nearer the rhumb got
+   through faster: INSIGHT · Position × timing). Fixed cast: RAGANA, the
+   rating twin, and Carina (the caption's cleanest cohort match). Title and
+   caption in COPY.takeaways.tweast. */
+"use strict";
+
+registerModule({
+  id: 'tweast',
+  deps: ['ev'],
+  section: { kind: 'plot', height: 'min(340px, 84vw)', title: '', note: '' },
+  build(ctx) {
+    const { D, S, h, cfg } = ctx;
+    const tw = (ctx.copy && ctx.copy.takeaways && ctx.copy.takeaways.tweast) || {};
+    const card = ctx.el && typeof ctx.el.closest === 'function' ? ctx.el.closest('.card') : null;
+    if (card) {
+      const h2 = card.querySelector('h2'); if (h2 && tw.title) h2.innerHTML = tw.title;
+      const nt = card.querySelector('.note'); if (nt && tw.note) nt.innerHTML = tw.note;
+    }
+    const D0 = 320, D1 = 60;   // the beat (insight window 265→180) into the park (180→80)
+    const BOATS = ['RAGANA', 'Christopher Dragon', 'Carina'];
+
+    const traces = [];
+    let yMax = 8, yMin = -8;
+    for (const nm of BOATS) {
+      const b = D.boats[nm]; if (!b || !b.t || !b.xte) continue;
+      const xs = [], ys = [];
+      for (let i = 0; i < b.t.length; i++) {
+        if (b.dtf[i] == null || b.dtf[i] > D0 || b.dtf[i] < D1 || b.xte[i] == null) continue;
+        xs.push(b.dtf[i]); ys.push(b.xte[i]);
+        if (b.xte[i] > yMax) yMax = b.xte[i];
+        if (b.xte[i] < yMin) yMin = b.xte[i];
+      }
+      traces.push({ x: xs, y: ys, mode: 'lines', name: nm,
+        line: { color: h.boatColor[nm], width: nm === cfg.hero.name ? 2.6 : 1.3 },
+        opacity: nm === cfg.hero.name ? 1 : .8,
+        hovertemplate: `${nm} · %{x} nm to go · %{y} nm off the rhumb<extra></extra>` });
+    }
+
+    const park = cfg.charts.parkShading;
+    const shapes = [
+      { type: 'line', xref: 'paper', yref: 'y', x0: 0, x1: 1, y0: 0, y1: 0,
+        line: { color: '#B9CBD4', width: 1 } },   // the rhumb itself
+      { type: 'rect', xref: 'x', yref: 'paper', x0: park.zone[0], x1: park.zone[1], y0: 0, y1: 1,
+        fillcolor: 'rgba(23,41,58,0.05)', line: { width: 0 } },
+      { type: 'rect', xref: 'x', yref: 'paper', x0: park.core[0], x1: park.core[1], y0: 0, y1: 1,
+        fillcolor: 'rgba(192,57,43,0.07)', line: { width: 0 } }];
+    // the two halves of the bet, labelled with the record's own conclusions
+    const ann = [
+      { x: 232, y: 1.06, xref: 'x', yref: 'paper', showarrow: false,
+        text: 'THE SUNDAY BEAT — the east lane pays', font: { ...h.AXFONT, size: 9, color: '#0E7C7B' } },
+      { x: 130, y: 1.06, xref: 'x', yref: 'paper', showarrow: false,
+        text: 'THE PARK — the bill', font: { ...h.AXFONT, size: 9, color: '#B23A2E' } }];
+
+    return { traces, layout: { ...h.BASE(), shapes, annotations: ann,
+      margin: { ...h.BASE().margin, t: 26, b: 42 },
+      xaxis: { ...h.GAX, autorange: 'reversed',
+        title: { text: 'Distance to finish (nm) — race runs right to left ⟵', font: h.AXFONT } },
+      yaxis: { ...h.GAX, range: [yMin - 2, yMax + 3],
+        title: { text: 'nm east (+) / west (−) of the rhumb', font: h.AXFONT } } } };
+  },
+});
+
+</script>
+<script>
+/* Takeaway 5 — "Practice light-wind sailing" (Sebastian, 2026-07-16). His
+   arithmetic, drawn: time to cross the park's 100 nm (DTF 180→80) at a given
+   made-good speed is t = 100/v — pure division, no model. Dots are the
+   SELECTED boats' own traversals from the parkFair payload (the same fair
+   basis as the park table, so the copy's scope discipline holds); the two
+   brackets are the same division evaluated at the slow and fast ends of the
+   curve, computed at render time. Title/caption in COPY.takeaways.twpark. */
+"use strict";
+
+registerModule({
+  id: 'twpark',
+  deps: ['boats'],   // dots follow the selection, like the park table
+  section: { kind: 'plot', height: 'min(380px, 88vw)', title: '', note: '' },
+  build(ctx) {
+    const { D, S, h, cfg } = ctx, hero = cfg.hero.name;
+    const tw = (ctx.copy && ctx.copy.takeaways && ctx.copy.takeaways.twpark) || {};
+    const card = ctx.el && typeof ctx.el.closest === 'function' ? ctx.el.closest('.card') : null;
+    if (card) {
+      const h2 = card.querySelector('h2'); if (h2 && tw.title) h2.innerHTML = tw.title;
+      const nt = card.querySelector('.note'); if (nt && tw.note) nt.innerHTML = tw.note;
+    }
+    const ZONE = 100;   // DTF 180→80 (cfg.charts.parkShading.zone)
+    const names = Object.keys(D.parkFair).filter(nm => S.boats.has(nm) && D.parkFair[nm].hrs);
+    const dot = nm => {
+      const pf = D.parkFair[nm];
+      return { nm, x: +(ZONE / pf.hrs).toFixed(2), y: pf.hrs, u4: pf.u4 };
+    };
+    const dots = names.map(dot);
+    const rag = dots.find(d => d.nm === hero);
+    const others = dots.filter(d => d.nm !== hero);
+    const hover = d => `${d.nm} · ${d.y} h through 180→80 · ${d.u4}% of it under 4 kts`;
+
+    // the curve: t = 100 / v, drawn across the observed speed range
+    const vs = []; for (let v = 3.0; v <= 6.8; v += 0.05) vs.push(+v.toFixed(2));
+    const traces = [
+      { x: vs, y: vs.map(v => +(ZONE / v).toFixed(2)), mode: 'lines', name: 't = 100 nm ÷ v',
+        line: { color: 'rgba(110,139,152,0.55)', width: 1.5, dash: 'dot' },
+        hoverinfo: 'skip', showlegend: false },
+      { x: others.map(d => d.x), y: others.map(d => d.y), mode: 'markers',
+        marker: { size: 8, color: others.map(d => h.boatColor[d.nm] || '#6E8B98'), line: { width: 1, color: '#fff' } },
+        text: others.map(hover), hoverinfo: 'text', showlegend: false }];
+    if (rag) traces.push({ x: [rag.x], y: [rag.y], mode: 'markers',
+      marker: { symbol: 'diamond', size: 14, color: cfg.hero.color, line: { width: 1.5, color: '#fff' } },
+      hovertext: [hover(rag)], hoverinfo: 'text', showlegend: false });
+
+    // Sebastian's point, evaluated on the curve itself (arithmetic, not authored):
+    // +1 kt from the slow end vs +1 kt from the fast end
+    const save = v => +(ZONE / v - ZONE / (v + 1)).toFixed(1);
+    const bracket = (v, label) => ([
+      { type: 'line', xref: 'x', yref: 'y', x0: v, y0: ZONE / v, x1: v + 1, y1: ZONE / v,
+        line: { color: '#7A93A3', width: 1 } },
+      { type: 'line', xref: 'x', yref: 'y', x0: v + 1, y0: ZONE / v, x1: v + 1, y1: ZONE / (v + 1),
+        line: { color: '#7A93A3', width: 1.6 } }]);
+    const shapes = [...bracket(3.5), ...bracket(5.5)];
+    const ann = [
+      { x: 4.0, y: ZONE / 3.5 + 1.2, xref: 'x', yref: 'y', showarrow: false, yanchor: 'bottom',
+        text: `+1 kt here saves ${save(3.5)} h`, font: { ...h.AXFONT, size: 9.5, color: '#17293A' } },
+      { x: 6.0, y: ZONE / 5.5 + 1.2, xref: 'x', yref: 'y', showarrow: false, yanchor: 'bottom',
+        text: `+1 kt here saves ${save(5.5)} h`, font: { ...h.AXFONT, size: 9.5, color: '#17293A' } }];
+    if (rag) ann.push({ x: rag.x, y: rag.y, xref: 'x', yref: 'y', ax: 26, ay: 20, text: hero, showarrow: true,
+      arrowhead: 0, arrowwidth: .7, arrowcolor: 'rgba(194,24,126,0.55)', standoff: 6,
+      font: { ...h.AXFONT, size: 10, color: cfg.hero.color } });
+
+    return { traces, layout: { ...h.BASE(), shapes, annotations: ann, showlegend: false,
+      margin: { ...h.BASE().margin, t: 18, b: 46 },
+      xaxis: { ...h.GAX, range: [2.9, 6.9],
+        title: { text: 'Speed made good through the zone (kts) — 100 nm ÷ own traversal hours', font: h.AXFONT } },
+      yaxis: { ...h.GAX,
+        title: { text: 'Hours to cross DTF 180 → 80', font: h.AXFONT } } } };
   },
 });
 

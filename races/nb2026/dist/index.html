@@ -17,28 +17,36 @@
 <meta name="twitter:title" content="RAGANA · Newport Bermuda 2026 · Race Analysis">
 <meta name="twitter:description" content="A crew's-eye reconstruction of the 2026 Newport Bermuda Race from the YB tracker and the nav log.">
 <meta name="twitter:image" content="https://hgq.fyi/ragana-newport-bermuda-2026/og.png">
-<link rel="icon" href="favicon.svg?v=5055081eb8" type="image/svg+xml">
-<link rel="stylesheet" href="tokens.css?v=5055081eb8">
-<link rel="stylesheet" href="styles.css?v=5055081eb8">
+<link rel="icon" href="favicon.svg?v=590c270065" type="image/svg+xml">
+<link rel="stylesheet" href="tokens.css?v=590c270065">
+<link rel="stylesheet" href="styles.css?v=590c270065">
 <!-- DATA:FETCH — start the core payload download before the deferred scripts arrive -->
-<script>window.__CORE_FETCH=fetch('data/core.json?v=5055081eb8').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});</script>
+<script>window.__CORE_FETCH=fetch('data/core.json?v=590c270065').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});</script>
 <!-- /DATA:FETCH -->
-<script src="app/helpers.js?v=5055081eb8" defer></script>
-<script src="app/tokens.js?v=5055081eb8" defer></script>
-<script src="app/core.js?v=5055081eb8" defer></script>
-<script src="app/charts/map.js?v=5055081eb8" defer></script>
-<script src="app/charts/dtf.js?v=5055081eb8" defer></script>
-<script src="app/charts/race.js?v=5055081eb8" defer></script>
-<script src="app/charts/xte.js?v=5055081eb8" defer></script>
-<script src="app/charts/sog.js?v=5055081eb8" defer></script>
-<script src="race/presentation.js?v=5055081eb8" defer></script>
-<script src="race/copy.js?v=5055081eb8" defer></script>
-<script src="race/modules/parkfair.js?v=5055081eb8" defer></script>
-<script src="race/modules/finstrip.js?v=5055081eb8" defer></script>
-<script src="race/modules/distspeed.js?v=5055081eb8" defer></script>
-<script src="race/modules/navlog.js?v=5055081eb8" defer></script>
-<script src="race/overlays/gulfstream.js?v=5055081eb8" defer></script>
-<script src="race/overlays/watches.js?v=5055081eb8" defer></script>
+<script src="app/helpers.js?v=590c270065" defer></script>
+<script src="app/tokens.js?v=590c270065" defer></script>
+<script src="app/core.js?v=590c270065" defer></script>
+<script src="app/charts/map.js?v=590c270065" defer></script>
+<script src="app/charts/dtf.js?v=590c270065" defer></script>
+<script src="app/charts/race.js?v=590c270065" defer></script>
+<script src="app/charts/xte.js?v=590c270065" defer></script>
+<script src="app/charts/sog.js?v=590c270065" defer></script>
+<script src="race/presentation.js?v=590c270065" defer></script>
+<script src="race/copy.js?v=590c270065" defer></script>
+<script src="race/modules/verdict.js?v=590c270065" defer></script>
+<script src="race/modules/phasegap.js?v=590c270065" defer></script>
+<script src="race/modules/parkfair.js?v=590c270065" defer></script>
+<script src="race/modules/finstrip.js?v=590c270065" defer></script>
+<script src="race/modules/distspeed.js?v=590c270065" defer></script>
+<script src="race/modules/navlog.js?v=590c270065" defer></script>
+<script src="race/modules/lessons.js?v=590c270065" defer></script>
+<script src="race/modules/twhelm.js?v=590c270065" defer></script>
+<script src="race/modules/twreef.js?v=590c270065" defer></script>
+<script src="race/modules/twnight.js?v=590c270065" defer></script>
+<script src="race/modules/tweast.js?v=590c270065" defer></script>
+<script src="race/modules/twpark.js?v=590c270065" defer></script>
+<script src="race/overlays/gulfstream.js?v=590c270065" defer></script>
+<script src="race/overlays/watches.js?v=590c270065" defer></script>
 <script src="vendor/plotly-basic-2.35.2.min.js" id="plotlyjs" defer></script>
 </head>
 <body>
@@ -92,6 +100,13 @@
 
 <section class="kpis" id="kpis" aria-label="Key results"></section>
 
+<section class="card" id="sec_verdict" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="verdict" data-mount></div>
+  <div class="tapnote" id="tap_verdict"></div>
+</section>
+
 <section class="card">
   <h2>The course</h2>
   <div class="note" id="map_note">Every selected boat's track, the rhumb line, and the Gulf Stream band as RAGANA measured it (74°F entry 17:21 Sat → 80°F core → 75°F exit 05:01 Sun, from the nav log). It's a plain lat/lon plot stretched to fill the width — positions are exact but the aspect isn't to scale. Grey ghosts are the tracked fleet. Hover — or tap — anything.</div>
@@ -121,6 +136,13 @@
   <div class="note" id="racenote"></div>
   <div id="race" class="plot"></div>
   <div class="tapnote" id="tap_race"></div>
+</section>
+
+<section class="card" id="sec_phasegap" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="phasegap" data-mount></div>
+  <div class="tapnote" id="tap_phasegap"></div>
 </section>
 
 <section class="card" id="sec_finstrip" hidden>
@@ -163,6 +185,48 @@
   <h2>Race log — every marked moment</h2>
   <div class="note">Everything driving the markers and shading above, in order, with the boat's distance-to-finish at each point. Includes the analysis notes (the "insight" rows). Filter by category in the Overlays row.</div>
   <div id="eventtable" style="max-height:520px;overflow-y:auto"></div>
+</section>
+
+<section class="card" id="sec_lessons" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="lessons" data-mount></div>
+  <div class="tapnote" id="tap_lessons"></div>
+</section>
+
+<section class="card" id="sec_twhelm" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="twhelm" data-mount></div>
+  <div class="tapnote" id="tap_twhelm"></div>
+</section>
+
+<section class="card" id="sec_twreef" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="twreef" data-mount></div>
+  <div class="tapnote" id="tap_twreef"></div>
+</section>
+
+<section class="card" id="sec_twnight" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="twnight" data-mount></div>
+  <div class="tapnote" id="tap_twnight"></div>
+</section>
+
+<section class="card" id="sec_tweast" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="tweast" data-mount></div>
+  <div class="tapnote" id="tap_tweast"></div>
+</section>
+
+<section class="card" id="sec_twpark" hidden>
+  <h2></h2>
+  <div class="note"></div>
+  <div id="twpark" data-mount></div>
+  <div class="tapnote" id="tap_twpark"></div>
 </section>
 
 <section class="card" id="sec_navlog" hidden>
