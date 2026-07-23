@@ -33,6 +33,20 @@ introduction).
   references as a first-class optional source; the fetch commands are in the
   manifest. Known gap either way: no 2025 observation platform in central LI
   Sound (44017/44039/44040 dead) — park-zone wind is model-only.
+- **One pivot, two protagonists** (owner, 2026-07-23): ALIR 2025 has two
+  co-equal focus boats (Daffodil and Max) but `build_data.py` pivots
+  stats/groups on a single `client_boat`. The dual focus is currently carried by
+  `groups` (a `hero` key plus a `focus` key of equal visual weight), which may
+  be enough. Judge at stage 2/4 whether that shape is clunky in practice; if it
+  is, teach the engine to accept multiple pivots rather than bending the race
+  config around one. Related: the hero-less Tier-1 thread below.
+- **Promote per-boat track trimming into `starter/`** (2026-07-23): the racing-
+  window trim is now a stage-0 procedure step in the skill, with
+  `races/alir2025/trim_tracks.py` as the reference implementation (dedup +
+  `[gun − 15 min, finish + 5 min]`, or furthest-point for non-finishers). It is
+  generic — every tracker export carries pre-start milling and post-finish
+  delivery. Move it to `starter/pipeline/` once a second race exercises it, so
+  the trim rule and the route model stay in one place.
 - **Tier-1 (fleet-only) builds need a hero today** (review, 2026-07-23):
   `build_data.py` pivots stats/groups/series on `client_boat` unconditionally
   — a null client_boat crashes at the stats step, so true fleet-commentary

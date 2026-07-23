@@ -12,7 +12,15 @@ tracker:
   vendor: yb                    # YB race id alir25 (pro.yb.tl/alir25); satTrackingUrl now
                                 # empty in YS metadata — id verified by fleet/geography/start
                                 # ritual instead (stage-0 record)
-  path: raw/alir2025_tracks.csv
+  path: raw/alir2025_tracks_clean.csv   # produced by trim_tracks.py from the as-fetched
+                                        # alir2025_tracks.csv: drops 434 duplicate (boat,epoch)
+                                        # rows and trims each boat to its own racing window —
+                                        # [division gun - 15 min, finish + 5 min], or for a boat
+                                        # that never finished, up to her furthest point along the
+                                        # course. Removes pre-start milling and post-finish
+                                        # deliveries. 26,177 -> 21,666 rows; fleet max latitude
+                                        # 41.922N -> 41.281N (Scarlett's tracker rode to Kingston
+                                        # NY after she retired). No boat is dropped.
 
 official_results:
   path: raw/alir2025_results_local.csv   # derived by derive_results_columns.py from
@@ -154,20 +162,12 @@ groups:                         # dual-focus, NOT a duel (see decisions/stage-0-
   default_key: fleet_other
   dnf_key: fleet_dnf
 
-exclude_boats:                  # tracked-only committee vessel; two DNCs with no track
+exclude_boats:                  # tracked-only committee vessel; two DNCs with no track.
+                                # NOTE: no racing boat is excluded — Scarlett stays in the fleet
+                                # and is handled by trim_tracks.py instead (owner, 2026-07-23).
   - "COMMITTEE BOAT"
   - "Wind Song"
   - "Rocksteady"
-  - "Scarlett"                  # PROPOSED — owner confirms at the stage-0 stop. Scarlett (RET)
-                                # turned back off Fire Island on day 1, and her tracker then
-                                # travelled home OVERLAND up the Hudson, parking near Kingston NY
-                                # (41.92, -73.99) for a day. Inside the grid window she contributes
-                                # 650 pings, 468 of them north of 41.3N, and single-handedly
-                                # stretches the fleet bounding box from 41.281N to 41.922N — about
-                                # 38 nm of phantom extent on every map frame. Excluding her costs
-                                # ~4 h of genuine racing track; keeping her puts a boat in the
-                                # Catskills. Alternative if the owner prefers: keep her and cap
-                                # her series at turn-back (needs a per-boat cap the config lacks).
 extra_boats: []
 
 grid: { minutes: 15, end_utc: '2025-07-26T18:45:00+00:00', interpolate_limit: 4 }

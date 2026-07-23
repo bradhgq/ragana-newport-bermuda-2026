@@ -68,17 +68,23 @@ anomalies:
   - "COMMITTEE BOAT present in tracks only -> exclude_boats."
   - "Wind Song + Rocksteady: DNC, no track -> exclude_boats (run-log hygiene only; the payload is
      byte-identical either way, since they would otherwise land in the report-only name-miss list)."
-  - "SCARLETT'S TRACKER WENT HOME OVERLAND. She turned back off Fire Island on day 1 (RET), and the
-     track then runs UP THE HUDSON: 07-25 06:30Z at 41.478/-73.996, 12:00Z at 41.922/-73.966
-     (~Kingston NY), parked there for a day. Inside the grid window she contributes 650 pings, 468
-     of them north of 41.3N. The fleet's maximum latitude excluding Scarlett is 41.281N; including
-     her it is 41.922N — about 38 nm of phantom extent on every map frame. PROPOSED: exclude_boats
-     (the bir2026 'DNC at a mooring' precedent), which costs ~4 h of her genuine racing track.
-     OWNER DECISION at the stop; doing nothing ships a map with a boat in the Catskills."
+  - "SCARLETT'S TRACKER WENT HOME OVERLAND (RESOLVED by trimming, not by exclusion). She turned back
+     off Fire Island on day 1 (RET), and the track then ran UP THE HUDSON: 07-25 06:30Z at
+     41.478/-73.996, 12:00Z at 41.922/-73.966 (~Kingston NY), parked there for a day — 468 pings
+     north of 41.3N, stretching the fleet bounding box by ~38 nm. She raced, so she is NOT excluded:
+     trim_tracks.py cuts her at her furthest point along the course (185.7 nm to go, 07-24 18:50Z),
+     keeping 49 genuine racing pings. Fleet max latitude 41.922N -> 41.281N."
   - "438 duplicate (boat_id, epoch) ping rows (26,177 -> 25,739 unique; 434 duplicated keys).
      437 are byte-identical re-emissions. ONE is a genuine position conflict: Pathfinder at
      2025-07-24T19:00:02Z carries both 40.53069/-73.8461 and 40.53070/-73.8462 — 1.1 m apart,
-     immaterial. All cadence statistics below are computed AFTER dedup."
+     immaterial; the first row is kept. Dropped by trim_tracks.py; all cadence statistics below
+     are computed AFTER dedup."
+  - "POST-FINISH TRACKER RUN-ON is fleet-wide, not just Scarlett: trackers stay on for the delivery
+     home, so the raw export carries motion that never happened during the race (Dolcezza kept
+     transmitting for 9.1 h after finishing). Resolved the same way — every boat is trimmed to
+     [division gun - 15 min, finish + 5 min]; boats with no finish are cut at their furthest point
+     along the course. Verified: all 43 finishers' trimmed tracks end within 5 min of their official
+     finish and start within 15 min of their gun. 26,177 -> 21,666 rows, 49 boats retained."
   - "COURSE POLYLINE — two legs of the first draft ran over land, found by testing every leg
      against the sailed fleet envelope rather than by eye. (a) spine->Montauk crossed the
      Amagansett-Napeague ocean beach: ZERO of 1,198 outbound pings lay north of it, worst clearance
@@ -277,17 +283,54 @@ weather_evidence:                # EXPERIMENTAL stage-0 extra (owner-requested)
   followup: "if the layer proves useful, bake weather acquisition into starter/acquisition/ + the
     skill (docs/OPEN_THREADS.md entry)."
 
-open_decisions:                  # what the owner is actually being asked at this stop
-  - "Pipeline pivot: client_boat is Daffodil (mechanical — build_data pivots on exactly one boat and
-    a null hero crashes it). Confirm, or swap to Max. Does not affect the dual-focus framing."
-  - "Unofficial unified cross-circle ladder: ship it or not. Recommended YES — it is the only view
-    that gives the sole multihull any measurable peers."
-  - "Scarlett: exclude her (loses ~4 h of racing track) or keep her (ships 38 nm of phantom map
-    extent from a tracker that drove to Kingston NY). Currently PROPOSED as excluded."
-  - "noise_floor_min 10: confirm the value and the doctrine-6 consequence — that both contested
-    circle titles and 3 of 7 contested division titles narrate as sub-floor."
-  - "finish_radius_nm lowered 0.7 -> 0.4 to stop seven finishers' ghost tracks being truncated
-    early (Sound's Great by 110 min). Confirm."
+owner_decisions:                 # ANSWERED by the owner, 2026-07-23
+  pivot: "Daffodil confirmed as client_boat. Owner notes there are MEANT to be two pivots, and that
+    the engine should learn to accept multiple if the single-pivot shape proves clunky — raised as
+    an OPEN_THREADS item, to be judged at stage 2/4 when the real cost shows up. Until then the
+    dual focus is carried by groups (hero + focus) rather than by the pivot mechanism."
+  unified_ladder: "SHIP IT. Confirmed — the unofficial cross-circle corrected ladder is what makes
+    any Daffodil-versus-monohull observation possible."
+  scarlett_and_retirees: "DO NOT EXCLUDE any genuine boat. Owner's instruction: trim every boat's
+    track to its own racing window instead, cutting pre-start noise and post-finish/post-retirement
+    delivery. Implemented as trim_tracks.py -> raw/alir2025_tracks_clean.csv, now the tracker input.
+    Scarlett keeps her 49 racing pings. Fleet max latitude falls 41.922N -> 41.281N without dropping
+    a single boat. Generalization requested and recorded (see stage_0_generalization below)."
+  dnc_boats: "Wind Song and Rocksteady (DNC, never started, no track): DROP. Confirmed — they stay
+    in exclude_boats."
+  noise_floor: "10 min confirmed. See the narrative consequence recorded under narrative_framing —
+    the floor redirects the Max story from margin to mechanism rather than muting it."
+  sounds_great: "RESOLVED — see claims_resolved below. Max won overall; Sound's Great's win was
+    divisional."
 
-confirmed_by: ""                 # owner
-date: ""
+claims_resolved:                 # stage-1 claims tested early because they were already circulating
+  sounds_great_headline:
+    claim: "WindCheck Magazine: 'Sound's Great wins 2025 Around Long Island Regatta', described as
+      a third consecutive win."
+    verdict: "PARTIAL — true divisionally, false as stated for the regatta overall."
+    evidence: "The organizer's own trophy page (alir.org/2025) awards the 'Around Long Island
+      Regatta Trophy (overall winner, Around Long Island course)' to MAX, helmed by Moritz Hilf.
+      Sound's Great does not appear anywhere on the 2025 trophy list. The results confirm the shape:
+      Sound's Great is 1st in Spinnaker Division 5 and 22nd of 32 on corrected time within the
+      Spinnaker circle, at 31:43:01 against Max's 27:02:56 — 4h 40m behind on corrected time.
+      The WindCheck article itself is bot-walled (403) and could not be read directly; the headline
+      is known only through search indexing, so its internal wording is NOT quoted or relied on."
+    consequence: "Copy must say Max won the regatta overall. Sound's Great may be credited with its
+      division win (and, if stage 1 can source it, its divisional three-peat) — never with the
+      regatta. Do not cite the WindCheck headline as a source for anything."
+  other_trophies_verified: "Same official page: John B. Thomson Trophy (Around the Islands overall)
+    to Halve Maen; First to Finish (Around Long Island Course) to Wahoo; First to Finish (Multihull)
+    to DAFFODIL; Youth Challenge Cup to Habiru. NOTE for copy: Daffodil's listed honour is
+    FIRST TO FINISH (MULTIHULL), which — as the only multihull entered — is the same 1-of-1 fact as
+    her division win, stated a second way. It is not an additional achievement."
+
+stage_0_generalization:          # owner asked to consider folding this into the skill
+  track_trimming: "The per-boat racing-window trim is generic, not ALIR-specific: every tracker
+    export carries pre-start milling and post-finish delivery, and the fix must never be to drop a
+    boat that actually raced. Added as a stage-0 procedure step in
+    skills/race-viz/references/stage-0-acquisition.md, with races/alir2025/trim_tracks.py as the
+    reference implementation (bir2026's despike.py is the precedent for a race-local cleaning
+    script). Promotion of the code itself into starter/pipeline/ is an OPEN_THREADS item, to happen
+    once a second race exercises it."
+
+confirmed_by: "Brad"
+date: "2026-07-23"
