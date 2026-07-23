@@ -17,7 +17,7 @@ starter/            the reusable engine (raw code only)
   build_race.py     the one-command build+verify chain — use this, not the steps
   requirements.txt
 skills/race-viz/    the /race-viz skill — process & judgment, source of truth
-docs/               living logs only: REPO_NOTES (standing decisions), DOC_GAPS (open gaps)
+docs/               one living log: OPEN_THREADS.md (open/undecided/todo)
 races/
   nb2026/           Newport Bermuda 2026 (LIVE) — the shell-based worked example
                     (config, data, modules, overlays, committed dist/)
@@ -66,5 +66,6 @@ skill's checkpoint protocol (never skip CP-0 or CP-2). Kickoff prompt template:
 See [`starter/README.md`](starter/README.md) for the engine doctrines. The
 `/race-viz` skill in [`skills/race-viz/`](skills/race-viz/SKILL.md) is the
 authoritative process layer. For current layout and invocations, this README
-is authoritative; historical specs and retrospectives live in git history and
-the `archives-2026-07` release, not in the tree.
+is authoritative — together with `starter/shell/INVARIANTS.md` it IS the living
+spec (no REPO_SPEC v2 is planned); historical specs and retrospectives live in
+git history and the `archives-2026-07` release, not in the tree.

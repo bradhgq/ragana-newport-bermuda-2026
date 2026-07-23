@@ -22,7 +22,10 @@ numpy 1.26.4).
 
 - **Frozen oracles and goldens move only with a `decisions/` ledger entry** (I16)
   enumerating every diff class and citing the recorded instruction. Goldens are
-  never re-derived from the pipeline you are testing.
+  never re-derived from the pipeline you are testing; fixtures are
+  authored-frozen in `races/<race>/tests/regression.json` and cross-checked
+  against config goldens by `shell/build.py` — never emitted by the pipeline
+  under test.
 - **Committed `dist/` is production** (nix flake input serves the git tree).
   After a verification rebuild, `git checkout -- races/*/dist` unless deploying
   is the point. When deploying NEW dist paths, `git add -f` them — the global
@@ -38,16 +41,15 @@ numpy 1.26.4).
 - **Copy discipline**: propose microcopy freely; never author analysis claims;
   scope every set-dependent number to the set the section displays (the NB2026
   park-copy lesson). Narrative lives in `events.yaml`/`copy.md`, never code.
-- **Log, then compact**: standing decisions and open threads →
-  `docs/REPO_NOTES.md`; open documentation gaps → `docs/DOC_GAPS.md`. When an
-  item closes or its rule lands where it belongs (CLAUDE.md, the skill,
-  INVARIANTS.md, a code comment), **delete the entry — git history is the
-  archive**. Never append closure notes to a living doc. `docs/` holds living
-  documents only: review screenshots are PR material and leave the tree once
-  their round merges; retrospective insights get consolidated into the skill
-  and the retro file deleted; big binaries go to a GitHub release
-  (`archives-2026-07` is the precedent). Suites green before and after each
-  phase.
+- **Log, then compact**: everything open/undecided/todo lives in ONE file,
+  `docs/OPEN_THREADS.md` — nothing else does. When a thread closes, delete it;
+  when a decision becomes a rule, encode it where it belongs (CLAUDE.md, the
+  skill, INVARIANTS.md, a code comment) and delete the entry. **Never append
+  closure notes — git history is the archive.** `docs/` holds living documents
+  only: review screenshots are PR material and leave the tree once their round
+  merges; retrospective insights get consolidated into the skill and the retro
+  file deleted; big binaries go to a GitHub release (`archives-2026-07` is the
+  precedent). Suites green before and after each phase.
 
 ## Git & publication
 

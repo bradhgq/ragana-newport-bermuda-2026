@@ -7,7 +7,7 @@ Run AFTER build_data.py, BEFORE the shell build:
 Only the genuinely race-specific analysis channels remain here; the original
 steps 1/2/5 (display-name groups, Daffodil removal, Windfall meta-only) are
 pipeline-native since the shell migration (config keys `groups.by_name/by_cls`,
-`exclude_boats`, `official_results.untracked` — see docs/REPO_NOTES.md).
+`exclude_boats`, `official_results.untracked` — config-gated in the pipeline).
 
   1. meta.up1bi — authoritative raw-track distance sailed to the 1BI rounding,
      computed on the CLEANED track, trimmed to [race_start, official finish],

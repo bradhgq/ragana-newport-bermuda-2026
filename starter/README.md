@@ -47,6 +47,6 @@ narrative goes in `events.yaml`) plus `presentation.js`, then run the one-comman
 chain. See the skill's
 stage files for the checkpoint protocol; never skip CP-0 or CP-2.
 
-Living logs live in [`docs/`](../docs/): `REPO_NOTES.md` (standing decisions and
-open threads only — closed items are deleted, git history is the archive) and
-`DOC_GAPS.md` (open documentation gaps only).
+The repo's one living log is [`docs/OPEN_THREADS.md`](../docs/OPEN_THREADS.md)
+(open/undecided/todo only — closed items are deleted, git history is the
+archive).
